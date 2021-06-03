@@ -8,7 +8,6 @@ includes:
   - markets
   - leagues
   - trades
-  - errors
 
 
 search: true
