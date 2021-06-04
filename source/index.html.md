@@ -8,6 +8,8 @@ includes:
   - markets
   - leagues
   - trades
+  - livescores
+  - metadata
 
 
 search: true
