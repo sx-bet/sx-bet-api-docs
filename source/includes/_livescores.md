@@ -3,7 +3,7 @@
 ## Get live scores
 
 ```shell
-curl --location --request POST 'https://stage.api.sportx.bet/live-scores' \
+curl --location --request POST 'https://app.api.sportx.bet/live-scores' \
 --header 'Content-Type: application/json'
 ```
 
@@ -97,37 +97,36 @@ This endpoint retrieves live scores for a particular event ID.
 
 ### HTTP Request
 
-`POST https://stage.api.sportx.bet/live-scores`
+`POST https://app.api.sportx.bet/live-scores`
 
 ### Request payload
 
-Name | Required | Type | Description
---- | --- | --- | ---
-sportXEventIds | true | string[] | An array of event IDs
+| Name           | Required | Type     | Description           |
+| -------------- | -------- | -------- | --------------------- |
+| sportXEventIds | true     | string[] | An array of event IDs |
 
 ### Response format
 
-Name | Type | Description
---- | --- | ---
-status | string | `success` or `failure` if the request succeeded or not
-data | Score[] | The resulting scores for the fixtures passed in
+| Name   | Type    | Description                                            |
+| ------ | ------- | ------------------------------------------------------ |
+| status | string  | `success` or `failure` if the request succeeded or not |
+| data   | Score[] | The resulting scores for the fixtures passed in        |
 
 A `Score` object has the following format
 
-Name | Type | Description
---- | --- | ---
-currentPeriod | string | The current period label
-extra | string | Extra data for this match
-leagueID | number | The league ID for this match
-periodTime | number | The time in the period. If it's -1, it is not available or the game is finished
-periods | Period[] | All of the periods in the match
+| Name          | Type     | Description                                                                     |
+| ------------- | -------- | ------------------------------------------------------------------------------- |
+| currentPeriod | string   | The current period label                                                        |
+| extra         | string   | Extra data for this match                                                       |
+| leagueID      | number   | The league ID for this match                                                    |
+| periodTime    | number   | The time in the period. If it's -1, it is not available or the game is finished |
+| periods       | Period[] | All of the periods in the match                                                 |
 
 A `Period` object has the following format
 
-Name | Type | Description
---- | --- | ---
-label | string | The current period name
-isFinished | boolean | `true` if the period is over
-teamOneScore | string | The score of team one in this period
-teamTwoScore | string | The score of team two in this period
-
+| Name         | Type    | Description                          |
+| ------------ | ------- | ------------------------------------ |
+| label        | string  | The current period name              |
+| isFinished   | boolean | `true` if the period is over         |
+| teamOneScore | string  | The score of team one in this period |
+| teamTwoScore | string  | The score of team two in this period |

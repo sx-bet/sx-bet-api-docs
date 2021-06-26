@@ -3,6 +3,7 @@ title: API Reference
 
 language_tabs: # must be one of https://git.io/vQNgJ
   - shell
+  - javascript
 
 includes:
   - markets
@@ -10,6 +11,8 @@ includes:
   - trades
   - livescores
   - metadata
+  - orders
+  - unitconversion
 
 
 search: true

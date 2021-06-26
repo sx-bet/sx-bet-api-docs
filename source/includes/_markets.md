@@ -3,7 +3,7 @@
 ## Get active markets
 
 ```shell
-curl --location --request GET 'https://stage.api.sportx.bet/markets/active?onlyMainLine=true'
+curl --location --request GET 'https://app.api.sportx.bet/markets/active?onlyMainLine=true'
 ```
 
 > The above command returns JSON structured like this:
@@ -83,7 +83,7 @@ This endpoint retrieves active markets on the exchange
 
 ### HTTP Request
 
-`GET https://stage.api.sportx.bet/markets/active`
+`GET https://app.api.sportx.bet/markets/active`
 
 ### Query parameters
 
@@ -97,11 +97,11 @@ This endpoint retrieves active markets on the exchange
 
 ### Response format
 
-| Name      | Type     | Description                  |
-| --------- | -------- | ---------------------------- |
+| Name      | Type     | Description                                            |
+| --------- | -------- | ------------------------------------------------------ |
 | status    | string   | `success` or `failure` if the request succeeded or not |
-| data      | object   | The response data            |
-| > markets | Market[] | The active markets           |
+| data      | object   | The response data                                      |
+| > markets | Market[] | The active markets                                     |
 
 A `market` object looks like this
 
@@ -123,7 +123,7 @@ A `market` object looks like this
 | leagueID        | number     | The league ID for this market                                                       |
 | homeTeamFirst   | boolean    | Indicator to the client of whether to display the home team first or not            |
 | leagueLabel     | string     | The name of the league for this market                                              |
-| mainLine        | boolean   | If this market is currently the main line or not                                    |
+| mainLine        | boolean    | If this market is currently the main line or not                                    |
 | group1          | string     | Indicator to the client of how to display this market                               |
 | group2          | string?    | Indicator to the client of how to display this market                               |
 
@@ -137,7 +137,7 @@ A `MarketType` can currently be one of the following
 ## Get specific markets
 
 ```shell
-curl --location --request POST 'https://stage.api.sportx.bet/markets/find' \
+curl --location --request POST 'https://app.api.sportx.bet/markets/find' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "marketHashes": ["0x3cba25f2253035b015b9bb555c1bf900f6737704d57425dd2a5b60e929c33b81"]
@@ -182,27 +182,27 @@ This endpoint retrieves specific markets
 
 ### HTTP Request
 
-`POST https://stage.api.sportx.bet/markets/find`
+`POST https://app.api.sportx.bet/markets/find`
 
 ### Request format
 
 | Name         | Required | Type     | Description                                  |
-| ------------ | ---- | -------- | -------------------------------------------- |
-| marketHashes | true | string[] | The market hashes of the markets to retrieve |
+| ------------ | -------- | -------- | -------------------------------------------- |
+| marketHashes | true     | string[] | The market hashes of the markets to retrieve |
 
 ### Response format
 
-| Name   | Type     | Description                  |
-| ------ | -------- | ---------------------------- |
+| Name   | Type     | Description                                            |
+| ------ | -------- | ------------------------------------------------------ |
 | status | string   | `success` or `failure` if the request succeeded or not |
-| data   | Market[] | The response data            |
+| data   | Market[] | The response data                                      |
 
 See [active markets section](#get-active-markets) for how the `Market` object is formatted
 
 ## Popular markets
 
 ```shell
-curl --location --request GET 'https://stage.api.sportx.bet/markets/popular'
+curl --location --request GET 'https://app.api.sportx.bet/markets/popular'
 ```
 
 > The above command returns JSON structured like this:
@@ -259,13 +259,13 @@ This endpoint retrieves the top 10 popular markets by volume.
 
 ### HTTP Request
 
-`GET https://stage.api.sportx.bet/markets/popular`
+`GET https://app.api.sportx.bet/markets/popular`
 
 ### Response format
 
-| Name   | Type     | Description                  |
-| ------ | -------- | ---------------------------- |
+| Name   | Type     | Description                                            |
+| ------ | -------- | ------------------------------------------------------ |
 | status | string   | `success` or `failure` if the request succeeded or not |
-| data   | Market[] | The response data            |
+| data   | Market[] | The response data                                      |
 
 See [active markets section](#get-active-markets) for how the `Market` object is formatted

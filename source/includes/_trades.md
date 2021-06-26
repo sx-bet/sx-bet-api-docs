@@ -3,7 +3,7 @@
 ## Get active trades
 
 ```shell
-curl --location --request POST 'https://stage.api.sportx.bet/trades'
+curl --location --request POST 'https://app.api.sportx.bet/trades'
 ```
 
 > The above command returns JSON structured like this:
@@ -102,7 +102,7 @@ This endpoint retrieves past trades on the exchange split up by order. For examp
 
 ### HTTP Request
 
-`POST https://stage.api.sportx.bet/trades`
+`POST https://app.api.sportx.bet/trades`
 
 ### Request payload parameters
 
@@ -151,7 +151,7 @@ To convert the <code>stake</code> into a readable token amount, divide by 10^18 
 ## Get consolidated trades
 
 ```shell
-curl --location --request POST 'https://stage.api.sportx.bet/trades/consolidated' \
+curl --location --request POST 'https://app.api.sportx.bet/trades/consolidated' \
 --header 'Content-Type: application/json''
 ```
 
@@ -210,7 +210,7 @@ This endpoint retrieves past consolidated trades on the exchange via pagination.
 
 ### HTTP Request
 
-`POST https://stage.api.sportx.bet/trades/consolidated`
+`POST https://app.api.sportx.bet/trades/consolidated`
 
 ### Request payload parameters
 
@@ -230,7 +230,7 @@ This endpoint retrieves past consolidated trades on the exchange via pagination.
 | status   | string              | `success` or `failure` if the request succeeded or not |
 | data     | any                 | The response data                                      |
 | > trades | ConsolidatedTrade[] | The consolidated trades for this request               |
-| > count    | number              | Total count of trades for this query                   |
+| > count  | number              | Total count of trades for this query                   |
 
 A `ConsolidatedTrade` object has the following format
 
