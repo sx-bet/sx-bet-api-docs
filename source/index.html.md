@@ -13,6 +13,7 @@ includes:
   - metadata
   - orders
   - unitconversion
+  - eip712signing
 
 
 search: true
