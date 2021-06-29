@@ -77,20 +77,20 @@ This endpoint returns active orders on the exchange based on a few parameters
 
 ### Response format
 
-| Name                     | Type    | Description                                                                                                                                                                                                                                                                          |
-| ------------------------ | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| fillAmount               | string  | How much this order has been filled in Ethereum units up to a max of `totalBetSize`. To get a human readable amount, divide by either 10^18 for DAI and ETH or 10^6 for USDC.                                                                                                        |
-| orderHash                | string  | A unique identifier for this order                                                                                                                                                                                                                                                   |
-| marketHash               | string  | The market corresponding to this order                                                                                                                                                                                                                                               |
-| maker                    | string  | The market maker for this order                                                                                                                                                                                                                                                      |
-| totalBetSize             | string  | The total size of this order in Ethereum units. To get a human readable amount, divide by either 10^18 for DAI and ETH or 10^6 for USDC.                                                                                                                                             |
-| percentageOdds           | string  | The odds that the `maker` receives in the sportx protocol format. To convert to an implied percentage odds divide by 10^20. To convert to the odds that the taker would receive if this order would be filled in implied format, use the formula `takerOdds=1-percentageOdds/10^20`. See the [unit conversion section](#odds-display-on-sportx) for more details. |
-| expiry                   | number  | The time in unix seconds after which this order is no longer valid                                                                                                                                                                                                                   |
-| baseToken                | string  | The base token this order is denominated in                                                                                                                                                                                                                                          |
-| executor                 | string  | The address permitted to execute on this order. This is set to the sportx.bet exchange                                                                                                                                                                                               |
-| salt                     | string  | A random number to differentiate identical orders                                                                                                                                                                                                                                    |
-| isMakerBettingOutcomeOne | boolean | `true` if the maker is betting outcome one (and hence taker is betting outcome two if filled)                                                                                                                                                                                        |
-| signature                | string  | Signature of the maker on this order                                                                                                                                                                                                                                                 |
+| Name                     | Type    | Description                                                                                                                                                                                                                                                                                                                                               |
+| ------------------------ | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| fillAmount               | string  | How much this order has been filled in Ethereum units up to a max of `totalBetSize`. To get a human readable amount, divide by either 10^18 for DAI and ETH or 10^6 for USDC.                                                                                                                                                                             |
+| orderHash                | string  | A unique identifier for this order                                                                                                                                                                                                                                                                                                                        |
+| marketHash               | string  | The market corresponding to this order                                                                                                                                                                                                                                                                                                                    |
+| maker                    | string  | The market maker for this order                                                                                                                                                                                                                                                                                                                           |
+| totalBetSize             | string  | The total size of this order in Ethereum units. To get a human readable amount, divide by either 10^18 for DAI and ETH or 10^6 for USDC.                                                                                                                                                                                                                  |
+| percentageOdds           | string  | The odds that the `maker` receives in the sportx protocol format. To convert to an implied percentage odds divide by 10^20. To convert to the odds that the taker would receive if this order would be filled in implied format, use the formula `takerOdds=1-percentageOdds/10^20`. See the [unit conversion section](#bookmaker-odds) for more details. |
+| expiry                   | number  | The time in unix seconds after which this order is no longer valid                                                                                                                                                                                                                                                                                        |
+| baseToken                | string  | The base token this order is denominated in                                                                                                                                                                                                                                                                                                               |
+| executor                 | string  | The address permitted to execute on this order. This is set to the sportx.bet exchange                                                                                                                                                                                                                                                                    |
+| salt                     | string  | A random number to differentiate identical orders                                                                                                                                                                                                                                                                                                         |
+| isMakerBettingOutcomeOne | boolean | `true` if the maker is betting outcome one (and hence taker is betting outcome two if filled)                                                                                                                                                                                                                                                             |
+| signature                | string  | Signature of the maker on this order                                                                                                                                                                                                                                                                                                                      |
 
 ## Post a new order
 
@@ -224,7 +224,7 @@ A `SignedNewOrder` object looks like this
 | data     | object   | The response data                                      |
 | > orders | string[] | The order hashes corresponding to the new orders       |
 
-<!-- ## Cancel orders
+## Cancel orders
 
 ```shell
 curl --location --request POST 'https://app.api.sportx.bet/orders/cancel' \
@@ -233,7 +233,55 @@ curl --location --request POST 'https://app.api.sportx.bet/orders/cancel' \
 ```
 
 ```javascript
-cosnt cancel
+import ethSigUtil from "eth-sig-util";
+
+// Example is shown using a private key
+
+const privateKey = process.env.PRIVATE_KEY;
+const bufferPrivateKey = Buffer.from(privateKey.substring(2), "hex");
+const ordersToCancel = [
+  "0x4ead6ef92741cd0b6e1ea32cb1d9586a85165e8bd780ab6f897992428c357bf1",
+];
+
+const payload = {
+  types: {
+    EIP712Domain: [
+      { name: "name", type: "string" },
+      { name: "version", type: "string" },
+      { name: "chainId", type: "uint256" },
+    ],
+    Details: [
+      { name: "message", type: "string" },
+      { name: "orders", type: "string[]" },
+    ],
+  },
+  primaryType: "Details",
+  domain: {
+    name: "CancelOrderSportX",
+    version: "1.0",
+    chainId: 1,
+  },
+  message: {
+    message: "Are you sure you want to cancel these orders",
+    orders: ordersToCancel,
+  },
+};
+
+const signature = ethSigUtil.signTypedData_v4(bufferPrivateKey, {
+  data: payload,
+});
+
+const payload = {
+  orders: ordersToCancel,
+  message: "Are you sure you want to cancel these orders",
+  signature,
+};
+
+const result = await fetch("https://app.api.sportx.bet/orders/cancel", {
+  method: "POST",
+  body: JSON.stringify(payload),
+  headers: { "Content-Type": "application/json" },
+});
 ```
 
 > The above command returns json structured like this
@@ -247,4 +295,27 @@ cosnt cancel
     ]
   }
 }
-``` -->
+```
+
+This endpoint cancels existing orders on the exchange. 
+
+### HTTP Request
+
+`POST https://app.api.sportx.bet/orders/cancel`
+
+### Request payload parameters
+
+| Name      | Required | Type     | Description                                                    |
+| --------- | -------- | -------- | -------------------------------------------------------------- |
+| orders    | true     | string[] | The order hashes to cancel                                     |
+| message   | true     | string   | A user-facing message for the eip712 signing. Can be anything. |
+| signature | true     | string   | The EIP712 signature on the cancel order payload. See the [EIP712 signing section](#eip712-signing) for more details on how to compute this signature.               |
+
+### Response format
+
+| Name          | Type     | Description                                            |
+| ------------- | -------- | ------------------------------------------------------ |
+| status        | string   | `success` or `failure` if the request succeeded or not |
+| data          | object   | The response data                                      |
+| > orderHashes | string[] | The cancelled order hashes                             |
+

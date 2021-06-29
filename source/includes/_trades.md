@@ -29,7 +29,6 @@ curl --location --request POST 'https://app.api.sportx.bet/trades'
         "tradeStatus": "SUCCESS",
         "valid": true,
         "affiliate": "0xA216136Ac816FC1E816af5FffDC9E58281e14383",
-        "providerEventId": "6269894",
         "outcome": 1,
         "settleDate": "2020-12-11T20:17:45.990Z"
       },
@@ -49,7 +48,6 @@ curl --location --request POST 'https://app.api.sportx.bet/trades'
         "tradeStatus": "SUCCESS",
         "valid": true,
         "affiliate": "0xA216136Ac816FC1E816af5FffDC9E58281e14383",
-        "providerEventId": "6269894",
         "outcome": 1,
         "settleDate": "2020-12-11T20:17:45.990Z"
       },
@@ -69,7 +67,6 @@ curl --location --request POST 'https://app.api.sportx.bet/trades'
         "tradeStatus": "SUCCESS",
         "valid": true,
         "affiliate": "0xA216136Ac816FC1E816af5FffDC9E58281e14383",
-        "providerEventId": "6269902",
         "outcome": 1,
         "settleDate": "2020-12-11T22:02:19.484Z"
       },
@@ -89,7 +86,6 @@ curl --location --request POST 'https://app.api.sportx.bet/trades'
         "tradeStatus": "SUCCESS",
         "valid": true,
         "affiliate": "0xBAbe136fcA601Cab2CfFFbc5512DDfF20fe33d2B",
-        "providerEventId": "6269902",
         "outcome": 1,
         "settleDate": "2020-12-11T22:02:19.484Z"
       }
@@ -130,7 +126,7 @@ A `Trade` object has the following format
 | ----------------- | ------- | ------------------------------------------------------------------------------------------------------------------- |
 | baseToken         | string  | The token in which this trade was placed                                                                            |
 | bettor            | string  | The address of the bettor who placed the trade                                                                      |
-| stake             | string  | Exact token amount that was staked for the bet.                                                                     |
+| stake             | string  | Exact token amount that was staked for the bet. To convert into a readable token amount, see [the token conversion section](#tokens)                                                                    |
 | odds              | string  | Implied odds that the bettor received for this bet. Divide by 10^20 to get the odds in decimal format.              |
 | orderHash         | string  | The unique identifier of the order that was filled for this trade                                                   |
 | marketHash        | string  | The unique identifier of the market for which this trade was placed                                                 |
@@ -143,10 +139,6 @@ A `Trade` object has the following format
 | valid             | boolean | `true` if the trade counts toward competitions or tournaments                                                       |
 | outcome           | number  | with `settled=true`, this will be 0, 1, or 2 depending on the final outcome of the market                           |
 | settleDate        | string  | ISO formatted date string of when the trade was settled                                                             |
-
-<aside class="notice">
-To convert the <code>stake</code> into a readable token amount, divide by 10^18 for all baseTokens other than USDC.
-</aside>
 
 ## Get consolidated trades
 

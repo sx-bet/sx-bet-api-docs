@@ -76,18 +76,10 @@ This endpoint retrieves metadata on the exchange itself and useful parameters to
 | executorAddress    | string  | The executor address for the sportx.bet exchange. Use this address for setting the `executor` when posting new orders as a market maker                               |
 | oracleFees         | any     | A mapping from token address to a percentage indicating the fees paid on profit for each token. To convert to a readable number, divide by 10^20                      |
 | sportXAffiliate    | any     | The default sportx.bet affiliate. Currently set to 0 and unused                                                                                                       |
-| makerOrderMinimums | any     | A mapping from token address to a real token amount indicating the minimum maker order size.                                                                          |
-| takerMinimums      | any     | A mapping from token address to a real token amount indicating the minimum taker order size                                                                           |
+| makerOrderMinimums | any     | A mapping from token address to a real token amount indicating the minimum maker order size. To convert into a readable amount, see [the token conversion section](#tokens)                                                                         |
+| takerMinimums      | any     | A mapping from token address to a real token amount indicating the minimum taker order size. To convert into a readable amount, see [the token conversion section](#tokens                                                                              )                                                                              |
 | addresses          | any     | A mapping from network id -> canonical token name -> token address of assets supported by the exchange                                                                |
 | bettingEnabled     | boolean | `true` if betting is enabled for your region, false otherwise. See [here](https://help.sportx.bet/en/articles/3613372-terms-and-conditions) for the supported regions |
 | depositMinimums    | any     | A mapping from token address to real token amount indicating the minimum amount required to bridge from Ethereum mainnet to Polygon                                   |
 | withdrawMinimums   | any     | A mapping from token address to real token amount indicating the minimum amount required to bridge from Polygon to Ethereum mainnet                                   |
 | totalVolume        | number  | All time total volume on the exchange                                                                                                                                 |
-
-<aside class="notice">
-To convert the <code>makerOrderMinimums</code> into a readable token amount, divide by 10^18 for all baseTokens other than USDC. For USDC divide by 10^6.
-</aside>
-
-<aside class="notice">
-To convert the <code>takerMinimums</code> into a readable token amount, divide by 10^18 for all baseTokens other than USDC. For USDC divide by 10^6.
-</aside>
