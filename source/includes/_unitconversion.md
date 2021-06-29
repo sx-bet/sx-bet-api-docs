@@ -26,9 +26,7 @@ Odds are specified in an implied odds format like `8391352143642350000`. To conv
 
 To convert from implied odds to decimal odds, inverse the number. For example, 0.0839 in decimal format is `1/0.0839 = 11.917`.
 
-## Odds display on sportx
-
-It's important to note how odds are displayed on sportx.bet. Recall from [the order section](#get-active-orders) that `percentageOdds` is from the perspective of the market maker. The odds that are displayed on sportx.bet in the order books are what the taker will be receiving. Let's run through an example.
+## Bookmaker odds
 
 ```json
 {
@@ -48,7 +46,11 @@ It's important to note how odds are displayed on sportx.bet. Recall from [the or
     },
 ```
 
+It's important to note how odds are displayed on sportx.bet. Recall from [the order section](#get-active-orders) that `percentageOdds` is from the perspective of the market maker. The odds that are displayed on sportx.bet in the order books are what the taker will be receiving. Let's run through an example.
+
 Suppose an order looks like the one on the right.
 
 Here the maker is betting outcome one (`isMakerBettingOutcomeOne = true`) and receiving implied odds of `70455284072443640000 / 10^20 = 0.704552841`. Therefore the taker is betting *outcome two* and receiving implied odds of `1 - 0.704552841 = 0.295447159`. This would be displayed on sportx.bet (what the user sees) under the second order book with odds of 29.5% in implied format, or `1 / 0.295447159 = 3.3847` in decimal format. 
+
+![bookmaker_odds_example](/images/bookmaker_odds_example.png)
 
