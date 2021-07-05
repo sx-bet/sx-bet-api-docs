@@ -91,7 +91,7 @@ This endpoint retrieves active markets on the exchange
 | ------------ | -------- | --------- | ---------------------------------------------------------------------------------------- |
 | onlyMainLine | false    | false     | If set to true, the result will only include main lines on spread and over under markets |
 | eventId      | false    | undefined | If set, it will only include markets for a particular sportXeventId                      |
-| leagueID     | false    | undefined | If set, it will only include markets for a particular league ID                          |
+| leagueId     | false    | undefined | If set, it will only include markets for a particular league ID                          |
 | liveOnly     | false    | false     | If set, it will only include markets that are currently available for in-play betting    |
 | betGroup     | false    | undefined | If set, it will only include markets for a particular bet group                          |
 
@@ -116,7 +116,7 @@ A `market` object looks like this
 | teamTwoName     | string     | The name of the second team/player participating                                    |
 | type            | MarketType | The type of the market                                                              |
 | gameTime        | number     | The UNIX timestamp of the game                                                      |
-| line            | number?    | The line of the market (only applicable to markets with a line, for example SPREAD) |
+| line            | number?    | The line of the market (only applicable to markets with a line, for example SPREAD or OVER_UNDER) |
 | sportXeventId   | string     | The unique event ID for this market                                                 |
 | liveEnabled     | boolean    | Whether or not this match is available for live betting                             |
 | sportLabel      | string     | The name of the sport for this market                                               |

@@ -118,7 +118,7 @@ A `Score` object has the following format
 | ------------- | -------- | ------------------------------------------------------------------------------- |
 | currentPeriod | string   | The current period label                                                        |
 | extra         | string   | Extra data for this match                                                       |
-| leagueID      | number   | The league ID for this match                                                    |
+| leagueId      | number   | The league ID for this match                                                    |
 | periodTime    | number   | The time in the period. If it's -1, it is not available or the game is finished |
 | periods       | Period[] | All of the periods in the match                                                 |
 

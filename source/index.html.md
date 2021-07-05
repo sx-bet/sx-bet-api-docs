@@ -14,6 +14,8 @@ includes:
   - orders
   - unitconversion
   - eip712signing
+  - contractAddresses
+  - fees
 
 
 search: true
