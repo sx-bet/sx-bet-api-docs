@@ -75,6 +75,8 @@ This endpoint returns active orders on the exchange based on a few parameters
 | baseToken    | false    | string   | Only get orders denominated in this base token |
 | maker        | false    | string   | Only get orders for this market maker          |
 
+Note that one of `marketHashes` or `maker` is required.
+
 ### Response format
 
 | Name                     | Type    | Description                                                                                                                                                                                                                                                                                                                                    |
@@ -383,149 +385,273 @@ curl --location --request POST 'https://app.api.sportx.bet/orders/fill' \
 ```
 
 ```javascript
-import { bigNumberify, randomBytes } from "ethers/utils";
 import ethSigUtil from "eth-sig-util";
-import { fill } from "lodash";
+import {
+  BigNumber,
+  constants,
+  Contract,
+  providers,
+  utils,
+  Wallet,
+} from "ethers";
+import { randomBytes } from "ethers/lib/utils";
 
-const privateKey = process.env.PRIVATE_KEY;
-const bufferPrivateKey = Buffer.from(privateKey!.substring(2), "hex");
-const takerAddress = process.env.TAKER_ADDRESS;
-const takerAmounts = ["10000000000000000000", "10000000000000000000"];
-const fillSalt = bigNumberify(randomBytes(32)).toString();
+async function fillOrder() {
+  const privateKey = process.env.PRIVATE_KEY;
+  const takerAddress = process.env.TAKER_ADDRESS;
+  const tokenAddress = process.env.TOKEN_ADDRESS;
+  const tokenTransferProxyAddress = process.env.TOKEN_TRANSFER_PROXY_ADDRESS;
+  const bufferPrivateKey = Buffer.from(privateKey!.substring(2), "hex");
+  const wallet = new Wallet(privateKey).connect(
+    new providers.JsonRpcProvider(process.env.PROVIDER_URL)
+  );
+  const takerAmounts = ["10000000000000000000", "10000000000000000000"];
+  const fillSalt = BigNumber.from(randomBytes(32)).toString();
+  const approvalAmount = constants.MaxUint256;
+  const tokenContract = new Contract(
+    tokenAddress,
+    [
+      {
+        constant: false,
+        inputs: [
+          { internalType: "address", name: "usr", type: "address" },
+          { internalType: "uint256", name: "wad", type: "uint256" },
+        ],
+        name: "approve",
+        outputs: [{ internalType: "bool", name: "", type: "bool" }],
+        payable: false,
+        stateMutability: "nonpayable",
+        type: "function",
+      },
+      {
+        inputs: [
+          {
+            internalType: "address",
+            name: "user",
+            type: "address",
+          },
+        ],
+        name: "getNonce",
+        outputs: [
+          {
+            internalType: "uint256",
+            name: "nonce",
+            type: "uint256",
+          },
+        ],
+        stateMutability: "view",
+        type: "function",
+      },
+      {
+        inputs: [
+          {
+            internalType: "address",
+            name: "owner",
+            type: "address",
+          },
+        ],
+        name: "nonces",
+        outputs: [
+          {
+            internalType: "uint256",
+            name: "",
+            type: "uint256",
+          },
+        ],
+        stateMutability: "view",
+        type: "function",
+        constant: true,
+      },
+    ],
+    wallet
+  );
 
-const ordersToFill = [
-  {
-    fillAmount: "0",
-    orderHash:
-      "0x863a2288a640e1bb722da2ee7a6f323ea28caee8ac681d320534d0e7f2e849de",
-    marketHash:
-      "0x0eeace4a9bbf6235bc59695258a419ed3a05a2c8e3b6a58fb71a0d9e6b031c2b",
-    maker: "0x63a4491dC73245E181c47BAe0ae9d6627E56dE55",
-    totalBetSize: "120000000000000000000",
-    percentageOdds: "68860772772306080000",
-    expiry: 1631233201,
-    baseToken: "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063",
-    executor: "0x3E91041b9e60C7275f8296b8B0a97141e6442d49",
-    salt:
-      "64542697517744547417546237340530363903382582642857122744382059379852833736063",
-    isMakerBettingOutcomeOne: true,
-    signature:
-      "0xa58255f9f7bb8a2698d66f9931a3d4ebe2e5605299a57d78b7c048f26585fdb5144b16bb930ad564f2e2819f66c8c20c2c076d8951728d8242481d58af221fc51b",
-    createdAt: "2021-06-24T21:44:51.355Z",
-  },
-  {
-    fillAmount: "0",
-    orderHash:
-      "0x001f676d68baf85310145f85bc5aeba64108b234607b4fae25c704069ca8464a",
-    marketHash:
-      "0x0eeace4a9bbf6235bc59695258a419ed3a05a2c8e3b6a58fb71a0d9e6b031c2b",
-    maker: "0x63a4491dC73245E181c47BAe0ae9d6627E56dE55",
-    totalBetSize: "120000000000000000000",
-    percentageOdds: "27138321995464855000",
-    expiry: 1631233201,
-    baseToken: "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063",
-    executor: "0x3E91041b9e60C7275f8296b8B0a97141e6442d49",
-    salt:
-      "33394198022904122521460365691253625674733505262618329029186356280403872887283",
-    isMakerBettingOutcomeOne: false,
-    signature:
-      "0xb52be3279a092823bb46b3bd9a397bef2a06eda95a519718992ea88d73a4375874728cb7c5f6527b67195e44f3f0f0d29956dc05e18e775547d8f2faf3d4bd001c",
-    createdAt: "2021-06-24T21:44:51.374Z",
-  },
-];
+  let nonce: BigNumber;
+  if (
+    tokenAddress === "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174" // USDC has a non-standard get nonce method
+  ) {
+    nonce = await tokenContract.nonces(takerAddress);
+  } else {
+    nonce = await tokenContract.getNonce(takerAddress);
+  }
+  const tokenName: string = await tokenContract.name();
+  const abiEncodedFunctionSig = tokenContract.interface.encodeFunctionData(
+    "approve",
+    [tokenTransferProxyAddress, approvalAmount]
+  );
 
-const signingPayload = {
-  types: {
-    EIP712Domain: [
-      { name: "name", type: "string" },
-      { name: "version", type: "string" },
-      { name: "chainId", type: "uint256" },
-      { name: "verifyingContract", type: "address" },
-    ],
-    Details: [
-      { name: "action", type: "string" },
-      { name: "market", type: "string" },
-      { name: "betting", type: "string" },
-      { name: "stake", type: "string" },
-      { name: "odds", type: "string" },
-      { name: "returning", type: "string" },
-      { name: "fills", type: "FillObject" },
-    ],
-    FillObject: [
-      { name: "orders", type: "Order[]" },
-      { name: "makerSigs", type: "bytes[]" },
-      { name: "takerAmounts", type: "uint256[]" },
-      { name: "fillSalt", type: "uint256" },
-    ],
-    Order: [
-      { name: "marketHash", type: "bytes32" },
-      { name: "baseToken", type: "address" },
-      { name: "totalBetSize", type: "uint256" },
-      { name: "percentageOdds", type: "uint256" },
-      { name: "expiry", type: "uint256" },
-      { name: "salt", type: "uint256" },
-      { name: "maker", type: "address" },
-      { name: "executor", type: "address" },
-      { name: "isMakerBettingOutcomeOne", type: "bool" },
-    ],
-  },
-  primaryType: "Details",
-  domain: {
-    name: "SportX",
-    version: "1.0",
-    chainId: 1,
-    verifyingContract: "0xCc4fBba7D0E0F2A03113F42f5D3aE80d9B2aD55d",
-  },
-  message: {
+  const ordersToFill = [
+    {
+      fillAmount: "0",
+      orderHash:
+        "0x863a2288a640e1bb722da2ee7a6f323ea28caee8ac681d320534d0e7f2e849de",
+      marketHash:
+        "0x0eeace4a9bbf6235bc59695258a419ed3a05a2c8e3b6a58fb71a0d9e6b031c2b",
+      maker: "0x63a4491dC73245E181c47BAe0ae9d6627E56dE55",
+      totalBetSize: "120000000000000000000",
+      percentageOdds: "68860772772306080000",
+      expiry: 1631233201,
+      baseToken: "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063",
+      executor: "0x3E91041b9e60C7275f8296b8B0a97141e6442d49",
+      salt:
+        "64542697517744547417546237340530363903382582642857122744382059379852833736063",
+      isMakerBettingOutcomeOne: true,
+      signature:
+        "0xa58255f9f7bb8a2698d66f9931a3d4ebe2e5605299a57d78b7c048f26585fdb5144b16bb930ad564f2e2819f66c8c20c2c076d8951728d8242481d58af221fc51b",
+      createdAt: "2021-06-24T21:44:51.355Z",
+    },
+    {
+      fillAmount: "0",
+      orderHash:
+        "0x001f676d68baf85310145f85bc5aeba64108b234607b4fae25c704069ca8464a",
+      marketHash:
+        "0x0eeace4a9bbf6235bc59695258a419ed3a05a2c8e3b6a58fb71a0d9e6b031c2b",
+      maker: "0x63a4491dC73245E181c47BAe0ae9d6627E56dE55",
+      totalBetSize: "120000000000000000000",
+      percentageOdds: "27138321995464855000",
+      expiry: 1631233201,
+      baseToken: "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063",
+      executor: "0x3E91041b9e60C7275f8296b8B0a97141e6442d49",
+      salt:
+        "33394198022904122521460365691253625674733505262618329029186356280403872887283",
+      isMakerBettingOutcomeOne: false,
+      signature:
+        "0xb52be3279a092823bb46b3bd9a397bef2a06eda95a519718992ea88d73a4375874728cb7c5f6527b67195e44f3f0f0d29956dc05e18e775547d8f2faf3d4bd001c",
+      createdAt: "2021-06-24T21:44:51.374Z",
+    },
+  ];
+
+  const signingPayload = {
+    types: {
+      EIP712Domain: [
+        { name: "name", type: "string" },
+        { name: "version", type: "string" },
+        { name: "chainId", type: "uint256" },
+        { name: "verifyingContract", type: "address" },
+      ],
+      Details: [
+        { name: "action", type: "string" },
+        { name: "market", type: "string" },
+        { name: "betting", type: "string" },
+        { name: "stake", type: "string" },
+        { name: "odds", type: "string" },
+        { name: "returning", type: "string" },
+        { name: "fills", type: "FillObject" },
+      ],
+      FillObject: [
+        { name: "orders", type: "Order[]" },
+        { name: "makerSigs", type: "bytes[]" },
+        { name: "takerAmounts", type: "uint256[]" },
+        { name: "fillSalt", type: "uint256" },
+      ],
+      Order: [
+        { name: "marketHash", type: "bytes32" },
+        { name: "baseToken", type: "address" },
+        { name: "totalBetSize", type: "uint256" },
+        { name: "percentageOdds", type: "uint256" },
+        { name: "expiry", type: "uint256" },
+        { name: "salt", type: "uint256" },
+        { name: "maker", type: "address" },
+        { name: "executor", type: "address" },
+        { name: "isMakerBettingOutcomeOne", type: "bool" },
+      ],
+    },
+    primaryType: "Details",
+    domain: {
+      name: "SportX",
+      version: "1.0",
+      chainId: 1,
+      verifyingContract: "0xCc4fBba7D0E0F2A03113F42f5D3aE80d9B2aD55d",
+    },
+    message: {
+      action: "N/A",
+      market: "N/A",
+      betting: "N/A",
+      stake: "N/A",
+      odds: "N/A",
+      returning: "N/A",
+      fills: {
+        makerSigs: ordersToFill.map((order) => order.signature),
+        orders: ordersToFill.map((order) => ({
+          marketHash: order.marketHash,
+          baseToken: order.baseToken,
+          totalBetSize: order.totalBetSize.toString(),
+          percentageOdds: order.percentageOdds.toString(),
+          expiry: order.expiry.toString(),
+          salt: order.salt.toString(),
+          maker: order.maker,
+          executor: order.executor,
+          isMakerBettingOutcomeOne: order.isMakerBettingOutcomeOne,
+        })),
+        takerAmounts,
+        fillSalt,
+      },
+    },
+  };
+
+  const approveProxySigningPayload = {
+    types: {
+      EIP712Domain: [
+        { name: "name", type: "string" },
+        { name: "version", type: "string" },
+        { name: "verifyingContract", type: "address" },
+        { name: "salt", type: "bytes32" },
+      ],
+      MetaTransaction: [
+        { name: "nonce", type: "uint256" },
+        { name: "from", type: "address" },
+        { name: "functionSignature", type: "bytes" },
+      ],
+    },
+    domain: {
+      name: tokenName,
+      version: "1",
+      salt: utils.hexZeroPad(utils.hexlify(137), 32),
+      verifyingContract: tokenAddress,
+    },
+    message: {
+      nonce,
+      from: takerAddress,
+      functionSignature: abiEncodedFunctionSig,
+    },
+    primaryType: "MetaTransaction",
+  };
+
+  const approveProxySignature = ethSigUtil.signTypedData_v4(bufferPrivateKey, {
+    data: approveProxySigningPayload,
+  });
+
+  const signature = ethSigUtil.signTypedData_v4(bufferPrivateKey, {
+    data: signingPayload,
+  });
+
+  const apiPayload = {
+    orderHashes: ordersToFill.map((order) => order.orderHash),
+    takerAmounts,
+    taker: takerAddress,
+    takerSig: signature,
+    fillSalt,
     action: "N/A",
     market: "N/A",
     betting: "N/A",
     stake: "N/A",
     odds: "N/A",
     returning: "N/A",
-    fills: {
-      makerSigs: ordersToFill.map((order) => order.signature),
-      orders: ordersToFill.map((order) => ({
-        marketHash: order.marketHash,
-        baseToken: order.baseToken,
-        totalBetSize: order.totalBetSize.toString(),
-        percentageOdds: order.percentageOdds.toString(),
-        expiry: order.expiry.toString(),
-        salt: order.salt.toString(),
-        maker: order.maker,
-        executor: order.executor,
-        isMakerBettingOutcomeOne: order.isMakerBettingOutcomeOne,
-      })),
-      takerAmounts,
-      fillSalt,
+    approveProxyPayload: {
+      owner: takerAddress,
+      spender: tokenTransferProxyAddress,
+      tokenAddress,
+      amount: approvalAmount.toString(),
+      signature: approveProxySignature,
     },
-  },
-};
+  };
 
-const signature = (ethSigUtil as any).signTypedData_v4(bufferPrivateKey, {
-  data: signingPayload,
-});
-
-const apiPayload = {
-  orderHashes: ordersToFill.map((order) => order.orderHash),
-  takerAmounts,
-  taker: takerAddress,
-  takerSig: signature,
-  fillSalt,
-  action: "N/A",
-  market: "N/A",
-  betting: "N/A",
-  stake: "N/A",
-  odds: "N/A",
-  returning: "N/A",
-};
-
-const response = await fetch(`https://app.api.sportx.bet/orders/fill`, {
-  method: "POST",
-  body: JSON.stringify(apiPayload),
-  headers: { "Content-Type": "application/json" },
-});
-
+  const response = await fetch(`https://app.api.sportx.bet/orders/fill`, {
+    method: "POST",
+    body: JSON.stringify(apiPayload),
+    headers: { "Content-Type": "application/json" },
+  });
+}
 ```
 
 > The above command returns json structured like this
@@ -539,7 +665,9 @@ const response = await fetch(`https://app.api.sportx.bet/orders/fill`, {
 }
 ```
 
-This endpoint fills orders on the exchange. Multiple orders can be filled at once and no gas is paid as this is a meta transaction submitted by the API itself. Note that pre-game has a built-in betting delay of 2s and in-game betting has a built-in betting delay of 5s. This is added to guard against toxic flow and high spikes in latency from the bookmaker's side. It is effectively protection for the bookmaker. If the odds change within that delay time, the order will be cancelled and an error will be thrown.
+This endpoint fills orders on the exchange. Multiple orders can be filled at once and no gas is paid as this is a meta transaction submitted by the API itself.
+
+Note that pre-game has a built-in betting delay of 2s and in-game betting has a built-in betting delay of 5s. This is added to guard against toxic flow and high spikes in latency from the bookmaker's side. It is effectively protection for the bookmaker. If the odds change within that delay time, the order will be cancelled and an error will be thrown.
 
 To fill orders on sportx.bet via the API, make sure you first enable betting by following the steps [here](#enabling-betting)
 
@@ -549,20 +677,31 @@ To fill orders on sportx.bet via the API, make sure you first enable betting by 
 
 ### Request payload parameters
 
-| Name         | Required | Type     | Description                                                                                                                                                                                                                                                 |
-| ------------ | -------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| action       | true     | string   | User facing string for what action the user is taking. Can simply set to "N/A" when using the API                                                                                                                                                           |
-| betting      | true     | string   | User facing string for what bet the user is making. Can simply set to "N/A" when using the API.                                                                                                                                                             |
-| fillSalt     | true     | string   | Random 32 byte string to identify this fill. Must be the same `fillSalt` used when computing the EIP712 payload                                                                                                                                             |
-| market       | true     | string   | User facing string for what market the user is betting on. Can simply set to "N/A" when using the API                                                                                                                                                       |
-| odds         | true     | string   | User facing string for the odds the user is receiving. Can simply set to "N/A" when using the API                                                                                                                                                           |
-| orderHashes  | true     | string[] | Orders being filled. Must be the order hashes of the orders used in computing the EIP712 payload. Must be the same length as `takerAmounts`                                                                                                                 |
-| returning    | true     | string   | User facing string for what the bet wil be returning. Can simply set to "N/A" when using the API.                                                                                                                                                           |
-| stake        | true     | string   | User facing string for how much the user is risking. Can simly set to "N/A" when using the API.                                                                                                                                                             |
-| takerAmounts | true     | string[] | How much each order is being filled, ordered by index. Must be in the same order as `orderHashes`, and the same length as `orderHashes`. It also must be the same and in the same order as the `takerAmounts` array used when computing the EIP712 payload. |
-| takerSig     | true     | string   | The EIP712 signature on the payload. See the example of how to compute this.                                                                                                                                                                                |
-| message      | true     | string   | A user-facing message for the eip712 signing. Can be anything.                                                                                                                                                                                              |
-| signature    | true     | string   | The EIP712 signature on the cancel order payload. See the [EIP712 signing section](#eip712-signing) for general informatin on how to compute this signature. See the example for the specific parameters required.                                          |
+| Name                | Required | Type                    | Description                                                                                                                                                                                                                                                 |
+| ------------------- | -------- | ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| action              | true     | string                  | User facing string for what action the user is taking. Can simply set to "N/A" when using the API                                                                                                                                                           |
+| betting             | true     | string                  | User facing string for what bet the user is making. Can simply set to "N/A" when using the API.                                                                                                                                                             |
+| fillSalt            | true     | string                  | Random 32 byte string to identify this fill. Must be the same `fillSalt` used when computing the EIP712 payload                                                                                                                                             |
+| market              | true     | string                  | User facing string for what market the user is betting on. Can simply set to "N/A" when using the API                                                                                                                                                       |
+| odds                | true     | string                  | User facing string for the odds the user is receiving. Can simply set to "N/A" when using the API                                                                                                                                                           |
+| orderHashes         | true     | string[]                | Orders being filled. Must be the order hashes of the orders used in computing the EIP712 payload. Must be the same length as `takerAmounts`                                                                                                                 |
+| returning           | true     | string                  | User facing string for what the bet wil be returning. Can simply set to "N/A" when using the API.                                                                                                                                                           |
+| stake               | true     | string                  | User facing string for how much the user is risking. Can simly set to "N/A" when using the API.                                                                                                                                                             |
+| takerAmounts        | true     | string[]                | How much each order is being filled, ordered by index. Must be in the same order as `orderHashes`, and the same length as `orderHashes`. It also must be the same and in the same order as the `takerAmounts` array used when computing the EIP712 payload. |
+| takerSig            | true     | string                  | The EIP712 signature on the payload. See the example of how to compute this.                                                                                                                                                                                |
+| message             | true     | string                  | A user-facing message for the eip712 signing. Can be anything.                                                                                                                                                                                              |
+| signature           | true     | string                  | The EIP712 signature on the cancel order payload. See the [EIP712 signing section](#eip712-signing) for general information on how to compute this signature. See the example for the specific parameters required.                                         |
+| approveProxyPayload | false    | `ApproveSpenderPayload` | Extra object required if you wish to atomically `ERC20.approve()` prior to the bet. This can be useful from a UX point of view if you don't want the user to have to wait until the approval is mined before the bet can be submitted                       |
+
+where an `ApproveSpenderPayload` looks like
+
+| Name         | Required | Type   | Description                                                                                                                                                                                      |
+| ------------ | -------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| owner        | true     | string | Address of the bettor                                                                                                                                                                            |
+| spender      | true     | string | Address of the contract permitted to spend tokens on behalf of the bettor to bet. See the `TokenTransferProxy` address in the [contract-addresses](#contract-addresses) section for this address |
+| tokenAddress | true     | string | Address of the token being used to bet. Must be the same as the token referenced in the orders being filled                                                                                      |
+| amount       | true     | string | Amount of tokens to approve. Must be greater than or equal to the total tokens bet from the bettors's perspective, i.e., how many tokens are leaving the bettor's wallet                         |
+| signature    | true     | string | The EIP712 signature of the this payload.                                                                                                                                                        |
 
 ### Response format
 
@@ -574,4 +713,8 @@ To fill orders on sportx.bet via the API, make sure you first enable betting by 
 
 <aside class="warning">
 Note that <code>fillAmounts</code> are from *the perspective of the market maker*. <code>fillAmounts</code> can be thought of as how many tokens the maker(s) will be putting into the pot. Given an amount you as the taker want to bet, you can use the following formula to convert what value you have to use as <code>fillAmount</code> in this endpoint. <code>fillAmount = takerBetAmount * percentageOdds / (10^20 - percentageOdds)</code>
+</aside>
+
+<aside class="notice">
+To convert a <code>fillAmount</code> (what the market maker pays) to what the taker will pay, you can use the formula <code>takerPayAmount = fillAmount * 10^20 / percentageOdds - fillAmount </code>. Intuitively, this is the pot size (<code>fillAmount * 10^20 / percentageOdds)</code> minus what the maker is putting in
 </aside>
