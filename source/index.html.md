@@ -16,6 +16,7 @@ includes:
   - eip712signing
   - contractAddresses
   - fees
+  - websocket
 
 
 search: true
