@@ -197,7 +197,17 @@ This endpoint retrieves specific markets
 | status | string   | `success` or `failure` if the request succeeded or not |
 | data   | Market[] | The response data                                      |
 
-See [active markets section](#get-active-markets) for how the `Market` object is formatted
+See [active markets section](#get-active-markets) for how the `Market` object is formatted. Note that there are a few additional fields if you are querying a market that has been settled/reported
+
+Name | Type | Description
+--- | --- | ---
+reportedDate | number | Time in unix seconds of when the market was reported
+outcome | number | The outcome of the market. Can be one of 0 1 or 2. 0 means the market was voided and stakes were returned to bettors. 1 means the outcome labeled `outcomeOneName` was the outcome. 2 means the outcome labeled `outcomeTwoName` was the outcome.
+teamOneScore | number | Final score of team one
+teamTwoScore | number | Final score of team two
+teamOneMeta | string | Extra metadata for team one
+teamTwoMeta | string | Extra metadata for team two
+marketMeta | string | Extra metadata for the market overall
 
 ## Popular markets
 
