@@ -1,4 +1,8 @@
 ---
+
+toc_footers:
+  - <a href='https://sportx.bet'>Visit sportx.bet</a>
+
 title: API Reference
 
 language_tabs: # must be one of https://git.io/vQNgJ
@@ -17,6 +21,8 @@ includes:
   - contractAddresses
   - fees
   - websocket
+
+
 
 
 search: true
