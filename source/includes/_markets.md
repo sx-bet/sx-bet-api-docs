@@ -79,7 +79,7 @@ curl --location --request GET 'https://app.api.sportx.bet/markets/active?onlyMai
 }
 ```
 
-This endpoint retrieves active markets on the exchange
+This endpoint retrieves active markets on the exchange. It does not return markets that have been settled or reported.
 
 ### HTTP Request
 
@@ -87,13 +87,13 @@ This endpoint retrieves active markets on the exchange
 
 ### Query parameters
 
-| Name         | Required | Type      | Description                                                                              |
-| ------------ | -------- | --------- | ---------------------------------------------------------------------------------------- |
-| onlyMainLine | false    | false     | If set to true, the result will only include main lines on spread and over under markets |
-| eventId      | false    | undefined | If set, it will only include markets for a particular sportXeventId                      |
-| leagueId     | false    | undefined | If set, it will only include markets for a particular league ID                          |
-| liveOnly     | false    | false     | If set, it will only include markets that are currently available for in-play betting    |
-| betGroup     | false    | undefined | If set, it will only include markets for a particular bet group                          |
+| Name         | Required | Type    | Description                                                                              |
+| ------------ | -------- | ------- | ---------------------------------------------------------------------------------------- |
+| onlyMainLine | false    | boolean | If set to true, the result will only include main lines on spread and over under markets |
+| eventId      | false    | string  | If set, it will only include markets for a particular sportXeventId                      |
+| leagueId     | false    | number  | If set, it will only include markets for a particular league ID                          |
+| liveOnly     | false    | boolean | If set, it will only include markets that are currently available for in-play betting    |
+| betGroup     | false    | string  | If set, it will only include markets for a particular bet group                          |
 
 ### Response format
 
@@ -105,27 +105,31 @@ This endpoint retrieves active markets on the exchange
 
 A `market` object looks like this
 
-| Name            | Type       | Description                                                                         |
-| --------------- | ---------- | ----------------------------------------------------------------------------------- |
-| status          | string     | `ACTIVE` or `INACTIVE`                                                              |
-| marketHash      | string     | The unique identifier for the market                                                |
-| outcomeOneName  | string     | Outcome one for this market                                                         |
-| outcomeTwoName  | string     | Outcome two for this market                                                         |
-| outcomeVoidName | string     | Outcome void for this market                                                        |
-| teamOneName     | string     | The name of the first team/player participating                                     |
-| teamTwoName     | string     | The name of the second team/player participating                                    |
-| type            | MarketType | The type of the market                                                              |
-| gameTime        | number     | The UNIX timestamp of the game                                                      |
-| line            | number?    | The line of the market (only applicable to markets with a line, for example SPREAD or OVER_UNDER) |
-| sportXeventId   | string     | The unique event ID for this market                                                 |
-| liveEnabled     | boolean    | Whether or not this match is available for live betting                             |
-| sportLabel      | string     | The name of the sport for this market                                               |
-| leagueID        | number     | The league ID for this market                                                       |
-| homeTeamFirst   | boolean    | Indicator to the client of whether to display the home team first or not            |
-| leagueLabel     | string     | The name of the league for this market                                              |
-| mainLine        | boolean    | If this market is currently the main line or not                                    |
-| group1          | string     | Indicator to the client of how to display this market                               |
-| group2          | string?    | Indicator to the client of how to display this market                               |
+| Name            | Type       | Description                                                                                                                         |
+| --------------- | ---------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| status          | string     | `ACTIVE` or `INACTIVE`                                                                                                              |
+| marketHash      | string     | The unique identifier for the market                                                                                                |
+| outcomeOneName  | string     | Outcome one for this market                                                                                                         |
+| outcomeTwoName  | string     | Outcome two for this market                                                                                                         |
+| outcomeVoidName | string     | Outcome void for this market                                                                                                        |
+| teamOneName     | string     | The name of the first team/player participating                                                                                     |
+| teamTwoName     | string     | The name of the second team/player participating                                                                                    |
+| type            | MarketType | The type of the market                                                                                                              |
+| gameTime        | number     | The UNIX timestamp of the game                                                                                                      |
+| line            | number?    | The line of the market (only applicable to markets with a line, for example SPREAD or OVER_UNDER)                                   |
+| sportXeventId   | string     | The unique event ID for this market                                                                                                 |
+| liveEnabled     | boolean    | Whether or not this match is available for live betting                                                                             |
+| sportLabel      | string     | The name of the sport for this market                                                                                               |
+| sportId         | number     | The ID of the sport for this market                                                                                                 |
+| leagueId        | number     | The league ID for this market                                                                                                       |
+| homeTeamFirst   | boolean    | Indicator to the client of whether to display the home team first or not                                                            |
+| leagueLabel     | string     | The name of the league for this market                                                                                              |
+| mainLine        | boolean?   | If this market is currently the main line or not. If the market is not a market with multiple lines, this field will not be present |
+| group1          | string     | Indicator to the client of how to display this market                                                                               |
+| group2          | string?    | Indicator to the client of how to display this market                                                                               |
+| teamOneMeta     | string?    | Extra metadata for team one                                                                                                         |
+| teamTwoMeta     | string?    | Extra metadata for team two                                                                                                         |
+| marketMeta      | string?    | Extra metadata for the market overall                                                                                               |
 
 A `MarketType` can currently be one of the following
 
@@ -133,6 +137,8 @@ A `MarketType` can currently be one of the following
 - `SPREAD`
 - `MONEY_LINE`
 - `OUTRIGHT_WINNER`
+
+More types might be added in the future.
 
 ## Get specific markets
 
@@ -197,17 +203,14 @@ This endpoint retrieves specific markets
 | status | string   | `success` or `failure` if the request succeeded or not |
 | data   | Market[] | The response data                                      |
 
-See [active markets section](#get-active-markets) for how the `Market` object is formatted. Note that there are a few additional fields if you are querying a market that has been settled/reported
+See [active markets section](#get-active-markets) for how the `Market` object is formatted. Note that there are a few additional fields if you are querying a market that has been settled/reported:
 
-Name | Type | Description
---- | --- | ---
-reportedDate | number | Time in unix seconds of when the market was reported
-outcome | number | The outcome of the market. Can be one of 0 1 or 2. 0 means the market was voided and stakes were returned to bettors. 1 means the outcome labeled `outcomeOneName` was the outcome. 2 means the outcome labeled `outcomeTwoName` was the outcome.
-teamOneScore | number | Final score of team one
-teamTwoScore | number | Final score of team two
-teamOneMeta | string | Extra metadata for team one
-teamTwoMeta | string | Extra metadata for team two
-marketMeta | string | Extra metadata for the market overall
+| Name         | Type   | Description                                                                                                                                                                                                                                       |
+| ------------ | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| reportedDate | number | Time in unix seconds of when the market was reported                                                                                                                                                                                              |
+| outcome      | number | The outcome of the market. Can be one of 0 1 or 2. 0 means the market was voided and stakes were returned to bettors. 1 means the outcome labeled `outcomeOneName` was the outcome. 2 means the outcome labeled `outcomeTwoName` was the outcome. |
+| teamOneScore | number | Final score of team one                                                                                                                                                                                                                           |
+| teamTwoScore | number | Final score of team two                                                                                                                                                                                                                           |
 
 ## Popular markets
 
