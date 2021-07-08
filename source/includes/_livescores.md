@@ -14,10 +14,9 @@ curl --location --request POST 'https://app.api.sportx.bet/live-scores' \
   "status": "success",
   "data": [
     {
-      "providerEventId": "7011313",
-      "createdAt": "2021-05-27T18:56:45.128Z",
-      "currentPeriod": "Full time",
-      "extra": "[{\"Name\":\"Balls\",\"Value\":\"0\"},{\"Name\":\"Bases\",\"Value\":\"0/0/1\"},{\"Name\":\"Strikes\",\"Value\":\"0\"},{\"Name\":\"Outs\",\"Value\":\"3\"},{\"Name\":\"Turn\",\"Value\":\"1\"}]",
+      "createdAt": "2021-07-08T17:57:38.057Z",
+      "currentPeriod": "8th Inning",
+      "extra": "[{\"Name\":\"Strikes\",\"Value\":\"0\"},{\"Name\":\"Turn\",\"Value\":\"2\"},{\"Name\":\"Balls\",\"Value\":\"1\"},{\"Name\":\"Outs\",\"Value\":\"2\"},{\"Name\":\"Bases\",\"Value\":\"0/0/0\"}]",
       "leagueId": 171,
       "periodTime": "-1",
       "periods": [
@@ -25,7 +24,7 @@ curl --location --request POST 'https://app.api.sportx.bet/live-scores' \
           "label": "1st Inning",
           "isFinished": true,
           "teamOneScore": "0",
-          "teamTwoScore": "1"
+          "teamTwoScore": "2"
         },
         {
           "label": "2nd Inning",
@@ -55,7 +54,7 @@ curl --location --request POST 'https://app.api.sportx.bet/live-scores' \
           "label": "6th Inning",
           "isFinished": true,
           "teamOneScore": "0",
-          "teamTwoScore": "3"
+          "teamTwoScore": "0"
         },
         {
           "label": "7th Inning",
@@ -64,30 +63,17 @@ curl --location --request POST 'https://app.api.sportx.bet/live-scores' \
           "teamTwoScore": "0"
         },
         {
-          "label": "Full time",
-          "isFinished": true,
-          "teamOneScore": "2",
-          "teamTwoScore": "5"
-        },
-        {
           "label": "8th Inning",
-          "isFinished": true,
+          "isFinished": false,
           "teamOneScore": "0",
           "teamTwoScore": "0"
-        },
-        {
-          "label": "9th Inning",
-          "isFinished": true,
-          "teamOneScore": "1",
-          "teamTwoScore": "1"
         }
       ],
-      "provider": "LSPORT",
       "sportId": 3,
-      "teamOneScore": 2,
-      "teamTwoScore": 5,
-      "updatedAt": "2021-05-28T16:39:29.410Z",
-      "sportXeventId": "L7011313"
+      "teamOneScore": 1,
+      "teamTwoScore": 2,
+      "updatedAt": "2021-07-08T20:35:21.607Z",
+      "sportXeventId": "L7187811"
     }
   ]
 }
@@ -121,6 +107,10 @@ A `Score` object has the following format
 | leagueId      | number   | The league ID for this match                                                    |
 | periodTime    | number   | The time in the period. If it's -1, it is not available or the game is finished |
 | periods       | Period[] | All of the periods in the match                                                 |
+| sportId       | number   | The ID of the sport for this match                                              |
+| teamOneScore  | number   | The current score for team one                                                  |
+| teamTwoScore  | number   | The current score for team two                                                  |
+| sportXeventId | string   | The event ID for this match                                                     |
 
 A `Period` object has the following format
 
