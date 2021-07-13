@@ -134,7 +134,9 @@ const tokenContract = new Contract(
   ],
   wallet
 );
-await tokenContract.approve(tokenTransferProxyAddress, MaxUInt256);
+await tokenContract.approve(tokenTransferProxyAddress, MaxUInt256, {
+  gasLimit: 100000,
+});
 ```
 
 To enable betting, you need to approve the `TokenTransferProxy` contract for each token for which you wish to trade. Otherwise, any endpoints that create/cancel or fill orders will fail. For example if you want to trade with both ETH and USDC, you'll need to approve the contract twice, once for each token. The address of the `TokenTransferProxy` is `0xa6EA1Ed4aeC85dF277fae3512f8a6cbb40c1Fe7e` and the address of each token is given in [the tokens section](#tokens)
@@ -240,13 +242,15 @@ const result = await fetch("https://app.api.sportx.bet/orders/new", {
 }
 ```
 
-This endpoint offers new orders on the exchange (market making).
+This endpoint offers new orders on the exchange (market making). Offering orders does not cost any fee or require you to have any MATIC tokens in your wallet. 
+
+Note you can offer as many orders as you wish, provided your total exposure for each token (as measured by `totalBetSize - fillAmount`) remains under your wallet balance. If your wallet balance dips under your total exposure, orders will be removed from the book until it reaches the minimum again. 
+
+<aside class="warning">
+If the API finds that your balance is consistently below your total exposure requiring orders to be cancelled, your account may be temporarily restricted. 
+</aside>
 
 To offer bets on sportx.bet via the API, make sure you first enable betting by following the steps [here](#enabling-betting).
-
-<aside class="notice">
-The address in the <code>maker</code> field must match the account being used to create the signature!
-</aside>
 
 ### HTTP Request
 
@@ -272,6 +276,10 @@ A `SignedNewOrder` object looks like this
 | salt                     | string  | A random 32 byte string to differentiate between between orders with otherwise identical parameters      |
 | isMakerBettingOutcomeOne | boolean | `true` if the maker is betting outcome one (and hence taker is betting outcome two if filled)            |
 | signature                | string  | The signature of the maker on this order payload                                                         |
+
+<aside class="notice">
+The address in the <code>maker</code> field must match the account being used to create the signature!
+</aside>
 
 ### Response format
 
