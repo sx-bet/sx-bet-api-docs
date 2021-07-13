@@ -173,13 +173,13 @@ const order = {
   marketHash:
     "0x0eeace4a9bbf6235bc59695258a419ed3a05a2c8e3b6a58fb71a0d9e6b031c2b",
   maker: "0x6F75bA6c90E3da79b7ACAfc0fb9cf3968aa4ee39",
-  totalBetSize: BigNumber.from("21600000000000000000"),
-  percentageOdds: BigNumber.from("47846889952153115000"),
+  totalBetSize: BigNumber.from("21600000000000000000").toString(),
+  percentageOdds: BigNumber.from("47846889952153115000").toString(),
   baseToken: "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063",
-  expiry: BigNumber.from(1631233201),
+  expiry: BigNumber.from(1631233201).toString(),
   executor: "0x3E91041b9e60C7275f8296b8B0a97141e6442d49",
   isMakerBettingOutcomeOne: true,
-  salt: BigNumber.from(utils.randomBytes(32)),
+  salt: BigNumber.from(utils.randomBytes(32)).toString(),
 };
 
 const orderHash = utils.arrayify(
@@ -243,6 +243,10 @@ const result = await fetch("https://app.api.sportx.bet/orders/new", {
 This endpoint offers new orders on the exchange (market making).
 
 To offer bets on sportx.bet via the API, make sure you first enable betting by following the steps [here](#enabling-betting).
+
+<aside class="notice">
+The address in the <code>maker</code> field must match the account being used to create the signature!
+</aside>
 
 ### HTTP Request
 
@@ -665,7 +669,7 @@ async function fillOrder() {
 }
 ```
 
-This endpoint fills orders on the exchange. Multiple orders can be filled at once and no gas is paid as this is a meta transaction submitted by the API itself.
+This endpoint fills orders on the exchange. Multiple orders can be filled at once and no gas is paid as this is a meta transaction submitted by the API itself. _Therefore you do not require any MATIC in your wallet to fill orders_.
 
 Note that pre-game has a built-in betting delay of 2s and in-game betting has a built-in betting delay of 5s. This is added to guard against toxic flow and high spikes in latency from the bookmaker's side. It is effectively protection for the bookmaker. If the odds change within that delay time, the order will be cancelled and an error will be thrown.
 
