@@ -60,7 +60,7 @@ channel.subscribe((message) => {
     "status": "ACTIVE",
     "teamOneName": "Tampa Bay Rays",
     "teamTwoName": "Cleveland Indians",
-    "type": "OVER_UNDER"
+    "type": 2
   }
 ]
 ```
@@ -93,13 +93,12 @@ channel.subscribe((message) => {
 ```json
 {
   "marketHash": "0x38cceead7bda65c18574a34994ebd8af154725d08aa735dcbf26247a7dcc67bd",
-  "marketType": "OVER_UNDER",
+  "marketType": 3,
   "sportXeventId": "L7178624"
 }
 ```
 
-Subscribe to all line changes. Messages are sent for particular combinations of event IDs and market types. Note that only market types with lines will have updates sent. For example,
-`MONEY_LINE` markets will not have main line changes.
+Subscribe to all line changes. Messages are sent for particular combinations of event IDs and market types. Note that only market types with lines will have updates sent. See [the active markets section](#get-active-markets) for details on which types have lines.
 
 ### Channel name format
 
@@ -107,11 +106,11 @@ Subscribe to all line changes. Messages are sent for particular combinations of 
 
 ### Message payload format
 
-| Name          | Type   | Description                                                                                                                                          |
-| ------------- | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| marketHash    | string | The market which is now the main line for this event ID                                                                                              |
-| marketType    | string | The type of market this update refers to. This is sent to distinguish between a `SPREAD` line change versus a `OVER_UNDER` line change, for example. |
-| sportXeventId | string | The event ID for this update                                                                                                                         |
+| Name          | Type   | Description                                             |
+| ------------- | ------ | ------------------------------------------------------- |
+| marketHash    | string | The market which is now the main line for this event ID |
+| marketType    | number | The type of market this update refers to.               |
+| sportXeventId | string | The event ID for this update                            |
 
 To get the actual line, you'll have to fetch the market using the `marketHash`
 

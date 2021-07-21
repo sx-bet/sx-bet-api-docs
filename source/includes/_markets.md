@@ -21,7 +21,7 @@ curl --location --request GET 'https://app.api.sportx.bet/markets/active?onlyMai
         "outcomeVoidName": "NO_CONTEST",
         "teamOneName": "Nikoloz Basilashvili",
         "teamTwoName": "Carlos Alcaraz",
-        "type": "MONEY_LINE",
+        "type": 226,
         "gameTime": 1622735700,
         "sportXeventId": "L7032829",
         "liveEnabled": true,
@@ -40,7 +40,7 @@ curl --location --request GET 'https://app.api.sportx.bet/markets/active?onlyMai
         "outcomeVoidName": "NO_GAME_OR_EVEN",
         "teamOneName": "Nikoloz Basilashvili",
         "teamTwoName": "Carlos Alcaraz",
-        "type": "OVER_UNDER",
+        "type": 2,
         "gameTime": 1622735700,
         "line": 36.5,
         "sportXeventId": "L7032829",
@@ -61,7 +61,7 @@ curl --location --request GET 'https://app.api.sportx.bet/markets/active?onlyMai
         "outcomeVoidName": "NO_GAME_OR_EVEN",
         "teamOneName": "Nikoloz Basilashvili",
         "teamTwoName": "Carlos Alcaraz",
-        "type": "SPREAD",
+        "type": 3,
         "gameTime": 1622735700,
         "line": 1.5,
         "sportXeventId": "L7032829",
@@ -116,7 +116,7 @@ A `market` object looks like this
 | teamTwoName     | string     | The name of the second team/player participating                                                                                    |
 | type            | MarketType | The type of the market                                                                                                              |
 | gameTime        | number     | The UNIX timestamp of the game                                                                                                      |
-| line            | number?    | The line of the market (only applicable to markets with a line, for example SPREAD or OVER_UNDER)                                   |
+| line            | number?    | The line of the market. Only applicable to markets with a line                                                                      |
 | sportXeventId   | string     | The unique event ID for this market                                                                                                 |
 | liveEnabled     | boolean    | Whether or not this match is available for live betting                                                                             |
 | sportLabel      | string     | The name of the sport for this market                                                                                               |
@@ -133,12 +133,23 @@ A `market` object looks like this
 
 A `MarketType` can currently be one of the following
 
-- `OVER_UNDER`
-- `SPREAD`
-- `MONEY_LINE`
-- `OUTRIGHT_WINNER`
+| ID   | Description                       | Has Lines |
+| ---- | --------------------------------- | --------- |
+| 1    | 12                                | false     |
+| 88   | To Qualify                        | false     |
+| 226  | 12 Including Overtime             | false     |
+| 3    | Asian Handicap                    | true      |
+| 201  | Asian Handicap Games              | true      |
+| 342  | Asian Handicap Including Overtime | true      |
+| 2    | Under/Over                        | true      |
+| 835  | Asian Under/Over                  | true      |
+| 28   | Under/Over Including Overtime     | true      |
+| 29   | Under/Over Rounds                 | true      |
+| 166  | Under/Over Games                  | true      |
+| 1536 | Under/Over Maps                   | true      |
+| 274  | Outright Winner                   | false     |
 
-More types might be added in the future.
+More types will be added continuously.
 
 ## Get specific markets
 
@@ -164,7 +175,7 @@ curl --location --request POST 'https://app.api.sportx.bet/markets/find' \
       "outcomeVoidName": "NO_GAME_OR_EVEN",
       "teamOneName": "Aston Villa",
       "teamTwoName": "Burnley",
-      "type": "OVER_UNDER",
+      "type": 2,
       "gameTime": 1608228000,
       "line": 2.5,
       "reportedDate": 1608234719,
@@ -232,7 +243,7 @@ curl --location --request GET 'https://app.api.sportx.bet/markets/popular'
       "outcomeVoidName": "NO_GAME",
       "teamOneName": "Ismagulov D.",
       "teamTwoName": "Rafael da Silva Alves",
-      "type": "MONEY_LINE",
+      "type": 226,
       "gameTime": 1621724400,
       "sportXeventId": "L6896568",
       "liveEnabled": false,
@@ -251,7 +262,7 @@ curl --location --request GET 'https://app.api.sportx.bet/markets/popular'
       "outcomeVoidName": "NO_GAME_OR_EVEN",
       "teamOneName": "West Ham United",
       "teamTwoName": "Southampton",
-      "type": "SPREAD",
+      "type": 3,
       "gameTime": 1621782000,
       "line": -0.5,
       "sportXeventId": "L6973172",
