@@ -135,7 +135,7 @@ A `MarketType` can currently be one of the following
 
 | ID   | Description                       | Has Lines |
 | ---- | --------------------------------- | --------- |
-| 1    | 12                                | false     |
+| 52   | 12                                | false     |
 | 88   | To Qualify                        | false     |
 | 226  | 12 Including Overtime             | false     |
 | 3    | Asian Handicap                    | true      |
