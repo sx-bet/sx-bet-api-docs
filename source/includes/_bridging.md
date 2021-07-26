@@ -17,7 +17,7 @@ import ethSigUtil from "eth-sig-util";
 async function fastExit() {
   const privateKey = process.env.PRIVATE_KEY!;
   const tokenAddress = process.env.TOKEN_ADDRESS!;
-  const fastExitSpenderAddress = process.env.FAST_EXIT_SPENDER_ADDRESS;
+  const fastExitSpenderAddress = process.env.FAST_EXIT_SPENDER_ADDRESS; // See the request payload for what this should be 
   const bufferPrivateKey = Buffer.from(privateKey!.substring(2), "hex");
   const withdrawAmount = parseUnits("100", 18);
   // Note that because this transaction is executing on polygon, you must pass a JSON-RPC endpoint for Polygon, not Ethereum mainnet.
