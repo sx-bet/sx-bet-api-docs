@@ -17,6 +17,7 @@ includes:
   - livescores
   - metadata
   - orders
+  - bridging
   - unitconversion
   - eip712signing
   - contractAddresses
@@ -33,7 +34,7 @@ code_clipboard: true
 
 # Introduction
 
-Be your own bookmaker and fill orders programmatically with the SportX API!
+Be your own bookmaker or fill orders programmatically with the SportX API!
 
 Questions? [Join our chat](https://discord.gg/xXUynCX)
 

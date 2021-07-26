@@ -145,6 +145,10 @@ If you don't wish to do this programmatically, you can simply go to `https://spo
 
 If you want to do it programmatically, see the code sample on the right. Note you will need a little bit of MATIC to make this transaction (~$0.01 worth).
 
+<aside class="notice">
+Your assets must be on polygon to place or fill orders via the API.
+</aside>
+
 ## Post a new order
 
 ```shell
@@ -245,6 +249,10 @@ const result = await fetch("https://app.api.sportx.bet/orders/new", {
 This endpoint offers new orders on the exchange (market making). Offering orders does not cost any fee or require you to have any MATIC tokens in your wallet. 
 
 Note you can offer as many orders as you wish, provided your total exposure for each token (as measured by `totalBetSize - fillAmount`) remains under your wallet balance. If your wallet balance dips under your total exposure, orders will be removed from the book until it reaches the minimum again. 
+
+<aside class="notice">
+Your assets must be on polygon to place orders.
+</aside>
 
 <aside class="warning">
 If the API finds that your balance is consistently below your total exposure requiring orders to be cancelled, your account may be temporarily restricted. 
@@ -682,6 +690,10 @@ This endpoint fills orders on the exchange. Multiple orders can be filled at onc
 Note that pre-game has a built-in betting delay of 2s and in-game betting has a built-in betting delay of 5s. This is added to guard against toxic flow and high spikes in latency from the bookmaker's side. It is effectively protection for the bookmaker. If the odds change within that delay time, the order will be cancelled and an error will be thrown.
 
 To fill orders on sportx.bet via the API, make sure you first enable betting by following the steps [here](#enabling-betting)
+
+<aside class="notice">
+Your assets must be on Polygon to place bets.
+</aside>
 
 ### HTTP Request
 

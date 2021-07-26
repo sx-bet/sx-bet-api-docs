@@ -79,7 +79,7 @@ curl --location --request GET 'https://app.api.sportx.bet/markets/active?onlyMai
 }
 ```
 
-This endpoint retrieves active markets on the exchange. It does not return markets that have been settled or reported.
+This endpoint retrieves active markets on the exchange. It does not return markets that have been settled or reported. Note that to retrieve odds for a particular market, you must query the orders endpoint [the orders endpoint](#get-active-orders) separately.
 
 ### HTTP Request
 
