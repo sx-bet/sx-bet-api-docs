@@ -13,6 +13,7 @@ includes:
   - markets
   - leagues
   - sports
+  - fixtures
   - trades
   - livescores
   - metadata
