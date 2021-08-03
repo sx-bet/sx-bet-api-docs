@@ -24,6 +24,7 @@ includes:
   - contractAddresses
   - fees
   - websocket
+  - affiliate
 
 
 
