@@ -716,7 +716,7 @@ Your assets must be on Polygon to place bets.
 | message             | true     | string                  | A user-facing message for the eip712 signing. Can be anything.                                                                                                                                                                                              |
 | signature           | true     | string                  | The EIP712 signature on the cancel order payload. See the [EIP712 signing section](#eip712-signing) for general information on how to compute this signature. See the example for the specific parameters required.                                         |
 | approveProxyPayload | false    | `ApproveSpenderPayload` | Extra object required if you wish to atomically `ERC20.approve()` prior to the bet. This can be useful from a UX point of view if you don't want the user to have to wait until the approval is mined before the bet can be submitted                       |
-affiliateAddress | false | string | Set the `taker` to this affiliate address. Only works for valid affiliates.
+affiliateAddress | false | string | Set the `taker` to a valid affiliate's address.
 
 where an `ApproveSpenderPayload` looks like
 
