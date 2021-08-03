@@ -28,7 +28,6 @@ curl --location --request POST 'https://app.api.sportx.bet/trades'
         "fillHash": "0xbe846c92bec584c4d2215df76ac7d53ebab25f81a30cca5811fb93f35e8b5321",
         "tradeStatus": "SUCCESS",
         "valid": true,
-        "affiliate": "0xA216136Ac816FC1E816af5FffDC9E58281e14383",
         "outcome": 1,
         "settleDate": "2020-12-11T20:17:45.990Z"
       },
@@ -47,7 +46,6 @@ curl --location --request POST 'https://app.api.sportx.bet/trades'
         "fillHash": "0xbe846c92bec584c4d2215df76ac7d53ebab25f81a30cca5811fb93f35e8b5321",
         "tradeStatus": "SUCCESS",
         "valid": true,
-        "affiliate": "0xA216136Ac816FC1E816af5FffDC9E58281e14383",
         "outcome": 1,
         "settleDate": "2020-12-11T20:17:45.990Z"
       },
@@ -66,7 +64,6 @@ curl --location --request POST 'https://app.api.sportx.bet/trades'
         "fillHash": "0xc0240cf27c111d843bc4cf2de0521ab097223de933125857343e7a6fba469172",
         "tradeStatus": "SUCCESS",
         "valid": true,
-        "affiliate": "0xA216136Ac816FC1E816af5FffDC9E58281e14383",
         "outcome": 1,
         "settleDate": "2020-12-11T22:02:19.484Z"
       },
@@ -85,16 +82,17 @@ curl --location --request POST 'https://app.api.sportx.bet/trades'
         "fillHash": "0xc0240cf27c111d843bc4cf2de0521ab097223de933125857343e7a6fba469172",
         "tradeStatus": "SUCCESS",
         "valid": true,
-        "affiliate": "0xBAbe136fcA601Cab2CfFFbc5512DDfF20fe33d2B",
         "outcome": 1,
         "settleDate": "2020-12-11T22:02:19.484Z"
       }
-    ]
+    ],
+    "nextKey": "60e4b70dc476a37a5b1b15ae",
+    "pageSize": 4
   }
 }
 ```
 
-This endpoint retrieves past trades on the exchange split up by order. For example, if a trade fills more than one order at once, it will show up as two entries for the bettor.
+This endpoint retrieves past trades on the exchange split up by order. This is a paginated endpoint. For example, if a trade fills more than one order at once, it will show up as two entries for the bettor. It is returned
 
 ### HTTP Request
 
@@ -102,43 +100,48 @@ This endpoint retrieves past trades on the exchange split up by order. For examp
 
 ### Request payload parameters
 
-| Name         | Required | Type     | Description                                                          |
-| ------------ | -------- | -------- | -------------------------------------------------------------------- |
-| startDate    | false    | number   | Only get trades placed after this time in UNIX seconds               |
-| endDate      | false    | number   | Only get trades placed before this time in UNIX seconds              |
-| bettor       | false    | string   | Only get trades placed by this bettor (regardless if maker or taker) |
-| settled      | false    | boolean  | If `true`, only get settled trades                                   |
-| marketHashes | false    | string[] | Only get trades for particular markets                               |
-| baseToken    | false    | string   | Only get trades placed for a particular token                        |
-| maker        | false    | boolean  | If `true`, only get trades where the bettor is the maker             |
+| Name          | Required | Type     | Description                                                                                                     |
+| ------------- | -------- | -------- | --------------------------------------------------------------------------------------------------------------- |
+| startDate     | false    | number   | Only get trades placed after this time in UNIX seconds                                                          |
+| endDate       | false    | number   | Only get trades placed before this time in UNIX seconds                                                         |
+| bettor        | false    | string   | Only get trades placed by this bettor (regardless if maker or taker)                                            |
+| settled       | false    | boolean  | If `true`, only get settled trades                                                                              |
+| marketHashes  | false    | string[] | Only get trades for particular markets                                                                          |
+| baseToken     | false    | string   | Only get trades placed for a particular token                                                                   |
+| maker         | false    | boolean  | If `true`, only get trades where the bettor is the maker                                                        |
+| affiliate     | false    | string   | Only get trades under this affiliate                                                                            |
+| pageSize      | false    | number   | Requested page size. Each call will only return up to this amount of records. Default is 100.                   |
+| paginationKey | false    | string   | Used for pagination. Pass the `nextKey` returned from the previous request to retrieve the next set of records. |
 
 ### Response format
 
-| Name     | Type    | Description                                            |
-| -------- | ------- | ------------------------------------------------------ |
-| status   | string  | `success` or `failure` if the request succeeded or not |
-| data     | object  | The response data                                      |
-| > trades | Trade[] | The trades for the request                             |
+| Name       | Type    | Description                                                                       |
+| ---------- | ------- | --------------------------------------------------------------------------------- |
+| status     | string  | `success` or `failure` if the request succeeded or not                            |
+| data       | object  | The response data                                                                 |
+| > trades   | Trade[] | The trades for the request                                                        |
+| > nextKey  | string  | Use this key as the `paginationKey` to retrieve the next set of records, if any   |
+| > pageSize | number  | Maximum amount of records on this page. Will be equal to the `pageSize` passed in |
 
 A `Trade` object has the following format
 
-| Name              | Type    | Description                                                                                                         |
-| ----------------- | ------- | ------------------------------------------------------------------------------------------------------------------- |
-| baseToken         | string  | The token in which this trade was placed                                                                            |
-| bettor            | string  | The address of the bettor who placed the trade                                                                      |
-| stake             | string  | Exact token amount that was staked for the bet. To convert into a readable token amount, see [the token conversion section](#tokens)                                                                    |
-| odds              | string  | Implied odds that the bettor received for this bet. Divide by 10^20 to get the odds in decimal format.              |
-| orderHash         | string  | The unique identifier of the order that was filled for this trade                                                   |
-| marketHash        | string  | The unique identifier of the market for which this trade was placed                                                 |
-| maker             | boolean | `true` if the bettor is market maker in this trade                                                                  |
-| betTime           | number  | The time in UNIX seconds when the trade was placed                                                                  |
-| settled           | boolean | `true` if this bet is settled (this refers to if the bet was won lost or voided, not if the trade succeeded or not) |
-| bettingOutcomeOne | boolean | `true` if the bettor is betting outcome one in the market                                                           |
-| fillHash          | string  | The unique identifier for this trade                                                                                |
-| tradeStatus       | string  | `SUCCESS` or `FAILURE` depending on if this trade succeeded or not                                                  |
-| valid             | boolean | `true` if the trade counts toward competitions or tournaments                                                       |
-| outcome           | number  | with `settled=true`, this will be 0, 1, or 2 depending on the final outcome of the market                           |
-| settleDate        | string  | ISO formatted date string of when the trade was settled                                                             |
+| Name              | Type    | Description                                                                                                                          |
+| ----------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| baseToken         | string  | The token in which this trade was placed                                                                                             |
+| bettor            | string  | The address of the bettor who placed the trade                                                                                       |
+| stake             | string  | Exact token amount that was staked for the bet. To convert into a readable token amount, see [the token conversion section](#tokens) |
+| odds              | string  | Implied odds that the bettor received for this bet. Divide by 10^20 to get the odds in decimal format.                               |
+| orderHash         | string  | The unique identifier of the order that was filled for this trade                                                                    |
+| marketHash        | string  | The unique identifier of the market for which this trade was placed                                                                  |
+| maker             | boolean | `true` if the bettor is market maker in this trade                                                                                   |
+| betTime           | number  | The time in UNIX seconds when the trade was placed                                                                                   |
+| settled           | boolean | `true` if this bet is settled (this refers to if the bet was won lost or voided, not if the trade succeeded or not)                  |
+| bettingOutcomeOne | boolean | `true` if the bettor is betting outcome one in the market                                                                            |
+| fillHash          | string  | The unique identifier for this trade                                                                                                 |
+| tradeStatus       | string  | `SUCCESS` or `FAILURE` depending on if this trade succeeded or not                                                                   |
+| valid             | boolean | `true` if the trade counts toward competitions or tournaments                                                                        |
+| outcome           | number  | with `settled=true`, this will be 0, 1, or 2 depending on the final outcome of the market                                            |
+| settleDate        | string  | ISO formatted date string of when the trade was settled                                                                              |
 
 ## Get consolidated trades
 
