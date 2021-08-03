@@ -246,9 +246,9 @@ const result = await fetch("https://app.api.sportx.bet/orders/new", {
 }
 ```
 
-This endpoint offers new orders on the exchange (market making). Offering orders does not cost any fee or require you to have any MATIC tokens in your wallet. 
+This endpoint offers new orders on the exchange (market making). Offering orders does not cost any fee or require you to have any MATIC tokens in your wallet.
 
-Note you can offer as many orders as you wish, provided your total exposure for each token (as measured by `totalBetSize - fillAmount`) remains under your wallet balance. If your wallet balance dips under your total exposure, orders will be removed from the book until it reaches the minimum again. 
+Note you can offer as many orders as you wish, provided your total exposure for each token (as measured by `totalBetSize - fillAmount`) remains under your wallet balance. If your wallet balance dips under your total exposure, orders will be removed from the book until it reaches the minimum again.
 
 <aside class="notice">
 Your assets must be on polygon to place orders.
@@ -710,20 +710,21 @@ Your assets must be on Polygon to place bets.
 | odds                | true     | string                  | User facing string for the odds the user is receiving. Can simply set to "N/A" when using the API                                                                                                                                                           |
 | orderHashes         | true     | string[]                | Orders being filled. Must be the order hashes of the orders used in computing the EIP712 payload. Must be the same length as `takerAmounts`                                                                                                                 |
 | returning           | true     | string                  | User facing string for what the bet wil be returning. Can simply set to "N/A" when using the API.                                                                                                                                                           |
+| taker               | true     | string                  | Address of the taker taking the bet                                                                                                                                                                                                                         |
 | stake               | true     | string                  | User facing string for how much the user is risking. Can simly set to "N/A" when using the API.                                                                                                                                                             |
 | takerAmounts        | true     | string[]                | How much each order is being filled, ordered by index. Must be in the same order as `orderHashes`, and the same length as `orderHashes`. It also must be the same and in the same order as the `takerAmounts` array used when computing the EIP712 payload. |
-| takerSig            | true     | string                  | The EIP712 signature on the payload. See the example of how to compute this.                                                                                                                                                                                |
+| takerSig            | true     | string                  | The EIP712 signature of the `taker` on the payload. See the example of how to compute this.                                                                                                                                                                 |
 | message             | true     | string                  | A user-facing message for the eip712 signing. Can be anything.                                                                                                                                                                                              |
 | signature           | true     | string                  | The EIP712 signature on the cancel order payload. See the [EIP712 signing section](#eip712-signing) for general information on how to compute this signature. See the example for the specific parameters required.                                         |
 | approveProxyPayload | false    | `ApproveSpenderPayload` | Extra object required if you wish to atomically `ERC20.approve()` prior to the bet. This can be useful from a UX point of view if you don't want the user to have to wait until the approval is mined before the bet can be submitted                       |
-affiliateAddress | false | string | Set the `taker` to a valid affiliate's address.
+| affiliateAddress    | false    | string                  | Set the `taker` to a valid affiliate's address.                                                                                                                                                                                                             |
 
 where an `ApproveSpenderPayload` looks like
 
 | Name         | Required | Type   | Description                                                                                                                                                                                      |
 | ------------ | -------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| owner        | true     | string | Address of the bettor                                                                                                                                                                            |
-| spender      | true     | string | Address of the contract permitted to spend tokens on behalf of the bettor to bet. See the `TokenTransferProxy` address in the [contract-addresses](#contract-addresses) section for this address |
+| owner        | true     | string | Address of the bettor/taker                                                                                                                                                                            |
+| spender      | true     | string | Address of the contract permitted to spend tokens on behalf of the bettor/taker to bet. See the `TokenTransferProxy` address in the [contract-addresses](#contract-addresses) section for this address |
 | tokenAddress | true     | string | Address of the token being used to bet. Must be the same as the token referenced in the orders being filled                                                                                      |
 | amount       | true     | string | Amount of tokens to approve. Must be greater than or equal to the total tokens bet from the bettors's perspective, i.e., how many tokens are leaving the bettor's wallet                         |
 | signature    | true     | string | The EIP712 signature of the this payload.                                                                                                                                                        |
