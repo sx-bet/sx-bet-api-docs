@@ -216,6 +216,11 @@ Note that this endpoint is only updated every 10m.
 
 `GET https://app.api.sportx.bet/leagues/active`
 
+### Query parameters
+Name | Required | Type | Description
+--- | --- | --- | ---
+sportId | true | number | Only return active leagues under this sport
+
 ### Response format
 
 See [get leagues section](#get-leagues) for how the response object is formatted. There is an additional field `eventsByType` which maps the number of unique events within a particular bet group (for example, `game-lines` or `outright-winner`).
