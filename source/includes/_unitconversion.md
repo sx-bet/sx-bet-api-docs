@@ -36,7 +36,8 @@ To convert from implied odds to decimal odds, inverse the number. For example, 0
   "maker": "0x63a4491dC73245E181c47BAe0ae9d6627E56dE55",
   "totalBetSize": "10000000000000000000",
   "percentageOdds": "70455284072443640000",
-  "expiry": 1631233201,
+  "expiry": 2209006800,
+  "apiExpiry": 1631233201
   "baseToken": "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063",
   "executor": "0x3E91041b9e60C7275f8296b8B0a97141e6442d49",
   "salt": "69415402816762328320330277846098411244657139277332120954321492419616371539163",

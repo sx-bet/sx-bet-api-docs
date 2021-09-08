@@ -19,7 +19,8 @@ curl --location --request POST 'https://app.api.sportx.bet/orders'
       "maker": "0x63a4491dC73245E181c47BAe0ae9d6627E56dE55",
       "totalBetSize": "10000000000000000000",
       "percentageOdds": "70455284072443640000",
-      "expiry": 1631233201,
+      "expiry": 2209006800,
+      "apiExpiry": 1631233201
       "baseToken": "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063",
       "executor": "0x3E91041b9e60C7275f8296b8B0a97141e6442d49",
       "salt": "69415402816762328320330277846098411244657139277332120954321492419616371539163",
@@ -34,7 +35,8 @@ curl --location --request POST 'https://app.api.sportx.bet/orders'
       "maker": "0x63a4491dC73245E181c47BAe0ae9d6627E56dE55",
       "totalBetSize": "10000000000000000000",
       "percentageOdds": "29542732332840140000",
-      "expiry": 1631233201,
+      "expiry": 2209006800,
+      "apiExpiry": 1631233201,
       "baseToken": "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063",
       "executor": "0x3E91041b9e60C7275f8296b8B0a97141e6442d49",
       "salt": "37069036490382455296196784649228360571791475783443923366499720348790829992442",
@@ -49,7 +51,8 @@ curl --location --request POST 'https://app.api.sportx.bet/orders'
       "maker": "0x63a4491dC73245E181c47BAe0ae9d6627E56dE55",
       "totalBetSize": "10000000000000000000",
       "percentageOdds": "50000000000000000000",
-      "expiry": 1631233201,
+      "expiry": 2209006800,
+      "apiExpiry": 1631233201,
       "baseToken": "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063",
       "executor": "0x3E91041b9e60C7275f8296b8B0a97141e6442d49",
       "salt": "90344661128498016788545482097709376028896473001963632493180076229973632520043",
@@ -87,7 +90,8 @@ Note that one of `marketHashes` or `maker` is required.
 | maker                    | string  | The market maker for this order                                                                                                                                                                                                                                                                                                                |
 | totalBetSize             | string  | The total size of this order in Ethereum units. See the [the token section](#tokens) section for how to convert this into nominal amounts.                                                                                                                                                                                                     |
 | percentageOdds           | string  | The odds that the `maker` receives in the sportx protocol format. To convert to an implied odds divide by 10^20. To convert to the odds that the taker would receive if this order would be filled in implied format, use the formula `takerOdds=1-percentageOdds/10^20`. See the [unit conversion section](#bookmaker-odds) for more details. |
-| expiry                   | number  | The time in unix seconds after which this order is no longer valid                                                                                                                                                                                                                                                                             |
+| expiry                   | number  | Deprecated: the time in unix seconds after which this order is no longer valid. After deprecation, this field is always 2209006800 (2040)                                                                                                                                                                                                      |
+| apiExpiry                | number  | The time in unix seconds after which this order is no longer valid.                                                                                                                                                                                                                                                                            |
 | baseToken                | string  | The base token this order is denominated in                                                                                                                                                                                                                                                                                                    |
 | executor                 | string  | The address permitted to execute on this order. This is set to the sportx.bet exchange                                                                                                                                                                                                                                                         |
 | salt                     | string  | A random number to differentiate identical orders                                                                                                                                                                                                                                                                                              |
@@ -162,7 +166,8 @@ curl --location --request POST 'https://app.api.sportx.bet/orders/new' \
             "totalBetSize": "21600000000000000000",
             "percentageOdds": "47846889952153115000",
             "baseToken": "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063",
-            "expiry": "1631233201",
+            "apiExpiry": 1631359800,
+            "expiry": 2209006800,
             "executor": "0x3E91041b9e60C7275f8296b8B0a97141e6442d49",
             "isMakerBettingOutcomeOne": true,
             "signature": "0x50b00e7994b0656f78701537296444bccba2a7e4d46a84ff26c8ca48cb66774c76faa893be293412959779900232065c8236e489158070777d7a3e1a37d911811b",
@@ -182,7 +187,8 @@ const order = {
   totalBetSize: BigNumber.from("21600000000000000000").toString(),
   percentageOdds: BigNumber.from("47846889952153115000").toString(),
   baseToken: "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063",
-  expiry: BigNumber.from(1631233201).toString(),
+  apiExpiry: 1631233201,
+  expiry: 2209006800,
   executor: "0x3E91041b9e60C7275f8296b8B0a97141e6442d49",
   isMakerBettingOutcomeOne: true,
   salt: BigNumber.from(utils.randomBytes(32)).toString(),
@@ -279,7 +285,8 @@ A `SignedNewOrder` object looks like this
 | baseToken                | string  | The token this order is denominated in                                                                   |
 | totalBetSize             | string  | The total bet size of the order in Ethereum units.                                                       |
 | percentageOdds           | string  | The odds _the maker will be receiving_ as this order gets filled                                         |
-| expiry                   | number  | Time in UNIX seconds after which this order is no longer valid                                           |
+| expiry                   | number  | Deprecated. Time in UNIX seconds after which this order is no longer valid. Must always be 2209006800.   |
+| apiExpiry                | number  | Time in UNIX seconds after which this order is no longer valid.                                          |
 | executor                 | string  | The sportx.bet executor address. See the [metadata section](#get-metadata) for where to get this address |
 | salt                     | string  | A random 32 byte string to differentiate between between orders with otherwise identical parameters      |
 | isMakerBettingOutcomeOne | boolean | `true` if the maker is betting outcome one (and hence taker is betting outcome two if filled)            |
@@ -510,7 +517,8 @@ async function fillOrder() {
       maker: "0x63a4491dC73245E181c47BAe0ae9d6627E56dE55",
       totalBetSize: "120000000000000000000",
       percentageOdds: "68860772772306080000",
-      expiry: 1631233201,
+      expiry: 2209006800,
+      apiExpiry: 1631233201,
       baseToken: "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063",
       executor: "0x3E91041b9e60C7275f8296b8B0a97141e6442d49",
       salt:
@@ -529,7 +537,8 @@ async function fillOrder() {
       maker: "0x63a4491dC73245E181c47BAe0ae9d6627E56dE55",
       totalBetSize: "120000000000000000000",
       percentageOdds: "27138321995464855000",
-      expiry: 1631233201,
+      expiry: 2209006800,
+      apiExpiry: 1631233201,
       baseToken: "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063",
       executor: "0x3E91041b9e60C7275f8296b8B0a97141e6442d49",
       salt:
@@ -721,13 +730,13 @@ Your assets must be on Polygon to place bets.
 
 where an `ApproveSpenderPayload` looks like
 
-| Name         | Required | Type   | Description                                                                                                                                                                                      |
-| ------------ | -------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Name         | Required | Type   | Description                                                                                                                                                                                            |
+| ------------ | -------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | owner        | true     | string | Address of the bettor/taker                                                                                                                                                                            |
 | spender      | true     | string | Address of the contract permitted to spend tokens on behalf of the bettor/taker to bet. See the `TokenTransferProxy` address in the [contract-addresses](#contract-addresses) section for this address |
-| tokenAddress | true     | string | Address of the token being used to bet. Must be the same as the token referenced in the orders being filled                                                                                      |
-| amount       | true     | string | Amount of tokens to approve. Must be greater than or equal to the total tokens bet from the bettors's perspective, i.e., how many tokens are leaving the bettor's wallet                         |
-| signature    | true     | string | The EIP712 signature of the this payload.                                                                                                                                                        |
+| tokenAddress | true     | string | Address of the token being used to bet. Must be the same as the token referenced in the orders being filled                                                                                            |
+| amount       | true     | string | Amount of tokens to approve. Must be greater than or equal to the total tokens bet from the bettors's perspective, i.e., how many tokens are leaving the bettor's wallet                               |
+| signature    | true     | string | The EIP712 signature of the this payload.                                                                                                                                                              |
 
 ### Response format
 
