@@ -217,10 +217,136 @@ Note that this endpoint is only updated every 10m.
 `GET https://app.api.sportx.bet/leagues/active`
 
 ### Query parameters
-Name | Required | Type | Description
---- | --- | --- | ---
-sportId | true | number | Only return active leagues under this sport
+
+| Name    | Required | Type   | Description                                 |
+| ------- | -------- | ------ | ------------------------------------------- |
+| sportId | true     | number | Only return active leagues under this sport |
 
 ### Response format
 
 See [get leagues section](#get-leagues) for how the response object is formatted. There is an additional field `eventsByType` which maps the number of unique events within a particular bet group (for example, `game-lines` or `outright-winner`).
+
+## Get league teams
+
+```shell
+curl --location --request GET 'https://app.api.sportx.bet/leagues/teams/1'
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+  "status": "success",
+  "data": {
+    "teams": [
+      {
+        "id": 725,
+        "name": "Juventus"
+      },
+      {
+        "id": 724,
+        "name": "Inter"
+      },
+      {
+        "id": 1058,
+        "name": "Napoli"
+      },
+      {
+        "id": 719,
+        "name": "Atalanta"
+      },
+      {
+        "id": 726,
+        "name": "Lazio"
+      },
+      {
+        "id": 728,
+        "name": "AC Milan"
+      },
+      {
+        "id": 732,
+        "name": "AS Roma"
+      },
+      {
+        "id": 723,
+        "name": "Fiorentina"
+      },
+      {
+        "id": 134312,
+        "name": "Sassuolo"
+      },
+      {
+        "id": 720,
+        "name": "Bologna"
+      },
+      {
+        "id": 733,
+        "name": "Torino"
+      },
+      {
+        "id": 1049,
+        "name": "Cagliari"
+      },
+      {
+        "id": 1062,
+        "name": "Sampdoria"
+      },
+      {
+        "id": 736,
+        "name": "Hellas Verona"
+      },
+      {
+        "id": 729,
+        "name": "Parma"
+      },
+      {
+        "id": 1057,
+        "name": "Genoa"
+      },
+      {
+        "id": 734,
+        "name": "Udinese"
+      },
+      {
+        "id": 1052,
+        "name": "Crotone"
+      },
+      {
+        "id": 115743,
+        "name": "Spezia"
+      },
+      {
+        "id": 134313,
+        "name": "Benevento"
+      }
+    ]
+  }
+}
+```
+
+This endpoint returns all the teams under a particular league
+
+### HTTP Request
+
+`GET https://app.api.sportx.bet/leagues/teams/:id`
+
+### Request parameters
+
+| Name | Required | Type   | Description                        |
+| ---- | -------- | ------ | ---------------------------------- |
+| id   | true     | number | Return the teams for this league ID |
+
+### Response format
+
+| Name   | Type   | Description                                            |
+| ------ | ------ | ------------------------------------------------------ |
+| status | string | `success` or `failure` if the request succeeded or not |
+| data   | object | The response data                                      |
+| teams  | Team[] | An array of teams                                      |
+
+A `Team` object looks like this
+
+| Name | Type   | Description           |
+| ---- | ------ | --------------------- |
+| id   | number | The ID for this team  |
+| name | string | The name of this team |
