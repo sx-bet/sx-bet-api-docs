@@ -138,27 +138,30 @@ A `market` object looks like this
 
 A `MarketType` can currently be one of the following
 
-| ID   | Name                              | Has Lines | Legacy ID       | Description                                                               | Bet Group       |
-| ---- | --------------------------------- | --------- | --------------- | ------------------------------------------------------------------------- | --------------- |
-| 52   | 12                                | false     | MONEY_LINE      | Who will win the game                                                     | game-lines      |
-| 88   | To Qualify                        | false     | MONEY_LINE      | Which team will qualify                                                   | game-lines      |
-| 226  | 12 Including Overtime             | false     | MONEY_LINE      | Who will win the game including overtime (no draw)                        | game-lines      |
-| 3    | Asian Handicap                    | true      | SPREAD          | Who will win the game with handicap (no draw)                             | game-lines      |
-| 201  | Asian Handicap Games              | true      | SPREAD          | Who will win more games with handicap (no draw)                           | game-lines      |
-| 342  | Asian Handicap Including Overtime | true      | SPREAD          | Who will win the game with handicap (no draw) including Overtime          | game-lines      |
-| 2    | Under/Over                        | true      | OVER_UNDER      | Will the score be under/over a specific line                              | game-lines      |
-| 835  | Asian Under/Over                  | true      | OVER_UNDER      | Will the score be under/over specific asian line                          | game-lines      |
-| 28   | Under/Over Including Overtime     | true      | OVER_UNDER      | Will the score including overtime be over/under a specific line           | game-lines      |
-| 29   | Under/Over Rounds                 | true      | OVER_UNDER      | Will the number of rounds in the match will be under/over a specific line | game-lines      |
-| 166  | Under/Over Games                  | true      | OVER_UNDER      | Number of games will be under/over a specific line                        | game-lines      |
-| 1536 | Under/Over Maps                   | true      | OVER_UNDER      | Will the number of maps be under/over a specific line                     | game-lines      |
-| 274  | Outright Winner                   | false     | OUTRIGHT_WINNER | Winner of a tournament, not a single match                                | outright-winner |
-| 202  | First Set Winner                  | false     | N/A             | Who will win the 1st set                                                  | first-set       |
-| 203  | Second Set Winner                 | false     | N/A             | Who will win the 2nd set                                                  | second-set      |
-| 204  | Third Set Winner                  | false     | N/A             | Who will win the 3rd set                                                  | third-set       |
-| 205  | Fourth Set Winner                 | false     | N/A             | Who will win the 4th set                                                  | fourth-set      |
-| 866  | Set Spread                        | true      | N/A             | Which team/player will win more sets with handicap                        | set-betting     |
-| 165  | Set Total                         | true      | N/A             | Number of sets will be under/over a specific line                         | set-betting     |
+| ID   | Name                              | Has Lines | Legacy ID       | Description                                                               | Bet Group        |
+| ---- | --------------------------------- | --------- | --------------- | ------------------------------------------------------------------------- | ---------------- |
+| 52   | 12                                | false     | MONEY_LINE      | Who will win the game                                                     | game-lines       |
+| 88   | To Qualify                        | false     | MONEY_LINE      | Which team will qualify                                                   | game-lines       |
+| 226  | 12 Including Overtime             | false     | MONEY_LINE      | Who will win the game including overtime (no draw)                        | game-lines       |
+| 3    | Asian Handicap                    | true      | SPREAD          | Who will win the game with handicap (no draw)                             | game-lines       |
+| 201  | Asian Handicap Games              | true      | SPREAD          | Who will win more games with handicap (no draw)                           | game-lines       |
+| 342  | Asian Handicap Including Overtime | true      | SPREAD          | Who will win the game with handicap (no draw) including Overtime          | game-lines       |
+| 2    | Under/Over                        | true      | OVER_UNDER      | Will the score be under/over a specific line                              | game-lines       |
+| 835  | Asian Under/Over                  | true      | OVER_UNDER      | Will the score be under/over specific asian line                          | game-lines       |
+| 28   | Under/Over Including Overtime     | true      | OVER_UNDER      | Will the score including overtime be over/under a specific line           | game-lines       |
+| 29   | Under/Over Rounds                 | true      | OVER_UNDER      | Will the number of rounds in the match will be under/over a specific line | game-lines       |
+| 166  | Under/Over Games                  | true      | OVER_UNDER      | Number of games will be under/over a specific line                        | game-lines       |
+| 1536 | Under/Over Maps                   | true      | OVER_UNDER      | Will the number of maps be under/over a specific line                     | game-lines       |
+| 274  | Outright Winner                   | false     | OUTRIGHT_WINNER | Winner of a tournament, not a single match                                | outright-winner  |
+| 202  | First Set Winner                  | false     | N/A             | Who will win the 1st set                                                  | first-set        |
+| 203  | Second Set Winner                 | false     | N/A             | Who will win the 2nd set                                                  | second-set       |
+| 204  | Third Set Winner                  | false     | N/A             | Who will win the 3rd set                                                  | third-set        |
+| 205  | Fourth Set Winner                 | false     | N/A             | Who will win the 4th set                                                  | fourth-set       |
+| 866  | Set Spread                        | true      | N/A             | Which team/player will win more sets with handicap                        | set-betting      |
+| 165  | Set Total                         | true      | N/A             | Number of sets will be under/over a specific line                         | set-betting      |
+| 53   | Asian Handicap Halftime           | true      | N/A             | Who will win the 1st half with handicap (no draw)                         | first-half-lines |
+| 63   | 12 Halftime                       | false     | N/A             | Who will win the 1st half (no draw)                                       | first-half-lines |
+| 77   | Under/Over Halftime               | true      | N/A             | Will the score in the 1st half be under/over a specific line              | first-half-lines |
 
 More types will be added continuously.
 
