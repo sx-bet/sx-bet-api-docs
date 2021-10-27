@@ -4,5 +4,5 @@ Below are special contract addresses required for interacting with the API
 
 Name | Contract Address
 --- | ---
-TokenTransferProxy | 0xa6EA1Ed4aeC85dF277fae3512f8a6cbb40c1Fe7e
-EIP712FillHasher | 0xCc4fBba7D0E0F2A03113F42f5D3aE80d9B2aD55d
+TokenTransferProxy | `0x3d8A563962dFeE81D7780Ed2BF0257ab88df857D`
+EIP712FillHasher | `0xCD667A4E7E377388b3aD8d57C3AEc4aC914c84Eb`

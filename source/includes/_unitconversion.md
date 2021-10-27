@@ -6,9 +6,9 @@ Every token in Ethereum has an associated "decimals" value. This effectively spe
 
 | Token | Polygon Address                            | Decimals |
 | ----- | ------------------------------------------ | -------- |
-| USDC  | 0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174 | 6        |
-| DAI   | 0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063 | 18       |
-| WETH  | 0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619 | 18       |
+| USDC  | `0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174` | 6        |
+| DAI   | `0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063` | 18       |
+| WETH  | `0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619` | 18       |
 
 To convert from nominal units (such as 100 DAI) to Ethereum units which are used in the API, you can do the following.
 

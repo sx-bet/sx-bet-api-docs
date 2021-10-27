@@ -343,7 +343,7 @@ const payload = {
   domain: {
     name: "CancelOrderSportX",
     version: "1.0",
-    chainId: 1,
+    chainId: 137,
   },
   message: {
     message: "Are you sure you want to cancel these orders",
@@ -382,6 +382,10 @@ const result = await fetch("https://app.api.sportx.bet/orders/cancel", {
 ```
 
 This endpoint cancels existing orders on the exchange.
+
+<aside class="notice">
+Ensure you use the <code>chainId</code> of Polygon, not the <code>chainId</code> of ETH mainnet.
+</aside>
 
 ### HTTP Request
 
@@ -572,6 +576,7 @@ async function fillOrder() {
         { name: "makerSigs", type: "bytes[]" },
         { name: "takerAmounts", type: "uint256[]" },
         { name: "fillSalt", type: "uint256" },
+        { name: "beneficiary", type: "address" }
       ],
       Order: [
         { name: "marketHash", type: "bytes32" },
@@ -588,9 +593,9 @@ async function fillOrder() {
     primaryType: "Details",
     domain: {
       name: "SportX",
-      version: "1.0",
-      chainId: 1,
-      verifyingContract: "0xCc4fBba7D0E0F2A03113F42f5D3aE80d9B2aD55d",
+      version: "3.0",
+      chainId: 137,
+      verifyingContract: "0xCD667A4E7E377388b3aD8d57C3AEc4aC914c84Eb",
     },
     message: {
       action: "N/A",
@@ -614,6 +619,7 @@ async function fillOrder() {
         })),
         takerAmounts,
         fillSalt,
+        beneficiary: constants.AddressZero
       },
     },
   };
@@ -702,6 +708,10 @@ To fill orders on sportx.bet via the API, make sure you first enable betting by 
 
 <aside class="notice">
 Your assets must be on Polygon to place bets.
+</aside>
+
+<aside class="notice">
+Ensure you use the <code>chainId</code> of Polygon, not the <code>chainId</code> of ETH mainnet.
 </aside>
 
 ### HTTP Request
