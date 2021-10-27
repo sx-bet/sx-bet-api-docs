@@ -44,6 +44,10 @@ We support betting in DAI, WETH, and USDC.
 
 If you wish to use our wrapper for javascript you can do so [here](https://github.com/sportx-bet/sportx-js)
 
+<aside class="notice">
+All ETH addresses used in this API are in check-summed format. If you pass in lowercase-only addresses, you won't get results.
+</aside>
+
 
 
 
