@@ -105,13 +105,13 @@ This endpoint returns the status of the passed event IDs.
 
 ### HTTP Request
 
-`GET https://app.api.sportx.bet/fixture/status`
+`POST https://app.api.sportx.bet/fixture/status`
 
 ### Request payload
 
 | Name           | Required | Type     | Description           |
 | -------------- | -------- | -------- | --------------------- |
-| sportXEventIds | true     | string[] | An array of event IDs |
+| sportXeventIds | true     | string[] | An array of event IDs |
 
 ### Response format
 
