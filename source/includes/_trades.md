@@ -209,14 +209,16 @@ This endpoint retrieves past consolidated trades on the exchange via pagination.
 
 ### Request payload parameters
 
-| Name    | Required | Type    | Description                                           |
-| ------- | -------- | ------- | ----------------------------------------------------- |
-| bettor  | false    | string  | Only get trades placed by this bettor                 |
-| settled | false    | boolean | If `true` only get settled trades                     |
-| page    | false    | number  | Page number for pagination                            |
-| perPage | false    | number  | Amount of records to fetch per page                   |
-| sortBy  | false    | string  | Which field to sort by (see response for field names) |
-| sortAsc | false    | boolean | If `true`, sorts in ascending order                   |
+| Name          | Required | Type    | Description                                                     |
+| ------------- | -------- | ------- | --------------------------------------------------------------- |
+| bettor        | false    | string  | Only get trades placed by this bettor                           |
+| settled       | true     | boolean | If `true` only get settled trades                               |
+| page          | true     | number  | Page number for pagination                                      |
+| perPage       | true     | number  | Amount of records to fetch per page                             |
+| sortBy        | true     | string  | Which field to sort by (see response for field names)           |
+| sortAsc       | true     | boolean | If `true`, sorts in ascending order                             |
+| maker         | false    | boolean | If `true`, only gets trades where the bettor was a market maker |
+| sportXeventId | false    | string  | Only gets trades for this event ID                              |
 
 ### Response format
 
