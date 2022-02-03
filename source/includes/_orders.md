@@ -308,62 +308,80 @@ The address in the <code>maker</code> field must match the account being used to
 Note that <code>totalBetSize</code> is from *the perspective of the market maker*. <code>totalBetSize</code> can be thought of as the maximum amount of tokens the maker (you) will be putting into the pot if the order was fully filled. This is the maximum amount you will risk.
 </aside>
 
-## Cancel orders
+## Cancel individual orders
 
 ```shell
-curl --location --request POST 'https://app.api.sportx.bet/orders/cancel' \
+curl --location --request POST 'https://app.api.sportx.bet/orders/cancel/v2' \
 --header 'Content-Type: application/json' \
---data-raw '{"message":"Are you sure you want to cancel these orders?","orders":["0x4ead6ef92741cd0b6e1ea32cb1d9586a85165e8bd780ab6f897992428c357bf1"],"cancelSignature":"0x1fe66a4ed7fbd2cf9e918f5b6b73db4f46166f871f7c0f293080ee07d63592ef0d29cd0aa37dc68e25a9d483515cc3ceb4934baaed8f0114385f8c43f28677aa1c"}'
+--data-raw '{
+    "orderHashes": [
+        "0x335d3dbd0621f0f6da90d1a58269e71b2fb5e91193dca75a0b90396cccb63001"
+    ],
+    "signature": "0x1763cb98a069657cb778fdc295eac48741b957bfe58e54f7f9ad03c6c1ca3d053d9ca2e6957af794991217752b69cb9aa4ac9330395c92e24c8c25ec19220e5a1b",
+    "salt": "0x6845028402f518a1c90770554a71017cd434ae9f2c09aa56c9560835c1929650",
+    "maker": "0xe087299AE9Acd0133d6D1544A97Bb0EEe24a2671",
+    "timestamp": 1643897553
+}'
 ```
 
 ```javascript
 import ethSigUtil from "eth-sig-util";
+import { randomBytes } from "@ethersproject/random";
 
 // Example is shown using a private key
 
 const privateKey = process.env.PRIVATE_KEY;
 const bufferPrivateKey = Buffer.from(privateKey.substring(2), "hex");
-const ordersToCancel = [
+const orderHashes = [
   "0x4ead6ef92741cd0b6e1ea32cb1d9586a85165e8bd780ab6f897992428c357bf1",
 ];
+const salt = `0x${Buffer.from(randomBytes(32)).toString("hex")}`;
+const timestamp = Math.floor(new Date().getTime() / 1000);
+const wallet = new Wallet(privateKey);
 
-const payload = {
-  types: {
-    EIP712Domain: [
-      { name: "name", type: "string" },
-      { name: "version", type: "string" },
-      { name: "chainId", type: "uint256" },
-    ],
-    Details: [
-      { name: "message", type: "string" },
-      { name: "orders", type: "string[]" },
-    ],
-  },
-  primaryType: "Details",
-  domain: {
-    name: "CancelOrderSportX",
-    version: "1.0",
-    chainId: 137,
-  },
-  message: {
-    message: "Are you sure you want to cancel these orders",
-    orders: ordersToCancel,
-  },
-};
+function getCancelOrderEIP712Payload(orderHashes, salt, timestamp, chainId) {
+  const payload = {
+    types: {
+      EIP712Domain: [
+        { name: "name", type: "string" },
+        { name: "version", type: "string" },
+        { name: "chainId", type: "uint256" },
+        { name: "salt", type: "bytes32" },
+      ],
+      Details: [
+        { name: "orderHashes", type: "string[]" },
+        { name: "timestamp", type: "uint256" },
+      ],
+    },
+    primaryType: "Details",
+    domain: {
+      name: "CancelOrderV2SportX",
+      version: "1.0",
+      chainId,
+      salt,
+    },
+    message: { orderHashes, timestamp },
+  };
+  return payload;
+}
+
+const payload = getCancelOrderEIP712Payload(orderHashes, salt, timestamp, 137);
 
 const signature = ethSigUtil.signTypedData_v4(bufferPrivateKey, {
   data: payload,
 });
 
-const payload = {
-  orders: ordersToCancel,
-  message: "Are you sure you want to cancel these orders",
+const apiPayload = {
   signature,
+  orderHashes,
+  salt,
+  maker: wallet.address,
+  timestamp,
 };
 
-const result = await fetch("https://app.api.sportx.bet/orders/cancel", {
+const result = await fetch("https://app.api.sportx.bet/orders/cancel/v2", {
   method: "POST",
-  body: JSON.stringify(payload),
+  body: JSON.stringify(apiPayload),
   headers: { "Content-Type": "application/json" },
 });
 ```
@@ -374,14 +392,12 @@ const result = await fetch("https://app.api.sportx.bet/orders/cancel", {
 {
   "status": "success",
   "data": {
-    "orderHashes": [
-      "0x4ead6ef92741cd0b6e1ea32cb1d9586a85165e8bd780ab6f897992428c357bf1"
-    ]
+    "cancelledCount": 1
   }
 }
 ```
 
-This endpoint cancels existing orders on the exchange.
+This endpoint cancels existing orders on the exchange that you placed as a market maker. If passed orders that do not exist, they simply fail silently while the others will succeed.
 
 <aside class="notice">
 Ensure you use the <code>chainId</code> of Polygon, not the <code>chainId</code> of ETH mainnet.
@@ -389,23 +405,266 @@ Ensure you use the <code>chainId</code> of Polygon, not the <code>chainId</code>
 
 ### HTTP Request
 
-`POST https://app.api.sportx.bet/orders/cancel`
+`POST https://app.api.sportx.bet/orders/cancel/v2`
 
 ### Request payload parameters
 
-| Name      | Required | Type     | Description                                                                                                                                            |
-| --------- | -------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| orders    | true     | string[] | The order hashes to cancel                                                                                                                             |
-| message   | true     | string   | A user-facing message for the eip712 signing. Can be anything.                                                                                         |
-| signature | true     | string   | The EIP712 signature on the cancel order payload. See the [EIP712 signing section](#eip712-signing) for more details on how to compute this signature. |
+| Name        | Required | Type     | Description                                                                                                                                            |
+| ----------- | -------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| orderHashes | true     | string[] | The order hashes to cancel                                                                                                                             |
+| signature   | true     | string   | The EIP712 signature on the cancel order payload. See the [EIP712 signing section](#eip712-signing) for more details on how to compute this signature. |
+| salt        | required | string   | A random 32 bytes hex string to protect against replay                                                                                                 |
+| maker       | required | true     | The account from which you are cancelling orders                                                                                                       |
+| timestamp   | required | true     | The current timestamp in UNIX seconds to protect against replay                                                                                        |
 
 ### Response format
 
-| Name          | Type     | Description                                            |
-| ------------- | -------- | ------------------------------------------------------ |
-| status        | string   | `success` or `failure` if the request succeeded or not |
-| data          | object   | The response data                                      |
-| > orderHashes | string[] | The cancelled order hashes                             |
+| Name             | Type     | Description                                            |
+| ---------------- | -------- | ------------------------------------------------------ |
+| status           | string   | `success` or `failure` if the request succeeded or not |
+| data             | object   | The response data                                      |
+| > cancelledCount | string[] | How many orders were cancelled, of the orders passed   |
+
+## Cancel event orders
+
+```shell
+curl --location --request POST 'https://app.api.sportx.bet/orders/cancel/event' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "sportXeventId": "L1234123",
+    "signature": "0x1763cb98a069657cb778fdc295eac48741b957bfe58e54f7f9ad03c6c1ca3d053d9ca2e6957af794991217752b69cb9aa4ac9330395c92e24c8c25ec19220e5a1b",
+    "salt": "0x6845028402f518a1c90770554a71017cd434ae9f2c09aa56c9560835c1929650",
+    "maker": "0xe087299AE9Acd0133d6D1544A97Bb0EEe24a2671",
+    "timestamp": 1643898624
+}'
+```
+
+```javascript
+import ethSigUtil from "eth-sig-util";
+import { randomBytes } from "@ethersproject/random";
+import { Wallet } from "@ethersproject/wallet";
+
+// Example is shown using a private key
+
+const privateKey = process.env.PRIVATE_KEY;
+const bufferPrivateKey = Buffer.from(privateKey.substring(2), "hex");
+const sportXeventId = "L1231231";
+const salt = `0x${Buffer.from(randomBytes(32)).toString("hex")}`;
+const timestamp = Math.floor(new Date().getTime() / 1000);
+const wallet = new Wallet(privateKey);
+
+function getCancelOrderEventsEIP712Payload(
+  sportXeventId,
+  salt,
+  timestamp,
+  chainId
+) {
+  const payload = {
+    types: {
+      EIP712Domain: [
+        { name: "name", type: "string" },
+        { name: "version", type: "string" },
+        { name: "chainId", type: "uint256" },
+        { name: "salt", type: "bytes32" },
+      ],
+      Details: [
+        { name: "sportXeventId", type: "string" },
+        { name: "timestamp", type: "uint256" },
+      ],
+    },
+    primaryType: "Details",
+    domain: {
+      name: "CancelOrderEventsSportX",
+      version: "1.0",
+      chainId,
+      salt,
+    },
+    message: { sportXeventId, timestamp },
+  };
+  return payload;
+}
+
+const payload = getCancelOrderEventsEIP712Payload(
+  sportXeventId,
+  salt,
+  timestamp,
+  137
+);
+
+const signature = ethSigUtil.signTypedData_v4(bufferPrivateKey, {
+  data: payload,
+});
+
+const apiPayload = {
+  signature,
+  sportXeventId,
+  salt,
+  maker: wallet.address,
+  timestamp,
+};
+
+const result = await fetch("https://app.api.sportx.bet/orders/cancel/v2", {
+  method: "POST",
+  body: JSON.stringify(apiPayload),
+  headers: { "Content-Type": "application/json" },
+});
+```
+
+> The above command returns json structured like this
+
+```json
+{
+  "status": "success",
+  "data": {
+    "cancelledCount": 1
+  }
+}
+```
+
+This endpoint cancels existing orders on the exchange for a particular event that you placed as a market maker.
+
+<aside class="notice">
+Ensure you use the <code>chainId</code> of Polygon, not the <code>chainId</code> of ETH mainnet.
+</aside>
+
+### HTTP Request
+
+`POST https://app.api.sportx.bet/orders/cancel/event`
+
+### Request payload parameters
+
+| Name          | Required | Type   | Description                                                                                                                                            |
+| ------------- | -------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| sportXeventId | true     | string | The event for which orders should be cancelled                                                                                                         |
+| signature     | true     | string | The EIP712 signature on the cancel order payload. See the [EIP712 signing section](#eip712-signing) for more details on how to compute this signature. |
+| salt          | required | string | A random 32 bytes hex string to protect against replay                                                                                                 |
+| maker         | required | true   | The account from which you are cancelling orders                                                                                                       |
+| timestamp     | required | true   | The current timestamp in UNIX seconds to protect against replay                                                                                        |
+
+### Response format
+
+| Name             | Type     | Description                                            |
+| ---------------- | -------- | ------------------------------------------------------ |
+| status           | string   | `success` or `failure` if the request succeeded or not |
+| data             | object   | The response data                                      |
+| > cancelledCount | string[] | How many orders were cancelled, of the orders passed   |
+
+## Cancel all orders
+
+```shell
+curl --location --request POST 'https://app.api.sportx.bet/orders/cancel/all' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+    "signature": "0x1763cb98a069657cb778fdc295eac48741b957bfe58e54f7f9ad03c6c1ca3d053d9ca2e6957af794991217752b69cb9aa4ac9330395c92e24c8c25ec19220e5a1b",
+    "salt": "0x6845028402f518a1c90770554a71017cd434ae9f2c09aa56c9560835c1929650",
+    "maker": "0xe087299AE9Acd0133d6D1544A97Bb0EEe24a2671",
+    "timestamp": 1643898624
+}'
+```
+
+```javascript
+import ethSigUtil from "eth-sig-util";
+import { randomBytes } from "@ethersproject/random";
+import { Wallet } from "@ethersproject/wallet";
+
+// Example is shown using a private key
+
+const privateKey = process.env.PRIVATE_KEY;
+const bufferPrivateKey = Buffer.from(privateKey.substring(2), "hex");
+const salt = `0x${Buffer.from(randomBytes(32)).toString("hex")}`;
+const timestamp = Math.floor(new Date().getTime() / 1000);
+const wallet = new Wallet(privateKey);
+
+function getCancelAllOrdersEIP712Payload(
+  salt,
+  timestamp,
+  chainId
+) {
+  const payload = {
+    types: {
+      EIP712Domain: [
+        { name: "name", type: "string" },
+        { name: "version", type: "string" },
+        { name: "chainId", type: "uint256" },
+        { name: "salt", type: "bytes32" },
+      ],
+      Details: [{ name: "timestamp", type: "uint256" }],
+    },
+    primaryType: "Details",
+    domain: {
+      name: "CancelAllOrdersSportX",
+      version: "1.0",
+      chainId,
+      salt,
+    },
+    message: { timestamp },
+  };
+  return payload;
+}
+
+
+const payload = getCancelOrderEventsEIP712Payload(
+  salt,
+  timestamp,
+  137
+);
+
+const signature = ethSigUtil.signTypedData_v4(bufferPrivateKey, {
+  data: payload,
+});
+
+const apiPayload = {
+  signature,
+  sportXeventId,
+  salt,
+  maker: wallet.address,
+  timestamp,
+};
+
+const result = await fetch("https://app.api.sportx.bet/orders/cancel/all", {
+  method: "POST",
+  body: JSON.stringify(apiPayload),
+  headers: { "Content-Type": "application/json" },
+});
+```
+
+> The above command returns json structured like this
+
+```json
+{
+  "status": "success",
+  "data": {
+    "cancelledCount": 10
+  }
+}
+```
+
+This endpoint cancels ALL existing orders on the exchange that you placed as a market maker.
+
+<aside class="notice">
+Ensure you use the <code>chainId</code> of Polygon, not the <code>chainId</code> of ETH mainnet.
+</aside>
+
+### HTTP Request
+
+`POST https://app.api.sportx.bet/orders/cancel/all`
+
+### Request payload parameters
+
+| Name      | Required | Type   | Description                                                                                                                                            |
+| --------- | -------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| signature | true     | string | The EIP712 signature on the cancel order payload. See the [EIP712 signing section](#eip712-signing) for more details on how to compute this signature. |
+| salt      | required | string | A random 32 bytes hex string to protect against replay                                                                                                 |
+| maker     | required | true   | The account from which you are cancelling orders                                                                                                       |
+| timestamp | required | true   | The current timestamp in UNIX seconds to protect against replay.                                                                                       |
+
+### Response format
+
+| Name             | Type     | Description                                            |
+| ---------------- | -------- | ------------------------------------------------------ |
+| status           | string   | `success` or `failure` if the request succeeded or not |
+| data             | object   | The response data                                      |
+| > cancelledCount | string[] | How many orders were cancelled, of the orders passed   |
 
 ## Filling orders
 
