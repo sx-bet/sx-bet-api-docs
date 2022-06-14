@@ -92,7 +92,7 @@ curl --location --request POST 'https://app.api.sportx.bet/trades'
 }
 ```
 
-This endpoint retrieves past trades on the exchange split up by order. This is a paginated endpoint. For example, if a trade fills more than one order at once, it will show up as two entries for the bettor. It is returned
+This endpoint retrieves past trades on the exchange split up by order. This is a paginated endpoint. For example, if a trade fills more than one order at once, it will show up as two entries for the bettor.
 
 ### HTTP Request
 

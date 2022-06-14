@@ -91,6 +91,10 @@ This endpoint retrieves live scores for a particular event ID.
 | -------------- | -------- | -------- | --------------------- |
 | sportXEventIds | true     | string[] | An array of event IDs |
 
+<aside class="notice">
+Up to 50 event IDs can be supplied at a time. 
+</aside>
+
 ### Response format
 
 | Name   | Type    | Description                                            |

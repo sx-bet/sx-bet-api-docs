@@ -87,26 +87,32 @@ This endpoint retrieves active markets on the exchange. It does not return marke
 
 ### Query parameters
 
-| Name         | Required | Type    | Description                                                                                  |
-| ------------ | -------- | ------- | -------------------------------------------------------------------------------------------- |
-| onlyMainLine | false    | boolean | If set to true, the result will only include main lines on spread and over under markets     |
-| eventId      | false    | string  | If set, it will only include markets for a particular sportXeventId                          |
-| leagueId     | false    | number  | If set, it will only include markets for a particular league ID                              |
-| liveOnly     | false    | boolean | If set, it will only include markets that are currently available for in-play betting        |
-| betGroup     | false    | string  | If set, it will only include markets for a particular bet group                              |
-| type         | false    | number  | If set, it will only include markets for a particular market type. See below for the options |
+| Name          | Required | Type    | Description                                                                                                     |
+| ------------- | -------- | ------- | --------------------------------------------------------------------------------------------------------------- |
+| onlyMainLine  | false    | boolean | If set to true, the result will only include main lines on spread and over under markets                        |
+| eventId       | false    | string  | If set, it will only include markets for a particular sportXeventId                                             |
+| leagueId      | false    | number  | If set, it will only include markets for a particular league ID                                                 |
+| liveOnly      | false    | boolean | If set, it will only include markets that are currently available for in-play betting                           |
+| betGroup      | false    | string  | If set, it will only include markets for a particular bet group                                                 |
+| type          | false    | number  | If set, it will only include markets for a particular market type. See below for the options                    |
+| paginationKey | false    | string  | Used for pagination. Pass the `nextKey` returned from the previous request to retrieve the next set of records. |
 
 <aside class="notice">
 Only one of <code>type</code> and <code>betGroup</code> can be present. Not both.
 </aside>
 
+<aside class="notice">
+This call will return a maximum of 50 markets at a time. You must use pagination to retrieve the rest of the records. 
+</aside>
+
 ### Response format
 
-| Name      | Type     | Description                                            |
-| --------- | -------- | ------------------------------------------------------ |
-| status    | string   | `success` or `failure` if the request succeeded or not |
-| data      | object   | The response data                                      |
-| > markets | Market[] | The active markets                                     |
+| Name      | Type     | Description                                                                     |
+| --------- | -------- | ------------------------------------------------------------------------------- |
+| status    | string   | `success` or `failure` if the request succeeded or not                          |
+| data      | object   | The response data                                                               |
+| > markets | Market[] | The active markets                                                              |
+| > nextKey | string   | Use this key as the `paginationKey` to retrieve the next set of records, if any |
 
 A `market` object looks like this
 
@@ -217,9 +223,9 @@ This endpoint retrieves specific markets
 
 ### Request format
 
-| Name         | Required | Type     | Description                                  |
-| ------------ | -------- | -------- | -------------------------------------------- |
-| marketHashes | true     | string[] | The market hashes of the markets to retrieve |
+| Name         | Required | Type     | Description                                               |
+| ------------ | -------- | -------- | --------------------------------------------------------- |
+| marketHashes | true     | string[] | The market hashes of the markets to retrieve. Maximum 50. |
 
 ### Response format
 
