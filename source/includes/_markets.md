@@ -88,22 +88,20 @@ This endpoint retrieves active markets on the exchange. It does not return marke
 
 ### Query parameters
 
-| Name          | Required | Type    | Description                                                                                                     |
-| ------------- | -------- | ------- | --------------------------------------------------------------------------------------------------------------- |
-| onlyMainLine  | false    | boolean | If set to true, the result will only include main lines on spread and over under markets                        |
-| eventId       | false    | string  | If set, it will only include markets for a particular sportXeventId                                             |
-| leagueId      | false    | number  | If set, it will only include markets for a particular league ID                                                 |
-| liveOnly      | false    | boolean | If set, it will only include markets that are currently available for in-play betting                           |
-| betGroup      | false    | string  | If set, it will only include markets for a particular bet group                                                 |
-| type          | false    | number  | If set, it will only include markets for a particular market type. See below for the options                    |
-| paginationKey | false    | string  | Used for pagination. Pass the `nextKey` returned from the previous request to retrieve the next set of records. |
+| Name          | Required | Type     | Description                                                                                                      |
+| ------------- | -------- | -------- | ---------------------------------------------------------------------------------------------------------------- |
+| onlyMainLine  | false    | boolean  | If set to true, the result will only include main lines on spread and over under markets                         |
+| eventId       | false    | string   | If set, it will only include markets for a particular sportXeventId                                              |
+| leagueId      | false    | number   | If set, it will only include markets for a particular league ID                                                  |
+| sportIds      | false    | number[] | If set, it will only include markets for particular sport IDs (comma separated)                                  |
+| liveOnly      | false    | boolean  | If set, it will only include markets that are currently available for in-play betting                            |
+| betGroup      | false    | string   | If set, it will only include markets for a particular bet group                                                  |
+| type          | false    | number   | If set, it will only include markets for a particular market type. See below for the options                     |
+| paginationKey | false    | string   | Used for pagination. Pass the `nextKey` returned from the previous request to retrieve the next set of records.  |
+| pageSize      | false    | number   | Used for pagination. Requested page size. Each call will only return up to this amount of records. Maximum of 50 |
 
 <aside class="notice">
 Only one of <code>type</code> and <code>betGroup</code> can be present. Not both.
-</aside>
-
-<aside class="notice">
-This call will return a maximum of 50 markets at a time. You must use pagination to retrieve the rest of the records. 
 </aside>
 
 ### Response format
