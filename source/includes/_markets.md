@@ -74,7 +74,8 @@ curl --location --request GET 'https://app.api.sportx.bet/markets/active?onlyMai
         "mainLine": true,
         "group1": "ATP French Open"
       }
-    ]
+    ],
+    "paginationKey": "60c7b8f54da0ad001aa3261c"
   }
 }
 ```
