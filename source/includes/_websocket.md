@@ -230,7 +230,8 @@ channel.subscribe((message) => {
   "settled": false,
   "bettingOutcomeOne": true,
   "fillHash": "0x027f3237d9dc9dfa6068b60d852c3e9727768683a8c43b2e1a436029f0de924e",
-  "status": "SUCCESS"
+  "status": "SUCCESS",
+  "tradeStatus": "SUCCESS"
 }
 ```
 
