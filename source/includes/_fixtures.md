@@ -3,7 +3,7 @@
 ## Get fixtures
 
 ```shell
-curl --location --request GET 'https://app.api.sportx.bet/fixture/active?leagueId=2'
+curl --location --request GET 'https://api.sx.bet/fixture/active?leagueId=2'
 ```
 
 > The above command returns JSON structured like this:
@@ -50,13 +50,13 @@ This endpoint returns current active fixtures for a particular league. A fixture
 
 ### HTTP Request
 
-`GET https://app.api.sportx.bet/fixture/active`
+`GET https://api.sx.bet/fixture/active`
 
 ### Query parameters
 
-Name | Required | Type | Description
---- | --- | --- | ---
-leagueId | true | number | The ID of the league
+| Name     | Required | Type   | Description          |
+| -------- | -------- | ------ | -------------------- |
+| leagueId | true     | number | The ID of the league |
 
 ### Response format
 
@@ -83,7 +83,7 @@ A `Fixture` object looks like this
 ## Get fixture status
 
 ```shell
-curl --location --request POST 'https://app.api.sportx.bet/fixture/status' \
+curl --location --request POST 'https://api.sx.bet/fixture/status' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "sportXeventIds": ["L6217784"]
@@ -105,7 +105,7 @@ This endpoint returns the status of the passed event IDs.
 
 ### HTTP Request
 
-`POST https://app.api.sportx.bet/fixture/status`
+`POST https://api.sx.bet/fixture/status`
 
 ### Request payload
 
@@ -115,10 +115,10 @@ This endpoint returns the status of the passed event IDs.
 
 ### Response format
 
-Name | Type | Description
---- | --- | ---
-status | string | `success` or `failure` if the request succeeded or not
-data | obj | Mapping from event Id to a status flag for each event's status.
+| Name   | Type   | Description                                                     |
+| ------ | ------ | --------------------------------------------------------------- |
+| status | string | `success` or `failure` if the request succeeded or not          |
+| data   | obj    | Mapping from event Id to a status flag for each event's status. |
 
 The possible statuses for a fixture are the following
 

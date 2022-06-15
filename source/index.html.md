@@ -1,7 +1,7 @@
 ---
 
 toc_footers:
-  - <a href='https://sportx.bet'>Visit sportx.bet</a>
+  - <a href='https://sx.bet'>Visit sx.bet</a>
 
 title: API Reference
 

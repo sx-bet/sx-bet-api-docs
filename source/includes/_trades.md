@@ -3,7 +3,7 @@
 ## Get active trades
 
 ```shell
-curl --location --request POST 'https://app.api.sportx.bet/trades'
+curl --location --request POST 'https://api.sx.bet/trades'
 ```
 
 > The above command returns JSON structured like this:
@@ -96,7 +96,7 @@ This endpoint retrieves past trades on the exchange split up by order. This is a
 
 ### HTTP Request
 
-`POST https://app.api.sportx.bet/trades`
+`POST https://api.sx.bet/trades`
 
 ### Request payload parameters
 
@@ -146,7 +146,7 @@ A `Trade` object has the following format
 ## Get consolidated trades
 
 ```shell
-curl --location --request POST 'https://app.api.sportx.bet/trades/consolidated' \
+curl --location --request POST 'https://api.sx.bet/trades/consolidated' \
 --header 'Content-Type: application/json''
 ```
 
@@ -205,7 +205,7 @@ This endpoint retrieves past consolidated trades on the exchange via pagination.
 
 ### HTTP Request
 
-`POST https://app.api.sportx.bet/trades/consolidated`
+`POST https://api.sx.bet/trades/consolidated`
 
 ### Request payload parameters
 

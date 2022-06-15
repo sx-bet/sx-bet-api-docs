@@ -3,7 +3,7 @@
 ## Get sports
 
 ```shell
-curl --location --request GET 'https://app.api.sportx.bet/sports'
+curl --location --request GET 'https://api.sx.bet/sports'
 ```
 
 > The above command returns JSON structured like this:
@@ -100,7 +100,7 @@ This endpoint retrieves all sports available on the exchange
 
 ### HTTP Request
 
-`GET https://app.api.sportx.bet/sports`
+`GET https://api.sx.bet/sports`
 
 ### Response format
 

@@ -5,7 +5,7 @@ You can become an affiliate of sportx.bet and participate in fee sharing. You'll
 ## Get affiliate users
 
 ```shell
-curl --location --request GET 'https://app.api.sportx.bet/affiliate/users'
+curl --location --request GET 'https://api.sx.bet/affiliate/users'
 ```
 
 > The above command returns JSON structured like this:
@@ -21,7 +21,7 @@ This endpoint retrieves all users registered under a particular affiliate.
 
 ### HTTP Request
 
-`GET https://app.api.sportx.bet/affiliate/users`
+`GET https://api.sx.bet/affiliate/users`
 
 ### Query parameters
 

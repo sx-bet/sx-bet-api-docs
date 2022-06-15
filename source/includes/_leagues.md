@@ -3,7 +3,7 @@
 ## Get leagues
 
 ```shell
-curl --location --request GET 'https://app.api.sportx.bet/leagues'
+curl --location --request GET 'https://api.sx.bet/leagues'
 ```
 
 > The above command returns JSON structured like this:
@@ -76,7 +76,7 @@ This endpoint returns all the leagues supported by SportX
 
 ### HTTP Request
 
-`GET https://app.api.sportx.bet/leagues`
+`GET https://api.sx.bet/leagues`
 
 ### Query parameters
 
@@ -104,7 +104,7 @@ A `League` object looks like this
 ## Get active leagues
 
 ```shell
-curl --location --request GET 'https://app.api.sportx.bet/leagues/active'
+curl --location --request GET 'https://api.sx.bet/leagues/active'
 ```
 
 > The above command returns JSON structured like this:
@@ -214,7 +214,7 @@ Note that this endpoint is only updated every 10m.
 
 ### HTTP Request
 
-`GET https://app.api.sportx.bet/leagues/active`
+`GET https://api.sx.bet/leagues/active`
 
 ### Query parameters
 
@@ -229,7 +229,7 @@ See [get leagues section](#get-leagues) for how the response object is formatted
 ## Get league teams
 
 ```shell
-curl --location --request GET 'https://app.api.sportx.bet/leagues/teams/1'
+curl --location --request GET 'https://api.sx.bet/leagues/teams/1'
 ```
 
 > The above command returns JSON structured like this:
@@ -328,12 +328,12 @@ This endpoint returns all the teams under a particular league
 
 ### HTTP Request
 
-`GET https://app.api.sportx.bet/leagues/teams/:id`
+`GET https://api.sx.bet/leagues/teams/:id`
 
 ### Request parameters
 
-| Name | Required | Type   | Description                        |
-| ---- | -------- | ------ | ---------------------------------- |
+| Name | Required | Type   | Description                         |
+| ---- | -------- | ------ | ----------------------------------- |
 | id   | true     | number | Return the teams for this league ID |
 
 ### Response format

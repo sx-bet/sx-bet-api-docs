@@ -3,7 +3,7 @@
 ## Get active markets
 
 ```shell
-curl --location --request GET 'https://app.api.sportx.bet/markets/active?onlyMainLine=true'
+curl --location --request GET 'https://api.sx.bet/markets/active?onlyMainLine=true'
 ```
 
 > The above command returns JSON structured like this:
@@ -84,7 +84,7 @@ This endpoint retrieves active markets on the exchange. It does not return marke
 
 ### HTTP Request
 
-`GET https://app.api.sportx.bet/markets/active`
+`GET https://api.sx.bet/markets/active`
 
 ### Query parameters
 
@@ -173,7 +173,7 @@ More types will be added continuously.
 ## Get specific markets
 
 ```shell
-curl --location --request POST 'https://app.api.sportx.bet/markets/find' \
+curl --location --request POST 'https://api.sx.bet/markets/find' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "marketHashes": ["0x3cba25f2253035b015b9bb555c1bf900f6737704d57425dd2a5b60e929c33b81"]
@@ -218,7 +218,7 @@ This endpoint retrieves specific markets
 
 ### HTTP Request
 
-`POST https://app.api.sportx.bet/markets/find`
+`POST https://api.sx.bet/markets/find`
 
 ### Request format
 
@@ -245,7 +245,7 @@ See [active markets section](#get-active-markets) for how the `Market` object is
 ## Popular markets
 
 ```shell
-curl --location --request GET 'https://app.api.sportx.bet/markets/popular'
+curl --location --request GET 'https://api.sx.bet/markets/popular'
 ```
 
 > The above command returns JSON structured like this:
@@ -302,7 +302,7 @@ This endpoint retrieves the top 10 popular markets by volume.
 
 ### HTTP Request
 
-`GET https://app.api.sportx.bet/markets/popular`
+`GET https://api.sx.bet/markets/popular`
 
 ### Response format
 

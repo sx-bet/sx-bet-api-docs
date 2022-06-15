@@ -3,7 +3,7 @@
 ## Get active orders
 
 ```shell
-curl --location --request POST 'https://app.api.sportx.bet/orders'
+curl --location --request POST 'https://api.sx.bet/orders'
 ```
 
 > The above command returns JSON structured like this
@@ -68,7 +68,7 @@ This endpoint returns active orders on the exchange based on a few parameters
 
 ### HTTP Request
 
-`POST https://app.api.sportx.bet/orders`
+`POST https://api.sx.bet/orders`
 
 ### Request payload parameters
 
@@ -156,7 +156,7 @@ Your assets must be on polygon to place or fill orders via the API.
 ## Post a new order
 
 ```shell
-curl --location --request POST 'https://app.api.sportx.bet/orders/new' \
+curl --location --request POST 'https://api.sx.bet/orders/new' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "orders": [
@@ -232,7 +232,7 @@ const signature = await signer.signMessage(orderHash);
 
 const signedOrder = { ...order, signature };
 
-const result = await fetch("https://app.api.sportx.bet/orders/new", {
+const result = await fetch("https://api.sx.bet/orders/new", {
   method: "POST",
   body: JSON.stringify({ orders: [signedOrder] }),
   headers: { "Content-Type": "application/json" },
@@ -268,7 +268,7 @@ To offer bets on sportx.bet via the API, make sure you first enable betting by f
 
 ### HTTP Request
 
-`POST https://app.api.sportx.bet/orders/new`
+`POST https://api.sx.bet/orders/new`
 
 ### Request payload parameters
 
@@ -311,7 +311,7 @@ Note that <code>totalBetSize</code> is from *the perspective of the market maker
 ## Cancel individual orders
 
 ```shell
-curl --location --request POST 'https://app.api.sportx.bet/orders/cancel/v2' \
+curl --location --request POST 'https://api.sx.bet/orders/cancel/v2' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "orderHashes": [
@@ -379,7 +379,7 @@ const apiPayload = {
   timestamp,
 };
 
-const result = await fetch("https://app.api.sportx.bet/orders/cancel/v2", {
+const result = await fetch("https://api.sx.bet/orders/cancel/v2", {
   method: "POST",
   body: JSON.stringify(apiPayload),
   headers: { "Content-Type": "application/json" },
@@ -405,7 +405,7 @@ Ensure you use the <code>chainId</code> of Polygon, not the <code>chainId</code>
 
 ### HTTP Request
 
-`POST https://app.api.sportx.bet/orders/cancel/v2`
+`POST https://api.sx.bet/orders/cancel/v2`
 
 ### Request payload parameters
 
@@ -428,7 +428,7 @@ Ensure you use the <code>chainId</code> of Polygon, not the <code>chainId</code>
 ## Cancel event orders
 
 ```shell
-curl --location --request POST 'https://app.api.sportx.bet/orders/cancel/event' \
+curl --location --request POST 'https://api.sx.bet/orders/cancel/event' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "sportXeventId": "L1234123",
@@ -503,7 +503,7 @@ const apiPayload = {
   timestamp,
 };
 
-const result = await fetch("https://app.api.sportx.bet/orders/cancel/v2", {
+const result = await fetch("https://api.sx.bet/orders/cancel/v2", {
   method: "POST",
   body: JSON.stringify(apiPayload),
   headers: { "Content-Type": "application/json" },
@@ -529,7 +529,7 @@ Ensure you use the <code>chainId</code> of Polygon, not the <code>chainId</code>
 
 ### HTTP Request
 
-`POST https://app.api.sportx.bet/orders/cancel/event`
+`POST https://api.sx.bet/orders/cancel/event`
 
 ### Request payload parameters
 
@@ -552,7 +552,7 @@ Ensure you use the <code>chainId</code> of Polygon, not the <code>chainId</code>
 ## Cancel all orders
 
 ```shell
-curl --location --request POST 'https://app.api.sportx.bet/orders/cancel/all' \
+curl --location --request POST 'https://api.sx.bet/orders/cancel/all' \
 --header 'Content-Type: application/json' \
 --data-raw '{
     "signature": "0x1763cb98a069657cb778fdc295eac48741b957bfe58e54f7f9ad03c6c1ca3d053d9ca2e6957af794991217752b69cb9aa4ac9330395c92e24c8c25ec19220e5a1b",
@@ -575,11 +575,7 @@ const salt = `0x${Buffer.from(randomBytes(32)).toString("hex")}`;
 const timestamp = Math.floor(new Date().getTime() / 1000);
 const wallet = new Wallet(privateKey);
 
-function getCancelAllOrdersEIP712Payload(
-  salt,
-  timestamp,
-  chainId
-) {
+function getCancelAllOrdersEIP712Payload(salt, timestamp, chainId) {
   const payload = {
     types: {
       EIP712Domain: [
@@ -602,12 +598,7 @@ function getCancelAllOrdersEIP712Payload(
   return payload;
 }
 
-
-const payload = getCancelOrderEventsEIP712Payload(
-  salt,
-  timestamp,
-  137
-);
+const payload = getCancelOrderEventsEIP712Payload(salt, timestamp, 137);
 
 const signature = ethSigUtil.signTypedData_v4(bufferPrivateKey, {
   data: payload,
@@ -621,7 +612,7 @@ const apiPayload = {
   timestamp,
 };
 
-const result = await fetch("https://app.api.sportx.bet/orders/cancel/all", {
+const result = await fetch("https://api.sx.bet/orders/cancel/all", {
   method: "POST",
   body: JSON.stringify(apiPayload),
   headers: { "Content-Type": "application/json" },
@@ -647,7 +638,7 @@ Ensure you use the <code>chainId</code> of Polygon, not the <code>chainId</code>
 
 ### HTTP Request
 
-`POST https://app.api.sportx.bet/orders/cancel/all`
+`POST https://api.sx.bet/orders/cancel/all`
 
 ### Request payload parameters
 
@@ -669,7 +660,7 @@ Ensure you use the <code>chainId</code> of Polygon, not the <code>chainId</code>
 ## Filling orders
 
 ```shell
-curl --location --request POST 'https://app.api.sportx.bet/orders/fill' \
+curl --location --request POST 'https://api.sx.bet/orders/fill' \
 --header 'Content-Type: application/json' \
 --data-raw '{"orderHashes":["0x863a2288a640e1bb722da2ee7a6f323ea28caee8ac681d320534d0e7f2e849de","0x001f676d68baf85310145f85bc5aeba64108b234607b4fae25c704069ca8464a"],"takerAmounts":["10000000000000000000","10000000000000000000"],"taker":"0xa3bBFaB3645B2Dd4296cADc451d74574CD47Ba1a","takerSig":"0x09d2603a8c8646221d6972b04a5cdd8b13d6326a267329825567a25a5e63606b07b97c84640bfb3ee4a5053083ce178d9e0c9cbdf1b1dfd519fda0594fae30dc1c","fillSalt":"69231297238279245345865414293427982207908612843136003245427437324972455931243","action":"N/A","market":"N/A","betting":"N/A","stake":"N/A","odds":"N/A","returning":"N/A"}'
 ```
@@ -940,7 +931,7 @@ async function fillOrder() {
     },
   };
 
-  const response = await fetch(`https://app.api.sportx.bet/orders/fill`, {
+  const response = await fetch(`https://api.sx.bet/orders/fill`, {
     method: "POST",
     body: JSON.stringify(apiPayload),
     headers: { "Content-Type": "application/json" },
@@ -975,7 +966,7 @@ Ensure you use the <code>chainId</code> of Polygon, not the <code>chainId</code>
 
 ### HTTP Request
 
-`POST https://app.api.sportx.bet/orders/fill`
+`POST https://api.sx.bet/orders/fill`
 
 ### Request payload parameters
 

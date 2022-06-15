@@ -12,7 +12,7 @@ Some users may require higher rate limits for their application. SportX provides
 4. Click the `Overview` tab on the account navigation bar.
 5. You will see an `API Credentials` card. Complete the `Basic Verification` if you have not yet done so by clicking the link in the card.
 6. If you've signed in and completed the basic verification, you can now click the button: `GENERATE API KEY NOW`. An API Key will be displayed.
-7. The API Key generated will not be displayed again, so please <b>copy and save this key for future use</b>. 
+7. The API Key generated will not be displayed again, so please <b>copy and save this key for future use</b>.
 
 <aside class="notice">
 If you lose your key, you can generate a new one by following the same steps. Any previous keys used will be unauthorized if you generate a new key.
@@ -21,7 +21,7 @@ If you lose your key, you can generate a new one by following the same steps. An
 ## Usage
 
 ```shell
-curl --location --request GET 'https://app.api.sportx.bet/markets/active?onlyMainLine=true' \
+curl --location --request GET 'https://api.sx.bet/markets/active?onlyMainLine=true' \
 --header 'X-Api-Key: XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX'
 ```
 

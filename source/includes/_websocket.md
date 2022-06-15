@@ -9,7 +9,7 @@ import * as ably from "ably";
 
 async function initialize() {
   const realtime = new ably.Realtime.Promise({
-    authUrl: `https://app.api.sportx.bet/user/token`,
+    authUrl: `https://api.sx.bet/user/token`,
   });
   await new Promise<void>((resolve, reject) => {
     realtime.connection.on("connected", () => {
