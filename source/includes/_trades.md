@@ -112,6 +112,7 @@ This endpoint retrieves past trades on the exchange split up by order. This is a
 | affiliate     | false    | string   | Only get trades under this affiliate                                                                            |
 | pageSize      | false    | number   | Requested page size. Each call will only return up to this amount of records. Default is 100.                   |
 | paginationKey | false    | string   | Used for pagination. Pass the `nextKey` returned from the previous request to retrieve the next set of records. |
+| tradeStatus   | false    | string   | Filter trades to see only those with `SUCCESS` or `FAILED` status'                                              |
 
 ### Response format
 
@@ -138,7 +139,7 @@ A `Trade` object has the following format
 | settled           | boolean | `true` if this bet is settled (this refers to if the bet was won lost or voided, not if the trade succeeded or not)                  |
 | bettingOutcomeOne | boolean | `true` if the bettor is betting outcome one in the market                                                                            |
 | fillHash          | string  | The unique identifier for this trade                                                                                                 |
-| tradeStatus       | string  | `SUCCESS` or `FAILURE` depending on if this trade succeeded or not                                                                   |
+| tradeStatus       | string  | `SUCCESS` or `FAILED` depending on if this trade succeeded or not                                                                    |
 | valid             | boolean | `true` if the trade counts toward competitions or tournaments                                                                        |
 | outcome           | number  | with `settled=true`, this will be 0, 1, or 2 depending on the final outcome of the market                                            |
 | settleDate        | string  | ISO formatted date string of when the trade was settled                                                                              |
@@ -209,16 +210,17 @@ This endpoint retrieves past consolidated trades on the exchange via pagination.
 
 ### Request payload parameters
 
-| Name          | Required | Type    | Description                                                     |
-| ------------- | -------- | ------- | --------------------------------------------------------------- |
-| bettor        | false    | string  | Only get trades placed by this bettor                           |
-| settled       | true     | boolean | If `true` only get settled trades                               |
-| page          | true     | number  | Page number for pagination                                      |
-| perPage       | true     | number  | Amount of records to fetch per page                             |
-| sortBy        | true     | string  | Which field to sort by (see response for field names)           |
-| sortAsc       | true     | boolean | If `true`, sorts in ascending order                             |
-| maker         | false    | boolean | If `true`, only gets trades where the bettor was a market maker |
-| sportXeventId | false    | string  | Only gets trades for this event ID                              |
+| Name          | Required | Type    | Description                                                        |
+| ------------- | -------- | ------- | ---------------------------------------------------------------    |
+| bettor        | false    | string  | Only get trades placed by this bettor                              |
+| settled       | true     | boolean | If `true` only get settled trades                                  |
+| page          | true     | number  | Page number for pagination                                         |
+| perPage       | true     | number  | Amount of records to fetch per page                                |
+| sortBy        | true     | string  | Which field to sort by (see response for field names)              |
+| sortAsc       | true     | boolean | If `true`, sorts in ascending order                                |
+| maker         | false    | boolean | If `true`, only gets trades where the bettor was a market maker    |
+| sportXeventId | false    | string  | Only gets trades for this event ID                                 |
+| tradeStatus   | false    | string  | Filter trades to see only those with `SUCCESS` or `FAILED` status' |
 
 ### Response format
 
@@ -234,7 +236,7 @@ A `ConsolidatedTrade` object has the following format
 | Name                | Type    | Description                                                                                                                                 |
 | ------------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
 | baseToken           | string  | The token in which this trade was placed                                                                                                    |
-| tradeStatus         | string  | `SUCCESS` or `FAILURE` depending on if this trade succeeded or not                                                                          |
+| tradeStatus         | string  | `SUCCESS` or `FAILED` depending on if this trade succeeded or not                                                                           |
 | bettor              | string  | The address of the bettor who placed the trade                                                                                              |
 | totalStake          | string  | Total nominal stake of the trade                                                                                                            |
 | weightedAverageOdds | string  | Weighted average odds (based on stake) of the trade if the trade filled multiple orders. Divide by 10^20 to get the odds in decimal format. |
