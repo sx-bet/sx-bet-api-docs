@@ -177,7 +177,7 @@ curl --location --request POST 'https://api.sx.bet/orders/new' \
 }'
 ```
 
-```javascript
+```typescript
 import { BigNumber, utils, providers, Wallet } from "ethers";
 
 const order = {
@@ -237,6 +237,45 @@ const result = await fetch("https://api.sx.bet/orders/new", {
   body: JSON.stringify({ orders: [signedOrder] }),
   headers: { "Content-Type": "application/json" },
 });
+
+// Odds ladder testing 
+
+import { PERCENTAGE_PRECISION_EXPONENT } from "@betx/sportx-contracts";
+import { BigNumber } from "bignumber.js";
+import { BigNumber as EthBigNumber } from "ethers";
+
+/**
+ * Check if the odds are valid, i.e., in one of the allowed steps
+ * @param odds Odds to check
+ */
+export function checkOddsLadderValid(odds: EthBigNumber) {
+  // Logic:
+  // 100% = 10^20
+  // 10% = 10^19
+  // 1% = 10^18
+  // 0.1% = 10^17
+  return odds
+    .mod(EthBigNumber.from(10).pow(17))
+    .eq(0);
+}
+
+/**
+ * Rounds odds to the nearest step. If you're examining maker odds, a higher implied is better for the maker, so you should want to round up
+ * @param odds Odds to round.
+ * @param equidistantRoundUp If true, round up at equidistant (0.5 -> 1). Default true.
+ */
+export function roundOddsToNearestStep(
+  odds: EthBigNumber,
+  equidistantRoundUp: boolean = true
+) {
+  const step = EthBigNumber.from(10).pow(17);
+  const bnStep = new BigNumber(step.toString());
+  const bnOdds = new BigNumber(odds.toString());
+  const firstPassDivision = bnOdds
+    .dividedBy(bnStep)
+    .toFixed(0, equidistantRoundUp ? 4 : 5);
+  return EthBigNumber.from(firstPassDivision).mul(step);
+}
 ```
 
 > The above command returns JSON structured like this
@@ -266,6 +305,13 @@ If the API finds that your balance is consistently below your total exposure req
 
 To offer bets on sportx.bet via the API, make sure you first enable betting by following the steps [here](#enabling-betting).
 
+We enforce an odds ladder to prevent diming. Your offer, in implied odds, must fall on one of the steps on the ladder. Currently, that is set to intervals of 0.1%, meaning that your offer cannot fall between the steps. An offer of 50.1% would be valid, but an offer of 50.05% would not. You can check if your odds would fall on the ladder by taking the modulus of your odds and 10 ^ 17 and checking if it's equal to 0. See the bottom of the JavaScript tab for a sample on how to do this, and how to round your odds to the nearest step. 
+
+<aside class="warning">
+Odds not on the ladder will be rejected and your order(s) will not be posted. 
+</aside>
+
+
 ### HTTP Request
 
 `POST https://api.sx.bet/orders/new`
@@ -278,19 +324,19 @@ To offer bets on sportx.bet via the API, make sure you first enable betting by f
 
 A `SignedNewOrder` object looks like this
 
-| Name                     | Type    | Description                                                                                              |
-| ------------------------ | ------- | -------------------------------------------------------------------------------------------------------- |
-| marketHash               | string  | The market you wish to place this order under                                                            |
-| maker                    | string  | The ethereum address offering the bet                                                                    |
-| baseToken                | string  | The token this order is denominated in                                                                   |
-| totalBetSize             | string  | The total bet size of the order in Ethereum units.                                                       |
-| percentageOdds           | string  | The odds _the maker will be receiving_ as this order gets filled                                         |
-| expiry                   | number  | Deprecated. Time in UNIX seconds after which this order is no longer valid. Must always be 2209006800.   |
-| apiExpiry                | number  | Time in UNIX seconds after which this order is no longer valid.                                          |
-| executor                 | string  | The sportx.bet executor address. See the [metadata section](#get-metadata) for where to get this address |
-| salt                     | string  | A random 32 byte string to differentiate between between orders with otherwise identical parameters      |
-| isMakerBettingOutcomeOne | boolean | `true` if the maker is betting outcome one (and hence taker is betting outcome two if filled)            |
-| signature                | string  | The signature of the maker on this order payload                                                         |
+| Name                     | Type    | Description                                                                                                       |
+| ------------------------ | ------- | ----------------------------------------------------------------------------------------------------------------- |
+| marketHash               | string  | The market you wish to place this order under                                                                     |
+| maker                    | string  | The ethereum address offering the bet                                                                             |
+| baseToken                | string  | The token this order is denominated in                                                                            |
+| totalBetSize             | string  | The total bet size of the order in Ethereum units.                                                                |
+| percentageOdds           | string  | The odds _the maker will be receiving_ as this order gets filled. Must be on the odds ladder or will be rejected. |
+| expiry                   | number  | Deprecated. Time in UNIX seconds after which this order is no longer valid. Must always be 2209006800.            |
+| apiExpiry                | number  | Time in UNIX seconds after which this order is no longer valid.                                                   |
+| executor                 | string  | The sportx.bet executor address. See the [metadata section](#get-metadata) for where to get this address          |
+| salt                     | string  | A random 32 byte string to differentiate between between orders with otherwise identical parameters               |
+| isMakerBettingOutcomeOne | boolean | `true` if the maker is betting outcome one (and hence taker is betting outcome two if filled)                     |
+| signature                | string  | The signature of the maker on this order payload                                                                  |
 
 <aside class="notice">
 The address in the <code>maker</code> field must match the account being used to create the signature!
