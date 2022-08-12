@@ -6,7 +6,7 @@ Some users may require higher rate limits for their application. SportX provides
 
 ## Generating API Key
 
-1. Visit <a href='https://sportx.bet'>sportx.bet</a> and register/login to your account. You can connect your MetaMask wallet, or login using your Fortmatic email address.
+1. Visit <a href='https://sx.bet'>sx.bet</a> and register/login to your account. You can connect your MetaMask wallet, or login using your Fortmatic email address.
 2. If using MetaMask, `sign` the Signature Request.
 3. Click the `Account` tab on the top navigation bar.
 4. Click the `Overview` tab on the account navigation bar.

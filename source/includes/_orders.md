@@ -89,11 +89,11 @@ Note that one of `marketHashes` or `maker` is required.
 | marketHash               | string  | The market corresponding to this order                                                                                                                                                                                                                                                                                                         |
 | maker                    | string  | The market maker for this order                                                                                                                                                                                                                                                                                                                |
 | totalBetSize             | string  | The total size of this order in Ethereum units. See the [the token section](#tokens) section for how to convert this into nominal amounts.                                                                                                                                                                                                     |
-| percentageOdds           | string  | The odds that the `maker` receives in the sportx protocol format. To convert to an implied odds divide by 10^20. To convert to the odds that the taker would receive if this order would be filled in implied format, use the formula `takerOdds=1-percentageOdds/10^20`. See the [unit conversion section](#bookmaker-odds) for more details. |
+| percentageOdds           | string  | The odds that the `maker` receives in the sx.bet protocol format. To convert to an implied odds divide by 10^20. To convert to the odds that the taker would receive if this order would be filled in implied format, use the formula `takerOdds=1-percentageOdds/10^20`. See the [unit conversion section](#bookmaker-odds) for more details. |
 | expiry                   | number  | Deprecated: the time in unix seconds after which this order is no longer valid. After deprecation, this field is always 2209006800 (2040)                                                                                                                                                                                                      |
 | apiExpiry                | number  | The time in unix seconds after which this order is no longer valid.                                                                                                                                                                                                                                                                            |
 | baseToken                | string  | The base token this order is denominated in                                                                                                                                                                                                                                                                                                    |
-| executor                 | string  | The address permitted to execute on this order. This is set to the sportx.bet exchange                                                                                                                                                                                                                                                         |
+| executor                 | string  | The address permitted to execute on this order. This is set to the sx.bet exchange                                                                                                                                                                                                                                                         |
 | salt                     | string  | A random number to differentiate identical orders                                                                                                                                                                                                                                                                                              |
 | isMakerBettingOutcomeOne | boolean | `true` if the maker is betting outcome one (and hence taker is betting outcome two if filled)                                                                                                                                                                                                                                                  |
 | signature                | string  | Signature of the maker on this order                                                                                                                                                                                                                                                                                                           |
@@ -145,7 +145,7 @@ await tokenContract.approve(tokenTransferProxyAddress, MaxUInt256, {
 
 To enable betting, you need to approve the `TokenTransferProxy` contract for each token for which you wish to trade. Otherwise, any endpoints that create/cancel or fill orders will fail. For example if you want to trade with both ETH and USDC, you'll need to approve the contract twice, once for each token. The address of the `TokenTransferProxy` is `0xa6EA1Ed4aeC85dF277fae3512f8a6cbb40c1Fe7e` and the address of each token is given in [the tokens section](#tokens)
 
-If you don't wish to do this programmatically, you can simply go to `https://sportx.bet`, make a test bet with the account and token you'll be using, and you will be good to go.
+If you don't wish to do this programmatically, you can simply go to `https://sx.bet`, make a test bet with the account and token you'll be using, and you will be good to go.
 
 If you want to do it programmatically, see the code sample on the right. Note you will need a little bit of MATIC to make this transaction (~$0.01 worth).
 
@@ -303,7 +303,7 @@ Your assets must be on polygon to place orders.
 If the API finds that your balance is consistently below your total exposure requiring orders to be cancelled, your account may be temporarily restricted. 
 </aside>
 
-To offer bets on sportx.bet via the API, make sure you first enable betting by following the steps [here](#enabling-betting).
+To offer bets on sx.bet via the API, make sure you first enable betting by following the steps [here](#enabling-betting).
 
 We enforce an odds ladder to prevent diming. Your offer, in implied odds, must fall on one of the steps on the ladder. Currently, that is set to intervals of 0.1%, meaning that your offer cannot fall between the steps. An offer of 50.1% would be valid, but an offer of 50.05% would not. You can check if your odds would fall on the ladder by taking the modulus of your odds and 10 ^ 17 and checking if it's equal to 0. See the bottom of the JavaScript tab for a sample on how to do this, and how to round your odds to the nearest step. 
 
@@ -333,7 +333,7 @@ A `SignedNewOrder` object looks like this
 | percentageOdds           | string  | The odds _the maker will be receiving_ as this order gets filled. Must be on the odds ladder or will be rejected. |
 | expiry                   | number  | Deprecated. Time in UNIX seconds after which this order is no longer valid. Must always be 2209006800.            |
 | apiExpiry                | number  | Time in UNIX seconds after which this order is no longer valid.                                                   |
-| executor                 | string  | The sportx.bet executor address. See the [metadata section](#get-metadata) for where to get this address          |
+| executor                 | string  | The sx.bet executor address. See the [metadata section](#get-metadata) for where to get this address          |
 | salt                     | string  | A random 32 byte string to differentiate between between orders with otherwise identical parameters               |
 | isMakerBettingOutcomeOne | boolean | `true` if the maker is betting outcome one (and hence taker is betting outcome two if filled)                     |
 | signature                | string  | The signature of the maker on this order payload                                                                  |
@@ -1000,7 +1000,7 @@ This endpoint fills orders on the exchange. Multiple orders can be filled at onc
 
 Note that pre-game has a built-in betting delay of 2s and in-game betting has a built-in betting delay of 5s. This is added to guard against toxic flow and high spikes in latency from the bookmaker's side. It is effectively protection for the bookmaker. If the odds change within that delay time, the order will be cancelled and an error will be thrown.
 
-To fill orders on sportx.bet via the API, make sure you first enable betting by following the steps [here](#enabling-betting)
+To fill orders on sx.bet via the API, make sure you first enable betting by following the steps [here](#enabling-betting)
 
 <aside class="notice">
 Your assets must be on Polygon to place bets.

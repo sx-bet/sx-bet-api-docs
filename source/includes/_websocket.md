@@ -65,7 +65,7 @@ channel.subscribe((message) => {
 ]
 ```
 
-Subscribe to all changes in markets on sportx.bet. You will get updates when
+Subscribe to all changes in markets on sx.bet. You will get updates when
 
 - A new market is added
 - A market is removed (set to `INACTIVE`)
