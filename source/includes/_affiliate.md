@@ -35,4 +35,3 @@ This endpoint retrieves all users registered under a particular affiliate.
 | ------ | -------- | ------------------------------------------------------ |
 | status | string   | `success` or `failure` if the request succeeded or not |
 | data   | string[] | The users currently registered under this affiliate    |
-

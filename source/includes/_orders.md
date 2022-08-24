@@ -93,7 +93,7 @@ Note that one of `marketHashes` or `maker` is required.
 | expiry                   | number  | Deprecated: the time in unix seconds after which this order is no longer valid. After deprecation, this field is always 2209006800 (2040)                                                                                                                                                                                                      |
 | apiExpiry                | number  | The time in unix seconds after which this order is no longer valid.                                                                                                                                                                                                                                                                            |
 | baseToken                | string  | The base token this order is denominated in                                                                                                                                                                                                                                                                                                    |
-| executor                 | string  | The address permitted to execute on this order. This is set to the sx.bet exchange                                                                                                                                                                                                                                                         |
+| executor                 | string  | The address permitted to execute on this order. This is set to the sx.bet exchange                                                                                                                                                                                                                                                             |
 | salt                     | string  | A random number to differentiate identical orders                                                                                                                                                                                                                                                                                              |
 | isMakerBettingOutcomeOne | boolean | `true` if the maker is betting outcome one (and hence taker is betting outcome two if filled)                                                                                                                                                                                                                                                  |
 | signature                | string  | Signature of the maker on this order                                                                                                                                                                                                                                                                                                           |
@@ -113,12 +113,10 @@ import { MaxUint256 } from "ethers/constants";
 import { Contract } from "ethers";
 import { JsonRpcProvider } from "ethers/providers";
 
-// You can get an RPC url from https://docs.matic.network/docs/develop/network-details/network/
-
 const walletAddress = process.env.WALLET_ADDRESS;
 const tokenAddress = process.env.TOKEN_ADDRESS;
 const tokenTransferProxyAddress = process.env.TOKEN_TRANSFER_PROXY_ADDRESS;
-const provider = new providers.JsonRpcProvider(process.env.POLYGON_RPC_URL);
+const provider = new providers.JsonRpcProvider(`https://rpc.sx.technology`);
 const wallet = new Wallet(process.env.PRIVATE_KEY).connect(provider);
 const tokenContract = new Contract(
   tokenAddress,
@@ -143,14 +141,14 @@ await tokenContract.approve(tokenTransferProxyAddress, MaxUInt256, {
 });
 ```
 
-To enable betting, you need to approve the `TokenTransferProxy` contract for each token for which you wish to trade. Otherwise, any endpoints that create/cancel or fill orders will fail. For example if you want to trade with both ETH and USDC, you'll need to approve the contract twice, once for each token. The address of the `TokenTransferProxy` is `0xa6EA1Ed4aeC85dF277fae3512f8a6cbb40c1Fe7e` and the address of each token is given in [the tokens section](#tokens)
+To enable betting, you need to approve the `TokenTransferProxy` contract for each token for which you wish to trade. Otherwise, any endpoints that create/cancel or fill orders will fail. For example if you want to trade with both ETH and USDC, you'll need to approve the contract twice, once for each token. The address of the `TokenTransferProxy` is available at `https://api.sx.bet/metadata` and the address of each token is given in [the tokens section](#tokens)
 
 If you don't wish to do this programmatically, you can simply go to `https://sx.bet`, make a test bet with the account and token you'll be using, and you will be good to go.
 
 If you want to do it programmatically, see the code sample on the right. Note you will need a little bit of MATIC to make this transaction (~$0.01 worth).
 
 <aside class="notice">
-Your assets must be on polygon to place or fill orders via the API.
+Your assets must be on SX Network to place or fill orders via the API.
 </aside>
 
 ## Post a new order
@@ -238,7 +236,7 @@ const result = await fetch("https://api.sx.bet/orders/new", {
   headers: { "Content-Type": "application/json" },
 });
 
-// Odds ladder testing 
+// Odds ladder testing
 
 import { PERCENTAGE_PRECISION_EXPONENT } from "@betx/sportx-contracts";
 import { BigNumber } from "bignumber.js";
@@ -254,9 +252,7 @@ export function checkOddsLadderValid(odds: EthBigNumber) {
   // 10% = 10^19
   // 1% = 10^18
   // 0.1% = 10^17
-  return odds
-    .mod(EthBigNumber.from(10).pow(17))
-    .eq(0);
+  return odds.mod(EthBigNumber.from(10).pow(17)).eq(0);
 }
 
 /**
@@ -296,7 +292,7 @@ This endpoint offers new orders on the exchange (market making). Offering orders
 Note you can offer as many orders as you wish, provided your total exposure for each token (as measured by `totalBetSize - fillAmount`) remains under your wallet balance. If your wallet balance dips under your total exposure, orders will be removed from the book until it reaches the minimum again.
 
 <aside class="notice">
-Your assets must be on polygon to place orders.
+Your assets must be on SX Network to place orders.
 </aside>
 
 <aside class="warning">
@@ -305,12 +301,11 @@ If the API finds that your balance is consistently below your total exposure req
 
 To offer bets on sx.bet via the API, make sure you first enable betting by following the steps [here](#enabling-betting).
 
-We enforce an odds ladder to prevent diming. Your offer, in implied odds, must fall on one of the steps on the ladder. Currently, that is set to intervals of 0.1%, meaning that your offer cannot fall between the steps. An offer of 50.1% would be valid, but an offer of 50.05% would not. You can check if your odds would fall on the ladder by taking the modulus of your odds and 10 ^ 17 and checking if it's equal to 0. See the bottom of the JavaScript tab for a sample on how to do this, and how to round your odds to the nearest step. 
+We enforce an odds ladder to prevent diming. Your offer, in implied odds, must fall on one of the steps on the ladder. Currently, that is set to intervals of 0.1%, meaning that your offer cannot fall between the steps. An offer of 50.1% would be valid, but an offer of 50.05% would not. You can check if your odds would fall on the ladder by taking the modulus of your odds and 10 ^ 17 and checking if it's equal to 0. See the bottom of the JavaScript tab for a sample on how to do this, and how to round your odds to the nearest step.
 
 <aside class="warning">
 Odds not on the ladder will be rejected and your order(s) will not be posted. 
 </aside>
-
 
 ### HTTP Request
 
@@ -333,7 +328,7 @@ A `SignedNewOrder` object looks like this
 | percentageOdds           | string  | The odds _the maker will be receiving_ as this order gets filled. Must be on the odds ladder or will be rejected. |
 | expiry                   | number  | Deprecated. Time in UNIX seconds after which this order is no longer valid. Must always be 2209006800.            |
 | apiExpiry                | number  | Time in UNIX seconds after which this order is no longer valid.                                                   |
-| executor                 | string  | The sx.bet executor address. See the [metadata section](#get-metadata) for where to get this address          |
+| executor                 | string  | The sx.bet executor address. See the [metadata section](#get-metadata) for where to get this address              |
 | salt                     | string  | A random 32 byte string to differentiate between between orders with otherwise identical parameters               |
 | isMakerBettingOutcomeOne | boolean | `true` if the maker is betting outcome one (and hence taker is betting outcome two if filled)                     |
 | signature                | string  | The signature of the maker on this order payload                                                                  |
@@ -411,7 +406,7 @@ function getCancelOrderEIP712Payload(orderHashes, salt, timestamp, chainId) {
   return payload;
 }
 
-const payload = getCancelOrderEIP712Payload(orderHashes, salt, timestamp, 137);
+const payload = getCancelOrderEIP712Payload(orderHashes, salt, timestamp, 416);
 
 const signature = ethSigUtil.signTypedData_v4(bufferPrivateKey, {
   data: payload,
@@ -446,7 +441,7 @@ const result = await fetch("https://api.sx.bet/orders/cancel/v2", {
 This endpoint cancels existing orders on the exchange that you placed as a market maker. If passed orders that do not exist, they simply fail silently while the others will succeed.
 
 <aside class="notice">
-Ensure you use the <code>chainId</code> of Polygon, not the <code>chainId</code> of ETH mainnet.
+Ensure you use the <code>chainId</code> of SX Network, not the <code>chainId</code> of ETH mainnet or Polygon.
 </aside>
 
 ### HTTP Request
@@ -534,7 +529,7 @@ const payload = getCancelOrderEventsEIP712Payload(
   sportXeventId,
   salt,
   timestamp,
-  137
+  416
 );
 
 const signature = ethSigUtil.signTypedData_v4(bufferPrivateKey, {
@@ -570,7 +565,7 @@ const result = await fetch("https://api.sx.bet/orders/cancel/v2", {
 This endpoint cancels existing orders on the exchange for a particular event that you placed as a market maker.
 
 <aside class="notice">
-Ensure you use the <code>chainId</code> of Polygon, not the <code>chainId</code> of ETH mainnet.
+Ensure you use the <code>chainId</code> of SX Network, not the <code>chainId</code> of ETH mainnet or Polygon. 
 </aside>
 
 ### HTTP Request
@@ -644,7 +639,7 @@ function getCancelAllOrdersEIP712Payload(salt, timestamp, chainId) {
   return payload;
 }
 
-const payload = getCancelOrderEventsEIP712Payload(salt, timestamp, 137);
+const payload = getCancelOrderEventsEIP712Payload(salt, timestamp, 416);
 
 const signature = ethSigUtil.signTypedData_v4(bufferPrivateKey, {
   data: payload,
@@ -679,7 +674,7 @@ const result = await fetch("https://api.sx.bet/orders/cancel/all", {
 This endpoint cancels ALL existing orders on the exchange that you placed as a market maker.
 
 <aside class="notice">
-Ensure you use the <code>chainId</code> of Polygon, not the <code>chainId</code> of ETH mainnet.
+Ensure you use the <code>chainId</code> of SX Network, not the <code>chainId</code> of ETH mainnet or Polygon.
 </aside>
 
 ### HTTP Request
@@ -727,7 +722,8 @@ async function fillOrder() {
   const privateKey = process.env.PRIVATE_KEY;
   const takerAddress = process.env.TAKER_ADDRESS;
   const tokenAddress = process.env.TOKEN_ADDRESS;
-  const tokenTransferProxyAddress = process.env.TOKEN_TRANSFER_PROXY_ADDRESS;
+  const tokenTransferProxyAddress = process.env.TOKEN_TRANSFER_PROXY_ADDRESS; // get from https://api.sx.bet/metadata
+  const EIP712FillHasherAddress = process.env.EIP712_FILL_HASHER_ADDRESS; // get from https://api.sx.bet/metadata
   const bufferPrivateKey = Buffer.from(privateKey!.substring(2), "hex");
   const wallet = new Wallet(privateKey).connect(
     new providers.JsonRpcProvider(process.env.PROVIDER_URL)
@@ -793,14 +789,7 @@ async function fillOrder() {
     wallet
   );
 
-  let nonce: BigNumber;
-  if (
-    tokenAddress === "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174" // USDC has a non-standard get nonce method
-  ) {
-    nonce = await tokenContract.nonces(takerAddress);
-  } else {
-    nonce = await tokenContract.getNonce(takerAddress);
-  }
+  let nonce = await tokenContract.getNonce(takerAddress);
   const tokenName: string = await tokenContract.name();
   const abiEncodedFunctionSig = tokenContract.interface.encodeFunctionData(
     "approve",
@@ -889,9 +878,9 @@ async function fillOrder() {
     primaryType: "Details",
     domain: {
       name: "SportX",
-      version: "3.0",
-      chainId: 137,
-      verifyingContract: "0xCD667A4E7E377388b3aD8d57C3AEc4aC914c84Eb",
+      version: process.env.DOMAIN_VERSION, // get from https://api.sx.bet/metadata
+      chainId: 416 // get from https://api.sx.bet/metadata,
+      verifyingContract: EIP712FillHasherAddress,
     },
     message: {
       action: "N/A",
@@ -937,7 +926,7 @@ async function fillOrder() {
     domain: {
       name: tokenName,
       version: "1",
-      salt: utils.hexZeroPad(utils.hexlify(137), 32),
+      salt: utils.hexZeroPad(utils.hexlify(416), 32), https://api.sx.bet/metadata
       verifyingContract: tokenAddress,
     },
     message: {
@@ -1003,11 +992,11 @@ Note that pre-game has a built-in betting delay of 2s and in-game betting has a 
 To fill orders on sx.bet via the API, make sure you first enable betting by following the steps [here](#enabling-betting)
 
 <aside class="notice">
-Your assets must be on Polygon to place bets.
+Your assets must be on SX Network to place bets.
 </aside>
 
 <aside class="notice">
-Ensure you use the <code>chainId</code> of Polygon, not the <code>chainId</code> of ETH mainnet.
+Ensure you use the <code>chainId</code> of SX Network, not the <code>chainId</code> of ETH mainnet or Polygon.
 </aside>
 
 ### HTTP Request
@@ -1036,13 +1025,13 @@ Ensure you use the <code>chainId</code> of Polygon, not the <code>chainId</code>
 
 where an `ApproveSpenderPayload` looks like
 
-| Name         | Required | Type   | Description                                                                                                                                                                                            |
-| ------------ | -------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| owner        | true     | string | Address of the bettor/taker                                                                                                                                                                            |
-| spender      | true     | string | Address of the contract permitted to spend tokens on behalf of the bettor/taker to bet. See the `TokenTransferProxy` address in the [contract-addresses](#contract-addresses) section for this address |
-| tokenAddress | true     | string | Address of the token being used to bet. Must be the same as the token referenced in the orders being filled                                                                                            |
-| amount       | true     | string | Amount of tokens to approve. Must be greater than or equal to the total tokens bet from the bettors's perspective, i.e., how many tokens are leaving the bettor's wallet                               |
-| signature    | true     | string | The EIP712 signature of the this payload.                                                                                                                                                              |
+| Name         | Required | Type   | Description                                                                                                                                                                                     |
+| ------------ | -------- | ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| owner        | true     | string | Address of the bettor/taker                                                                                                                                                                     |
+| spender      | true     | string | Address of the contract permitted to spend tokens on behalf of the bettor/taker to bet. See the `TokenTransferProxy` address in the available at `https://api.sx.bet/metadata` for this address |
+| tokenAddress | true     | string | Address of the token being used to bet. Must be the same as the token referenced in the orders being filled                                                                                     |
+| amount       | true     | string | Amount of tokens to approve. Must be greater than or equal to the total tokens bet from the bettors's perspective, i.e., how many tokens are leaving the bettor's wallet                        |
+| signature    | true     | string | The EIP712 signature of the this payload.                                                                                                                                                       |
 
 ### Response format
 

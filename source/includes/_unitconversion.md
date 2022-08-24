@@ -2,15 +2,15 @@
 
 ## Tokens
 
-Every token in Ethereum has an associated "decimals" value. This effectively specifies how divisible the token is. For example, 100 DAI is actually stored as 100 \* 10^18 DAI on Ethereum itself. Here is a table for the tokens supported by SportX and their associated decimals value
+Every token in Ethereum has an associated "decimals" value. This effectively specifies how divisible the token is. For example, 100 USDC is actually stored as 100 \* 10^18 USDC on Ethereum itself. Here is a table for the tokens supported by SportX and their associated decimals value
 
-| Token | Polygon Address                            | Decimals |
-| ----- | ------------------------------------------ | -------- |
-| USDC  | `0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174` | 6        |
-| DAI   | `0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063` | 18       |
-| WETH  | `0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619` | 18       |
+| Token | SX Network Address                            | Decimals |
+| ----- | --------------------------------------------- | -------- |
+| USDC  | See `https://api.sx.bet/metadata` for address | 6        |
+| DAI   | See `https://api.sx.bet/metadata` for address | 18       |
+| WETH  | See `https://api.sx.bet/metadata` for address | 18       |
 
-To convert from nominal units (such as 100 DAI) to Ethereum units which are used in the API, you can do the following.
+To convert from nominal units (such as 100 USDC) to Ethereum units which are used in the API, you can do the following.
 
 `ethereumAmount = nominalAmount * 10^decimals`
 

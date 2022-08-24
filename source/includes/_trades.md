@@ -211,7 +211,7 @@ This endpoint retrieves past consolidated trades on the exchange via pagination.
 ### Request payload parameters
 
 | Name          | Required | Type    | Description                                                        |
-| ------------- | -------- | ------- | ---------------------------------------------------------------    |
+| ------------- | -------- | ------- | ------------------------------------------------------------------ |
 | bettor        | false    | string  | Only get trades placed by this bettor                              |
 | settled       | true     | boolean | If `true` only get settled trades                                  |
 | page          | true     | number  | Page number for pagination                                         |

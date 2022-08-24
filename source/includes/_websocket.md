@@ -249,7 +249,7 @@ See [the trades section](#get-active-trades) for the format of the message
 
 ```javascript
 const user = "0x082605F78dD83A8423113ecbEB794Fb3FFE470a2";
-const token = "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174";
+const token = process.env.USDC_TOKEN_ADDRESS; // get from https://api.sx.bet/metadata
 const channel = realtime.channels.get(`active_orders:${token}:${user}`);
 channel.subscribe((message) => {
   console.log(message.data);
