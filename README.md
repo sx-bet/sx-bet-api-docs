@@ -87,3 +87,10 @@ Running with docker
 - Build: `docker run --rm --name slate -v $(pwd)/build:/srv/slate/build -v $(pwd)/source:/srv/slate/source slatedocs/slate build`
 - Middleman: `docker run --rm --name slate -p 4567:4567 -v $(pwd)/source:/srv/slate/source slatedocs/slate serve`
 - Push: `./deploy.sh --push-only`
+
+How to deploy:
+
+1. Make sure you're working on a fork in own account, not the original slate repo: `git remote show origin`.
+2. Commit your changes to the markdown source: `git commit -a -m "Update index.md"`
+3. Push the markdown source changes to GitHub: `git push`
+4. Run `./deploy.sh --push-only`
