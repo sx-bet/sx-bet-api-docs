@@ -45,7 +45,7 @@ curl --location --request GET 'https://api.sx.bet/metadata'
     "EIP712FillHasher": "0x3E96B0a25d51e3Cc89C557f152797c33B839968f",
     "TokenTransferProxy": "0xCc4fBba7D0E0F2A03113F42f5D3aE80d9B2aD55d",
     "bridgeFee": 1,
-    "oddsLadderStepSize": 2.5
+    "oddsLadderStepSize": 25
   }
 }
 ```
