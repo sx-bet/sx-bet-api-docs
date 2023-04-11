@@ -44,7 +44,8 @@ curl --location --request GET 'https://api.sx.bet/metadata'
     "domainVersion": "4.0",
     "EIP712FillHasher": "0x3E96B0a25d51e3Cc89C557f152797c33B839968f",
     "TokenTransferProxy": "0xCc4fBba7D0E0F2A03113F42f5D3aE80d9B2aD55d",
-    "bridgeFee": 1
+    "bridgeFee": 1,
+    "oddsLadderStepSize": 2.5
   }
 }
 ```
@@ -73,3 +74,4 @@ This endpoint retrieves metadata on the exchange itself and useful parameters to
 | EIP712FillHasher   | string  | Address used in EIP712 signing for filling orders                                                                                                                           |
 | TokenTransferProxy | string  | Address used in EIP712 signing for enabling betting                                                                                                                         |
 | bridgeFee          | number  | USD fee for bridge transaction from Polygon to SX Network                                                                                                                   |
+| oddsLadderStepSize | number  | Odds ladder step size. See [the post a new order section](#post-a-new-order)                                                                                                |

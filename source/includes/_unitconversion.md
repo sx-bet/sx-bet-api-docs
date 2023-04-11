@@ -2,13 +2,13 @@
 
 ## Tokens
 
-Every token in Ethereum has an associated "decimals" value. This effectively specifies how divisible the token is. For example, 100 USDC is actually stored as 100 \* 10^18 USDC on Ethereum itself. Here is a table for the tokens supported by SportX and their associated decimals value
+Every token in Ethereum has an associated "decimals" value. This effectively specifies how divisible the token is. For example, 100 USDC is actually stored as 100 \* 10^18 USDC on Ethereum itself. Here is a table for the tokens supported by SX.bet and their associated decimals value
 
 | Token | SX Network Address                            | Decimals |
 | ----- | --------------------------------------------- | -------- |
 | USDC  | See `https://api.sx.bet/metadata` for address | 6        |
-| DAI   | See `https://api.sx.bet/metadata` for address | 18       |
 | WETH  | See `https://api.sx.bet/metadata` for address | 18       |
+| WSX  | See `https://api.sx.bet/metadata` for address | 18       |
 
 To convert from nominal units (such as 100 USDC) to Ethereum units which are used in the API, you can do the following.
 

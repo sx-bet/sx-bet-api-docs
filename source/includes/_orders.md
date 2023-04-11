@@ -238,38 +238,47 @@ const result = await fetch("https://api.sx.bet/orders/new", {
 
 // Odds ladder testing
 
-import { PERCENTAGE_PRECISION_EXPONENT } from "@betx/sportx-contracts";
 import { BigNumber } from "bignumber.js";
 import { BigNumber as EthBigNumber } from "ethers";
+
+export const ODDS_LADDER_STEP_SIZE = 2.5; // (0.1% = 1, 0.5% = 5, etc)
 
 /**
  * Check if the odds are valid, i.e., in one of the allowed steps
  * @param odds Odds to check
  */
-export function checkOddsLadderValid(odds: EthBigNumber) {
+export function checkOddsLadderValid(
+  odds: EthBigNumber,
+  stepSizeOverride?: number
+) {
   // Logic:
   // 100% = 10^20
   // 10% = 10^19
   // 1% = 10^18
   // 0.1% = 10^17
-  return odds.mod(EthBigNumber.from(10).pow(17)).eq(0);
+  return odds
+    .mod(
+      EthBigNumber.from(10)
+        .pow(20 - 3)
+        .mul(stepSizeOverride || ODDS_LADDER_STEP_SIZE)
+    )
+    .eq(0);
 }
 
 /**
- * Rounds odds to the nearest step. If you're examining maker odds, a higher implied is better for the maker, so you should want to round up
+ * Rounds odds to the nearest step.
  * @param odds Odds to round.
- * @param equidistantRoundUp If true, round up at equidistant (0.5 -> 1). Default true.
  */
-export function roundOddsToNearestStep(
+export function roundDownOddsToNearestStep(
   odds: EthBigNumber,
-  equidistantRoundUp: boolean = true
+  stepSizeOverride?: number
 ) {
-  const step = EthBigNumber.from(10).pow(17);
+  const step = EthBigNumber.from(10)
+    .pow(20 - 3)
+    .mul(stepSizeOverride || ODDS_LADDER_STEP_SIZE);
   const bnStep = new BigNumber(step.toString());
   const bnOdds = new BigNumber(odds.toString());
-  const firstPassDivision = bnOdds
-    .dividedBy(bnStep)
-    .toFixed(0, equidistantRoundUp ? 4 : 5);
+  const firstPassDivision = bnOdds.dividedBy(bnStep).toFixed(0, 3);
   return EthBigNumber.from(firstPassDivision).mul(step);
 }
 ```
@@ -301,7 +310,9 @@ If the API finds that your balance is consistently below your total exposure req
 
 To offer bets on sx.bet via the API, make sure you first enable betting by following the steps [here](#enabling-betting).
 
-We enforce an odds ladder to prevent diming. Your offer, in implied odds, must fall on one of the steps on the ladder. Currently, that is set to intervals of 0.1%, meaning that your offer cannot fall between the steps. An offer of 50.1% would be valid, but an offer of 50.05% would not. You can check if your odds would fall on the ladder by taking the modulus of your odds and 10 ^ 17 and checking if it's equal to 0. See the bottom of the JavaScript tab for a sample on how to do this, and how to round your odds to the nearest step.
+We enforce an odds ladder to prevent diming. Your offer, in implied odds, must fall on one of the steps on the ladder. Currently, that is set to intervals of 0.25%, meaning that your offer cannot fall between the steps. An offer of 50.25% would be valid, but an offer of 50.05% would not. You can check if your odds would fall on the ladder by taking the modulus of your odds and 2.5 * 10 ^ 17 and checking if it's equal to 0. See the bottom of the JavaScript tab for a sample on how to do this, and how to round your odds to the nearest step.
+
+You can get the current interval from `GET /metadata`. It will spit out a number from 1 to 10, where 1 = 0.1%, and 10 = 1%
 
 <aside class="warning">
 Odds not on the ladder will be rejected and your order(s) will not be posted. 

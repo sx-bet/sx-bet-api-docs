@@ -34,13 +34,13 @@ meta:
 
 # Introduction
 
-Be your own bookmaker or fill orders programmatically with the SportX API!
+Be your own bookmaker or fill orders programmatically with the SX.bet API!
 
 Questions? [Join our chat](https://discord.gg/xXUynCX)
 
 We support betting in USDC, WETH, and WSX
 
-If you wish to use our wrapper for javascript you can do so [here](https://github.com/sportx-bet/sportx-js)
+DEPRECATED: If you wish to use our wrapper for javascript you can do so [here](https://github.com/sportx-bet/sportx-js)
 
 | Token | SX Network Address                           |
 | ----- | -------------------------------------------- |

@@ -72,7 +72,7 @@ curl --location --request GET 'https://api.sx.bet/leagues'
 }
 ```
 
-This endpoint returns all the leagues supported by SportX
+This endpoint returns all the leagues supported by SX.bet
 
 ### HTTP Request
 
@@ -98,7 +98,7 @@ A `League` object looks like this
 | leagueID      | number  | The ID for this league                                                                                                                                                   |
 | label         | string  | The name of this league                                                                                                                                                  |
 | sportID       | number  | The ID of the sport this league corresponds to                                                                                                                           |
-| active        | boolean | Whether or not the league is active on SportX currently                                                                                                                  |
+| active        | boolean | Whether or not the league is active on SX.bet currently                                                                                                                  |
 | homeTeamFirst | boolean | Instructions to the client of how to show the team names for markets in this league. `true` if the home team is `teamOneName`, `false` if the home team is `teamTwoName` |
 
 ## Get active leagues
