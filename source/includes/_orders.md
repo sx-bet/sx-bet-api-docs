@@ -259,8 +259,8 @@ export function checkOddsLadderValid(
   return odds
     .mod(
       EthBigNumber.from(10)
-        .pow(20 - 3)
-        .mul(stepSizeOverride || ODDS_LADDER_STEP_SIZE)
+        .pow(16)
+        .mul(ODDS_LADDER_STEP_SIZE)
     )
     .eq(0);
 }
@@ -274,8 +274,8 @@ export function roundDownOddsToNearestStep(
   stepSizeOverride?: number
 ) {
   const step = EthBigNumber.from(10)
-    .pow(20 - 3)
-    .mul(stepSizeOverride || ODDS_LADDER_STEP_SIZE);
+    .pow(16)
+    .mul(ODDS_LADDER_STEP_SIZE);
   const bnStep = new BigNumber(step.toString());
   const bnOdds = new BigNumber(odds.toString());
   const firstPassDivision = bnOdds.dividedBy(bnStep).toFixed(0, 3);
