@@ -241,7 +241,7 @@ const result = await fetch("https://api.sx.bet/orders/new", {
 import { BigNumber } from "bignumber.js";
 import { BigNumber as EthBigNumber } from "ethers";
 
-export const ODDS_LADDER_STEP_SIZE = 2.5; // (0.1% = 1, 0.5% = 5, etc)
+export const ODDS_LADDER_STEP_SIZE = 25; // (0.1% = 1, 0.5% = 5, etc)
 
 /**
  * Check if the odds are valid, i.e., in one of the allowed steps
