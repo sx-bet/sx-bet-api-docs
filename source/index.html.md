@@ -36,7 +36,7 @@ meta:
 
 Be your own bookmaker or fill orders programmatically with the SX.bet API!
 
-Questions? [Join our chat](https://discord.gg/xXUynCX)
+Technical questions or need support? [Send us an e-mail](mailto:api-support@sx.bet). 
 
 We support betting in USDC, WETH, and WSX
 

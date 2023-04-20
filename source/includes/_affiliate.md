@@ -1,6 +1,6 @@
 # Affiliate
 
-You can become an affiliate of sx.bet and participate in fee sharing. You'll be able to hook into our market resolution and liquidity using thiis API. Please [contact us](mailto:contact@sx.bet) if you are interested in working with us. We would love to hear from you!
+You can become an affiliate of sx.bet and participate in fee sharing. You'll be able to hook into our market resolution and liquidity using this API. Please [contact us](mailto:affiliate@sx.bet) if you are interested in working with us. We would love to hear from you!
 
 ## Get affiliate users
 
