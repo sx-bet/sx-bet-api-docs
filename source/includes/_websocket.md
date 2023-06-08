@@ -22,7 +22,7 @@ async function createTokenRequest() {
 }
 
 async function initialize() {
-  const ablyClient = new ably.Realtime.Promise({
+  const realtime = new ably.Realtime.Promise({
       authCallback: async (tokenParams, callback) => {
           try {
               const tokenRequest = await createTokenRequest() 
@@ -38,7 +38,7 @@ async function initialize() {
 }
 ```
 
-We use the Ably SDK to allow users to connect to our API. It supports pretty much every major language but all of the examples on this page will be in JavaScript. The API is relatively identical across languages though. See [this link](#https://ably.com/documentation/quick-start-guide) for a basic overview of the API in other languages.
+We use the Ably SDK to allow users to connect to our API. It supports pretty much every major language but all of the examples on this page will be in JavaScript. The API is relatively identical across languages though. See [this link](https://ably.com/documentation/quick-start-guide) for a basic overview of the API in other languages.
 
 <aside class="info">
 You must have a valid API key to subscribe to realtime channels via the API.
