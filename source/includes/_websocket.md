@@ -6,22 +6,43 @@ You can connect to the websocket API and listen for realtime changes in several 
 
 ```javascript
 import * as ably from "ably";
+import axios from "axios";
+
+async function createTokenRequest() {
+  const response = await axios.get(
+    "https://api.sx.bet/user/token",
+    {
+      headers: {
+        "x-api-key": process.env.SX_BET_API_KEY,
+      }
+    }
+    
+  );
+  return response.data;
+}
 
 async function initialize() {
-  const realtime = new ably.Realtime.Promise({
-    authUrl: `https://api.sx.bet/user/token`,
+  const ablyClient = new ably.Realtime.Promise({
+      authCallback: async (tokenParams, callback) => {
+          try {
+              const tokenRequest = await createTokenRequest() 
+              // Make a network request to GET /user/token passing in 
+              // `x-api-key: [YOUR_API_KEY]` as a header
+              callback(null, tokenRequest)
+          } catch (error) {
+              callback(error, null)
+          }
+      }
   });
-  await new Promise<void>((resolve, reject) => {
-    realtime.connection.on("connected", () => {
-      resolve();
-    });
-    // 10s timeout to connect
-    setTimeout(() => reject(), 10000);
-  });
+  await ablyClient.connection.once("connected");
 }
 ```
 
 We use the Ably SDK to allow users to connect to our API. It supports pretty much every major language but all of the examples on this page will be in JavaScript. The API is relatively identical across languages though. See [this link](#https://ably.com/documentation/quick-start-guide) for a basic overview of the API in other languages.
+
+<aside class="info">
+You must have a valid API key to subscribe to realtime channels via the API.
+</aside>
 
 <aside class="warning">
 You only need one instance of the <code>ably</code> object to connect to the API. Connections to multiple channels are multiplexed though the single network connection. If you create too many individual connections, you will be forcefully unsubscribed from all channels and disconnected.
