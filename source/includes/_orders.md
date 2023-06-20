@@ -3,7 +3,7 @@
 ## Get active orders
 
 ```shell
-curl --location --request POST 'https://api.sx.bet/orders'
+curl --location --request GET 'https://api.sx.bet/orders'
 ```
 
 > The above command returns JSON structured like this
@@ -68,15 +68,16 @@ This endpoint returns active orders on the exchange based on a few parameters
 
 ### HTTP Request
 
-`POST https://api.sx.bet/orders`
+`GET https://api.sx.bet/orders`
 
 ### Request payload parameters
 
-| Name         | Required | Type     | Description                                    |
-| ------------ | -------- | -------- | ---------------------------------------------- |
-| marketHashes | false    | string[] | Only get orders for these market hashes        |
-| baseToken    | false    | string   | Only get orders denominated in this base token |
-| maker        | false    | string   | Only get orders for this market maker          |
+| Name          | Required | Type     | Description                                               |
+| ------------- | -------- | -------- | --------------------------------------------------------- |
+| marketHashes  | false    | string[] | Only get orders for these market hashes. Comma separated. |
+| baseToken     | false    | string   | Only get orders denominated in this base token            |
+| maker         | false    | string   | Only get orders for this market maker                     |
+| sportXeventId | false    | string   | Only get orders for this event ID                         |
 
 Note that one of `marketHashes` or `maker` is required.
 
@@ -257,11 +258,7 @@ export function checkOddsLadderValid(
   // 1% = 10^18
   // 0.1% = 10^17
   return odds
-    .mod(
-      EthBigNumber.from(10)
-        .pow(16)
-        .mul(ODDS_LADDER_STEP_SIZE)
-    )
+    .mod(EthBigNumber.from(10).pow(16).mul(ODDS_LADDER_STEP_SIZE))
     .eq(0);
 }
 
@@ -273,9 +270,7 @@ export function roundDownOddsToNearestStep(
   odds: EthBigNumber,
   stepSizeOverride?: number
 ) {
-  const step = EthBigNumber.from(10)
-    .pow(16)
-    .mul(ODDS_LADDER_STEP_SIZE);
+  const step = EthBigNumber.from(10).pow(16).mul(ODDS_LADDER_STEP_SIZE);
   const bnStep = new BigNumber(step.toString());
   const bnOdds = new BigNumber(odds.toString());
   const firstPassDivision = bnOdds.dividedBy(bnStep).toFixed(0, 3);
@@ -310,7 +305,7 @@ If the API finds that your balance is consistently below your total exposure req
 
 To offer bets on sx.bet via the API, make sure you first enable betting by following the steps [here](#enabling-betting).
 
-We enforce an odds ladder to prevent diming. Your offer, in implied odds, must fall on one of the steps on the ladder. Currently, that is set to intervals of 0.25%, meaning that your offer cannot fall between the steps. An offer of 50.25% would be valid, but an offer of 50.05% would not. You can check if your odds would fall on the ladder by taking the modulus of your odds and 2.5 * 10 ^ 17 and checking if it's equal to 0. See the bottom of the JavaScript tab for a sample on how to do this, and how to round your odds to the nearest step.
+We enforce an odds ladder to prevent diming. Your offer, in implied odds, must fall on one of the steps on the ladder. Currently, that is set to intervals of 0.25%, meaning that your offer cannot fall between the steps. An offer of 50.25% would be valid, but an offer of 50.05% would not. You can check if your odds would fall on the ladder by taking the modulus of your odds and 2.5 \* 10 ^ 17 and checking if it's equal to 0. See the bottom of the JavaScript tab for a sample on how to do this, and how to round your odds to the nearest step.
 
 You can get the current interval from `GET /metadata`. It will spit out a number from 10 to 100, where 10 = 0.10%, and 25 = 0.25%
 

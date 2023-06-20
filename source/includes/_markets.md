@@ -183,11 +183,7 @@ More types will be added continuously.
 ## Get specific markets
 
 ```shell
-curl --location --request POST 'https://api.sx.bet/markets/find' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "marketHashes": ["0x3cba25f2253035b015b9bb555c1bf900f6737704d57425dd2a5b60e929c33b81"]
-}'
+curl --location --request GET 'https://api.sx.bet/markets/find'
 ```
 
 > The above command returns JSON structured like this:
@@ -228,13 +224,13 @@ This endpoint retrieves specific markets
 
 ### HTTP Request
 
-`POST https://api.sx.bet/markets/find`
+`GET https://api.sx.bet/markets/find`
 
 ### Request format
 
-| Name         | Required | Type     | Description                                               |
-| ------------ | -------- | -------- | --------------------------------------------------------- |
-| marketHashes | true     | string[] | The market hashes of the markets to retrieve. Maximum 50. |
+| Name         | Required | Type     | Description                                                                |
+| ------------ | -------- | -------- | -------------------------------------------------------------------------- |
+| marketHashes | true     | string[] | The market hashes of the markets to retrieve. Maximum 50. Comma separated. |
 
 ### Response format
 
