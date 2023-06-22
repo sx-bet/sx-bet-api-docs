@@ -3,8 +3,7 @@
 ## Get live scores
 
 ```shell
-curl --location --request POST 'https://api.sx.bet/live-scores' \
---header 'Content-Type: application/json'
+curl --location --request GET 'https://api.sx.bet/live-scores'
 ```
 
 > The above command returns JSON structured like this:
@@ -83,7 +82,7 @@ This endpoint retrieves live scores for a particular event ID.
 
 ### HTTP Request
 
-`POST https://api.sx.bet/live-scores`
+`GET https://api.sx.bet/live-scores`
 
 ### Request payload
 

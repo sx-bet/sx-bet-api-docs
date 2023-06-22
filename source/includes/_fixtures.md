@@ -83,11 +83,7 @@ A `Fixture` object looks like this
 ## Get fixture status
 
 ```shell
-curl --location --request POST 'https://api.sx.bet/fixture/status' \
---header 'Content-Type: application/json' \
---data-raw '{
-    "sportXeventIds": ["L6217784"]
-}'
+curl --location --request GET 'https://api.sx.bet/fixture/status'
 ```
 
 > The above command returns JSON structured like this:
@@ -105,13 +101,13 @@ This endpoint returns the status of the passed event IDs.
 
 ### HTTP Request
 
-`POST https://api.sx.bet/fixture/status`
+`GET https://api.sx.bet/fixture/status`
 
 ### Request payload
 
-| Name           | Required | Type     | Description           |
-| -------------- | -------- | -------- | --------------------- |
-| sportXeventIds | true     | string[] | An array of event IDs |
+| Name           | Required | Type     | Description                             |
+| -------------- | -------- | -------- | --------------------------------------- |
+| sportXeventIds | true     | string[] | An array of event IDs (comma separated) |
 
 ### Response format
 

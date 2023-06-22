@@ -39,7 +39,6 @@ curl --location --request GET 'https://api.sx.bet/metadata'
         "WSX": "0xaa99bE3356a11eE92c3f099BD7a038399633566f"
       }
     },
-    "bettingEnabled": true,
     "totalVolume": 214120305.80276245,
     "domainVersion": "4.0",
     "EIP712FillHasher": "0x3E96B0a25d51e3Cc89C557f152797c33B839968f",
@@ -68,7 +67,6 @@ This endpoint retrieves metadata on the exchange itself and useful parameters to
 | makerOrderMinimums | any     | A mapping from token address to a real token amount indicating the minimum maker order size. To convert into a readable amount, see [the token conversion section](#tokens) |
 | takerMinimums      | any     | A mapping from token address to a real token amount indicating the minimum taker order size. To convert into a readable amount, see [the token conversion section](#tokens) |
 | addresses          | any     | A mapping from network id -> canonical token name -> token address of assets supported by the exchange                                                                      |
-| bettingEnabled     | boolean | `true` if betting is enabled for your region, false otherwise. See [here](https://help.sx.bet/en/articles/3613372-terms-and-conditions) for the supported regions           |
 | totalVolume        | number  | All time total volume on the exchange                                                                                                                                       |
 | domainVersion      | string  | Used in EIP712 signing                                                                                                                                                      |
 | EIP712FillHasher   | string  | Address used in EIP712 signing for filling orders                                                                                                                           |
