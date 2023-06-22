@@ -888,7 +888,7 @@ async function fillOrder() {
     },
     primaryType: "Details",
     domain: {
-      name: "SportX",
+      name: "SX Bet",
       version: process.env.DOMAIN_VERSION, // get from https://api.sx.bet/metadata
       chainId: 416 // get from https://api.sx.bet/metadata,
       verifyingContract: EIP712FillHasherAddress,
