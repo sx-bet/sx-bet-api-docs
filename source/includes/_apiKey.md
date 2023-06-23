@@ -1,6 +1,6 @@
 # API Key
 
-In order to use the SX.bet API, you do NOT need an API Key. The standard API user can perform all the requests provided in this document. There is a baseline rate limiter applied to these requests.
+In order to use the SX.Bet API, you do NOT need an API Key. The standard API user can perform all the requests provided in this document. There is a baseline rate limiter applied to these requests.
 
 Some users may require higher rate limits for their application. SX.bet provides elevated rate limits through an authenticated API Key. If a valid API Key is passed in the request, the elevated rate limits will be applied.
 

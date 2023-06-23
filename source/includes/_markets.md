@@ -140,6 +140,7 @@ A `market` object looks like this
 | teamOneMeta     | string?    | Extra metadata for team one                                                                                                         |
 | teamTwoMeta     | string?    | Extra metadata for team two                                                                                                         |
 | marketMeta      | string?    | Extra metadata for the market overall                                                                                               |
+| legs            | Market[]?  | If this is a Parlay Market, this field will contain an array of the underlying Legs as a Market object                              |
 
 A `MarketType` can currently be one of the following
 

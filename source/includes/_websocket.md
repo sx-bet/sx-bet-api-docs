@@ -100,6 +100,58 @@ Subscribe to all changes in markets on sx.bet. You will get updates when
 
 See [the markets section](#get-specific-markets) for the format of the message
 
+## Parlay Market requests
+
+```javascript
+const channel = realtime.channels.get(`markets:parlay`);
+channel.subscribe((message) => {
+  console.log(message.data);
+});
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+  "marketHash": "0x38cceead7bda65c18574a34994ebd8af154725d08aa735dcbf26247a7dcc67bd",
+  "baseToken": "0x8f3Cf7ad23Cd3CaDbD9735AFf958023239c6A063",
+  "requestSize": "100000000",
+  "legs": [
+    {
+      "marketHash": "0x0d64c52e8781acdada86920a2d1e5acd6f29dcfe285cf9cae367b671dff05f7d",
+      "bettingOutcomeOne": true,
+    },
+    {
+      "marketHash": "0xe609a49d083cd41214a0db276c1ba323c4a947eefd2e4260386fec7b5d258188",
+      "bettingOutcomeOne": false,
+    }
+  ]
+}
+```
+
+When a bettor requests a Parlay Market, a message is sent via the `markets:parlay` channel. In order to offer orders on Parlay Markets, you will need to subscribe to this channel. The payload will contain the `marketHash` that is associated with the Parlay Market. You can post orders to this market as you would for other markets, using this `marketHash`. The payload also contains the token and size that the bettor is requesting. The `legs` in the payload contain the underlying legs that make up the parlay market. You can query for market data on each leg's `marketHash` to determine current orders for that individual market.
+
+### `ParlayMarket` payload format
+
+| Name          | Type              | Description                                                                                                                           |
+| ------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| marketHash    | string            | The parlay market associated with this request                                                                                        |
+| baseToken     | string            | The token this request is denominated in                                                                                              |
+| requestSize   | number            | The size in baseTokens that the bettor is requesting. See [the token section](#tokens) of how to convert this into nominal amounts    |
+| legs          | ParlayMarketLeg[] | An array of legs that make up the parlay                                                                                              |
+
+### `ParlayMarketLeg` payload format
+
+| Name                  | Type    | Description                                                             |
+| --------------------- | ------- | ----------------------------------------------------------------------- |
+| marketHash            | string  | The market for an individual leg within the parlay                      |
+| bettingOutcomeOne     | boolean | The side the bettor is betting for an individual leg within the parlay  |
+
+<aside class="notice">
+Note that the `requestSize` is only indicating what the user is requesting, but does not limit market makers in how much they want to offer. You are allowed to offer any size.
+</aside>
+
+
 ## Line changes
 
 ```javascript
