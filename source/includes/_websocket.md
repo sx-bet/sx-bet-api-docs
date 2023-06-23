@@ -129,7 +129,9 @@ channel.subscribe((message) => {
 }
 ```
 
-When a bettor requests a Parlay Market, a message is sent via the `markets:parlay` channel. In order to offer orders on Parlay Markets, you will need to subscribe to this channel. The payload will contain the `marketHash` that is associated with the Parlay Market. You can post orders to this market as you would for other markets, using this `marketHash`. The payload also contains the token and size that the bettor is requesting. The `legs` in the payload contain the underlying legs that make up the parlay market. You can query for market data on each leg's `marketHash` to determine current orders for that individual market.
+When a bettor requests a Parlay Market, a message is sent via the `markets:parlay` channel. In order to offer orders on Parlay Markets, you will need to subscribe to this channel. The payload will contain the `marketHash` that is associated with the Parlay Market. 
+
+You can post orders to this market as you would for any other market, using this `marketHash`. The payload also contains the token and size that the bettor is requesting. The `legs` in the payload contain the underlying legs that make up the parlay market. You can query for market data on each leg's `marketHash` to determine current orders for that individual market.
 
 ### `ParlayMarket` payload format
 
