@@ -207,7 +207,7 @@ This endpoint retrieves past consolidated trades on the exchange via pagination.
 
 `GET https://api.sx.bet/trades/consolidated`
 
-### Request payload parameters
+### Query parameters
 
 | Name          | Required | Type    | Description                                                        |
 | ------------- | -------- | ------- | ------------------------------------------------------------------ |
