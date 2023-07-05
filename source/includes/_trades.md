@@ -98,7 +98,7 @@ This endpoint retrieves past trades on the exchange split up by order. This is a
 
 `GET https://api.sx.bet/trades`
 
-### Request payload parameters
+### Query parameters
 
 | Name          | Required | Type     | Description                                                                                                     |
 | ------------- | -------- | -------- | --------------------------------------------------------------------------------------------------------------- |
