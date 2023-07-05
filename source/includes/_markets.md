@@ -231,7 +231,7 @@ This endpoint retrieves specific markets
 
 | Name         | Required | Type     | Description                                                                |
 | ------------ | -------- | -------- | -------------------------------------------------------------------------- |
-| marketHashes | true     | string[] | The market hashes of the markets to retrieve. Maximum 50. Comma separated. |
+| marketHashes | true     | string[] | The market hashes of the markets to retrieve. Maximum 30. Comma separated. |
 
 ### Response format
 
