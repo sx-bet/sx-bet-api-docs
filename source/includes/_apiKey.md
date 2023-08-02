@@ -10,8 +10,8 @@ Some users may require higher rate limits for their application. SX.bet provides
 2. If using MetaMask, `sign` the Signature Request.
 3. Click the `Account` tab on the top navigation bar.
 4. Click the `Overview` tab on the account navigation bar.
-5. You will see an `API Credentials` card. Complete the `Basic Verification` if you have not yet done so by clicking the link in the card.
-6. If you've signed in and completed the basic verification, you can now click the button: `GENERATE API KEY NOW`. An API Key will be displayed.
+5. You will see an `API Credentials` card. Complete the `Enhanced Verification` if you have not yet done so by clicking the link in the card.
+6. If you've signed in and completed the enhanced verification, you can now click the button: `GENERATE API KEY NOW`. An API Key will be displayed.
 7. The API Key generated will not be displayed again, so please <b>copy and save this key for future use</b>.
 
 <aside class="notice">
