@@ -1,5 +1,9 @@
 # Websocket API
 
+<aside class="info">
+You must have a valid API key to subscribe to realtime channels via the API. See [here](#api-key) for more info.
+</aside>
+
 You can connect to the websocket API and listen for realtime changes in several things such as order books, markets, scores, and line updates.
 
 ## Initialization
@@ -40,9 +44,6 @@ async function initialize() {
 
 We use the Ably SDK to allow users to connect to our API. It supports pretty much every major language but all of the examples on this page will be in JavaScript. The API is relatively identical across languages though. See [this link](https://ably.com/documentation/quick-start-guide) for a basic overview of the API in other languages.
 
-<aside class="info">
-You must have a valid API key to subscribe to realtime channels via the API.
-</aside>
 
 <aside class="warning">
 You only need one instance of the <code>ably</code> object to connect to the API. Connections to multiple channels are multiplexed though the single network connection. If you create too many individual connections, you will be forcefully unsubscribed from all channels and disconnected.

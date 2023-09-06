@@ -1,8 +1,10 @@
 # API Key
 
-In order to use the SX.Bet API, you do NOT need an API Key. The standard API user can perform all the requests provided in this document. There is a baseline rate limiter applied to these requests.
+In order to use the SX.Bet API, you do NOT need an API Key. The standard API user can perform all the requests provided in this document. There is a baseline rate limiter applied to all requests with or without an API Key. The API Key will give you elevated privilages on certain functions.
 
-Some users may require higher rate limits for their application. SX.bet provides elevated rate limits through an authenticated API Key. If a valid API Key is passed in the request, the elevated rate limits will be applied.
+<aside class="notice">
+The main usecase for the API Key is to connect to the WebSocket via Ably.
+</aside>
 
 ## Generating API Key
 
@@ -21,10 +23,10 @@ If you lose your key, you can generate a new one by following the same steps. An
 ## Usage
 
 ```shell
-curl --location --request GET 'https://api.sx.bet/markets/active?onlyMainLine=true' \
+curl --location --request GET 'https://api.sx.bet/user/token' \
 --header 'X-Api-Key: XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX'
 ```
 
-> You must fill your API Key in the header `X-Api-Key`. The above sample command returns JSON as expected but will allow elevated rate limits.
+> You must fill your API Key in the header `X-Api-Key`. The above is a sample command to create an Ably Token Request.
 
-Once your API Key is generated (see above), you can use it in your HTTP Requests as a header to automatically allow elevated rate limits. You must add it as a HTTP Header with the name: `X-Api-Key`.
+Once your API Key is generated (see above), you must add it as a HTTP Header with the name: `X-Api-Key`.
