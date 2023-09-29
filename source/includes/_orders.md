@@ -70,7 +70,7 @@ This endpoint returns active orders on the exchange based on a few parameters
 
 `GET https://api.sx.bet/orders`
 
-### Request payload parameters
+### Query parameters
 
 | Name          | Required | Type     | Description                                               |
 | ------------- | -------- | -------- | --------------------------------------------------------- |

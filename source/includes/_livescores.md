@@ -84,7 +84,7 @@ This endpoint retrieves live scores for a particular event ID.
 
 `GET https://api.sx.bet/live-scores`
 
-### Request payload
+### Query parameters
 
 | Name           | Required | Type     | Description           |
 | -------------- | -------- | -------- | --------------------- |

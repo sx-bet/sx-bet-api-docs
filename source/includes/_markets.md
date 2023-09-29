@@ -227,7 +227,7 @@ This endpoint retrieves specific markets
 
 `GET https://api.sx.bet/markets/find`
 
-### Request format
+### Query parameters
 
 | Name         | Required | Type     | Description                                                                |
 | ------------ | -------- | -------- | -------------------------------------------------------------------------- |

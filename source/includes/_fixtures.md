@@ -103,7 +103,7 @@ This endpoint returns the status of the passed event IDs.
 
 `GET https://api.sx.bet/fixture/status`
 
-### Request payload
+### Query parameters
 
 | Name           | Required | Type     | Description                             |
 | -------------- | -------- | -------- | --------------------------------------- |
