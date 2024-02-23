@@ -13,37 +13,32 @@ import * as ably from "ably";
 import axios from "axios";
 
 async function createTokenRequest() {
-  const response = await axios.get(
-    "https://api.sx.bet/user/token",
-    {
-      headers: {
-        "x-api-key": process.env.SX_BET_API_KEY,
-      }
-    }
-    
-  );
+  const response = await axios.get("https://api.sx.bet/user/token", {
+    headers: {
+      "x-api-key": process.env.SX_BET_API_KEY,
+    },
+  });
   return response.data;
 }
 
 async function initialize() {
   const realtime = new ably.Realtime.Promise({
-      authCallback: async (tokenParams, callback) => {
-          try {
-              const tokenRequest = await createTokenRequest() 
-              // Make a network request to GET /user/token passing in 
-              // `x-api-key: [YOUR_API_KEY]` as a header
-              callback(null, tokenRequest)
-          } catch (error) {
-              callback(error, null)
-          }
+    authCallback: async (tokenParams, callback) => {
+      try {
+        const tokenRequest = await createTokenRequest();
+        // Make a network request to GET /user/token passing in
+        // `x-api-key: [YOUR_API_KEY]` as a header
+        callback(null, tokenRequest);
+      } catch (error) {
+        callback(error, null);
       }
+    },
   });
   await ablyClient.connection.once("connected");
 }
 ```
 
 We use the Ably SDK to allow users to connect to our API. It supports pretty much every major language but all of the examples on this page will be in JavaScript. The API is relatively identical across languages though. See [this link](https://ably.com/documentation/quick-start-guide) for a basic overview of the API in other languages.
-
 
 <aside class="warning">
 You only need one instance of the <code>ably</code> object to connect to the API. Connections to multiple channels are multiplexed though the single network connection. If you create too many individual connections, you will be forcefully unsubscribed from all channels and disconnected.
@@ -120,40 +115,39 @@ channel.subscribe((message) => {
   "legs": [
     {
       "marketHash": "0x0d64c52e8781acdada86920a2d1e5acd6f29dcfe285cf9cae367b671dff05f7d",
-      "bettingOutcomeOne": true,
+      "bettingOutcomeOne": true
     },
     {
       "marketHash": "0xe609a49d083cd41214a0db276c1ba323c4a947eefd2e4260386fec7b5d258188",
-      "bettingOutcomeOne": false,
+      "bettingOutcomeOne": false
     }
   ]
 }
 ```
 
-When a bettor requests a Parlay Market, a message is sent via the `markets:parlay` channel. In order to offer orders on Parlay Markets, you will need to subscribe to this channel. The payload will contain the `marketHash` that is associated with the Parlay Market. 
+When a bettor requests a Parlay Market, a message is sent via the `markets:parlay` channel. In order to offer orders on Parlay Markets, you will need to subscribe to this channel. The payload will contain the `marketHash` that is associated with the Parlay Market.
 
 You can post orders to this market as you would for any other market, using this `marketHash`. The payload also contains the token and size that the bettor is requesting. The `legs` in the payload contain the underlying legs that make up the parlay market. You can query for market data on each leg's `marketHash` to determine current orders for that individual market.
 
 ### `ParlayMarket` payload format
 
-| Name          | Type              | Description                                                                                                                           |
-| ------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| marketHash    | string            | The parlay market associated with this request                                                                                        |
-| baseToken     | string            | The token this request is denominated in                                                                                              |
-| requestSize   | number            | The size in baseTokens that the bettor is requesting. See [the token section](#tokens) of how to convert this into nominal amounts    |
-| legs          | ParlayMarketLeg[] | An array of legs that make up the parlay                                                                                              |
+| Name        | Type              | Description                                                                                                                        |
+| ----------- | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| marketHash  | string            | The parlay market associated with this request                                                                                     |
+| baseToken   | string            | The token this request is denominated in                                                                                           |
+| requestSize | number            | The size in baseTokens that the bettor is requesting. See [the token section](#tokens) of how to convert this into nominal amounts |
+| legs        | ParlayMarketLeg[] | An array of legs that make up the parlay                                                                                           |
 
 ### `ParlayMarketLeg` payload format
 
-| Name                  | Type    | Description                                                             |
-| --------------------- | ------- | ----------------------------------------------------------------------- |
-| marketHash            | string  | The market for an individual leg within the parlay                      |
-| bettingOutcomeOne     | boolean | The side the bettor is betting for an individual leg within the parlay  |
+| Name              | Type    | Description                                                            |
+| ----------------- | ------- | ---------------------------------------------------------------------- |
+| marketHash        | string  | The market for an individual leg within the parlay                     |
+| bettingOutcomeOne | boolean | The side the bettor is betting for an individual leg within the parlay |
 
 <aside class="notice">
 Note that the `requestSize` is only indicating what the user is requesting, but does not limit market makers in how much they want to offer. You are allowed to offer any size.
 </aside>
-
 
 ## Line changes
 
@@ -449,3 +443,70 @@ The order is packed into an array and the fields are sent in the below order, wi
 | updateTime               | string  | Server-side clock time for the last modification of this order.                                                                                                                                                                                                                                                                                |
 
 Note that the messages are sent in batches in an array. If you receive two updates for the same `orderHash` within an update, you can order them by `updateTime` after converting the `updateTime` to a BigInt or BigNumber.
+
+## Best Practices
+
+```javascript
+const Ably = require("ably");
+import axios from "axios";
+
+async function getOrders(marketHash, token) {
+  const response = await axios.get(
+    `https://api.sx.bet/orders?marketHashes=${marketHash}&baseToken=${token}`,
+    {
+      headers: {
+        "Content-Type": "application/json",
+        "X-Api-Key": this.apiKey,
+      },
+    }
+  );
+  console.log(response.data);
+}
+
+async function orderStream(realtime, marketHash, token) {
+  const channel = realtime.channels.get(`order_book:${token}:${marketHash}`);
+  channel.subscribe((message) => {
+    console.log(message.data);
+  });
+}
+
+async function createTokenRequest() {
+  console.log("createTokenRequest");
+  const response = await axios.get("https://api.sx.bet/user/token", {
+    headers: {
+      "X-Api-Key": this.apiKey,
+      "Content-Type": "application/json",
+    },
+  });
+  return response.data;
+}
+
+async function initialize() {
+  const ably = new Ably.Realtime.Promise({
+    authUrl: "https://ably.com/ably-auth/token/docs",
+  });
+  const realtime = new Ably.Realtime.Promise({
+    authCallback: async (tokenParams, callback) => {
+      try {
+        const tokenRequest = await createTokenRequest();
+        callback(null, tokenRequest);
+      } catch (error) {
+        callback(error, null);
+      }
+    },
+  });
+  await ably.connection.once("connected");
+  return realtime;
+}
+
+async function main() {
+  const realtime = await initialize();
+  await getOrders(this.marketHash, this.token);
+  await orderStream(realtime, this.marketHash, this.token);
+}
+
+main();
+```
+
+For optimal state updates, we recommend a combination of HTTP requests and channel subscriptions, utilizing the rewind parameter. HTTP requests provide the current state, while channel subscriptions keep the state updated. The rewind parameter ensures playback of past events, preventing any missed events between the HTTP call and subscription.
+See [this link](https://ably.com/docs/storage-history/history?lang=nodejs) for an overview of the rewind parameter and more.
