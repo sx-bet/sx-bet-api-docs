@@ -464,7 +464,9 @@ async function getOrders(marketHash, token) {
 }
 
 async function orderStream(realtime, marketHash, token) {
-  const channel = realtime.channels.get(`order_book:${token}:${marketHash}`);
+  const channel = realtime.channels.get(`order_book:${token}:${marketHash}`, {
+    params: { rewind: "10s" },
+  });
   channel.subscribe((message) => {
     console.log(message.data);
   });
@@ -482,7 +484,7 @@ async function createTokenRequest() {
 }
 
 async function initialize() {
-  const ably = new Ably.Realtime.Promise({
+  const ablyClient = new Ably.Realtime.Promise({
     authUrl: "https://ably.com/ably-auth/token/docs",
   });
   const realtime = new Ably.Realtime.Promise({
@@ -495,7 +497,7 @@ async function initialize() {
       }
     },
   });
-  await ably.connection.once("connected");
+  await ablyClient.connection.once("connected");
   return realtime;
 }
 
@@ -509,4 +511,4 @@ main();
 ```
 
 For optimal state updates, we recommend a combination of HTTP requests and channel subscriptions, utilizing the rewind parameter. HTTP requests provide the current state, while channel subscriptions keep the state updated. The rewind parameter ensures playback of past events, preventing any missed events between the HTTP call and subscription.
-See [this link](https://ably.com/docs/storage-history/history?lang=nodejs) for an overview of the rewind parameter and more.
+See [this link](https://ably.com/docs/channels/options/rewind?lang=nodejs) for an overview of the rewind parameter and more.
