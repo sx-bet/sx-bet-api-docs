@@ -28,7 +28,7 @@ curl --location --request GET 'https://api.sx.bet/markets/active?onlyMainLine=tr
         "sportLabel": "Tennis",
         "sportId": 6,
         "leagueId": 1070,
-        "homeTeamFirst": true,
+  ,
         "leagueLabel": "ATP French Open",
         "group1": "ATP French Open"
       },
@@ -48,7 +48,7 @@ curl --location --request GET 'https://api.sx.bet/markets/active?onlyMainLine=tr
         "sportLabel": "Tennis",
         "sportId": 6,
         "leagueId": 1070,
-        "homeTeamFirst": true,
+  ,
         "leagueLabel": "ATP French Open",
         "mainLine": true,
         "group1": "ATP French Open"
@@ -69,7 +69,7 @@ curl --location --request GET 'https://api.sx.bet/markets/active?onlyMainLine=tr
         "sportLabel": "Tennis",
         "sportId": 6,
         "leagueId": 1070,
-        "homeTeamFirst": true,
+  ,
         "leagueLabel": "ATP French Open",
         "mainLine": true,
         "group1": "ATP French Open"
@@ -132,7 +132,6 @@ A `market` object looks like this
 | sportLabel      | string     | The name of the sport for this market                                                                                               |
 | sportId         | number     | The ID of the sport for this market                                                                                                 |
 | leagueId        | number     | The league ID for this market                                                                                                       |
-| homeTeamFirst   | boolean    | Indicator to the client of whether to display the home team first or not                                                            |
 | leagueLabel     | string     | The name of the league for this market                                                                                              |
 | mainLine        | boolean?   | If this market is currently the main line or not. If the market is not a market with multiple lines, this field will not be present |
 | group1          | string     | Indicator to the client of how to display this market                                                                               |
@@ -213,7 +212,7 @@ curl --location --request GET 'https://api.sx.bet/markets/find'
       "sportLabel": "Soccer",
       "sportId": 5,
       "leagueId": 29,
-      "homeTeamFirst": true,
+,
       "leagueLabel": "English Premier League",
       "group1": "English Premier League"
     }
@@ -276,7 +275,7 @@ curl --location --request GET 'https://api.sx.bet/markets/popular'
       "sportLabel": "Mixed Martial Arts",
       "sportId": 7,
       "leagueId": 34,
-      "homeTeamFirst": true,
+,
       "leagueLabel": "UFC",
       "group1": "UFC"
     },
@@ -296,7 +295,7 @@ curl --location --request GET 'https://api.sx.bet/markets/popular'
       "sportLabel": "Soccer",
       "sportId": 5,
       "leagueId": 29,
-      "homeTeamFirst": true,
+,
       "leagueLabel": "English Premier League",
       "mainLine": true,
       "group1": "English Premier League"

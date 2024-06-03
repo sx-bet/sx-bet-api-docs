@@ -62,7 +62,6 @@ channel.subscribe((message) => {
   {
     "gameTime": 1625674200,
     "group1": "MLB",
-    "homeTeamFirst": false,
     "leagueId": 171,
     "leagueLabel": "MLB",
     "line": 7,
