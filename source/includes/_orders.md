@@ -412,7 +412,7 @@ function getCancelOrderEIP712Payload(orderHashes, salt, timestamp, chainId) {
   return payload;
 }
 
-const payload = getCancelOrderEIP712Payload(orderHashes, salt, timestamp, 416);
+const payload = getCancelOrderEIP712Payload(orderHashes, salt, timestamp, chainId);
 
 const signature = ethSigUtil.signTypedData_v4(bufferPrivateKey, {
   data: payload,
@@ -535,7 +535,7 @@ const payload = getCancelOrderEventsEIP712Payload(
   sportXeventId,
   salt,
   timestamp,
-  416
+  chainId
 );
 
 const signature = ethSigUtil.signTypedData_v4(bufferPrivateKey, {
@@ -645,7 +645,7 @@ function getCancelAllOrdersEIP712Payload(salt, timestamp, chainId) {
   return payload;
 }
 
-const payload = getCancelOrderEventsEIP712Payload(salt, timestamp, 416);
+const payload = getCancelOrderEventsEIP712Payload(salt, timestamp, chainId);
 
 const signature = ethSigUtil.signTypedData_v4(bufferPrivateKey, {
   data: payload,
@@ -728,8 +728,13 @@ async function fillOrder() {
   const privateKey = process.env.PRIVATE_KEY;
   const takerAddress = process.env.TAKER_ADDRESS;
   const tokenAddress = process.env.TOKEN_ADDRESS;
-  const tokenTransferProxyAddress = process.env.TOKEN_TRANSFER_PROXY_ADDRESS; // get from https://api.sx.bet/metadata
-  const EIP712FillHasherAddress = process.env.EIP712_FILL_HASHER_ADDRESS; // get from https://api.sx.bet/metadata
+
+  // get the following from https://api.sx.bet/metadata
+  const tokenTransferProxyAddress = process.env.TOKEN_TRANSFER_PROXY_ADDRESS;
+  const EIP712FillHasherAddress = process.env.EIP712_FILL_HASHER_ADDRESS;
+  const chainId = process.env.CHAIN_ID; // 416 in production
+  const domainVersion = process.env.DOMAIN_VERSION;
+
   const bufferPrivateKey = Buffer.from(privateKey!.substring(2), "hex");
   const wallet = new Wallet(privateKey).connect(
     new providers.JsonRpcProvider(process.env.PROVIDER_URL)
@@ -791,11 +796,25 @@ async function fillOrder() {
         type: "function",
         constant: true,
       },
+      {
+        inputs: [],
+        name: "name",
+        outputs: [
+          {
+            internalType: "string",
+            name: "",
+            type: "string"
+          }
+        ],
+        stateMutability: "view",
+        type: "function",
+        constant: true
+      }
     ],
     wallet
   );
 
-  let nonce = await tokenContract.getNonce(takerAddress);
+  let nonce: BigNumber = await tokenContract.getNonce(takerAddress);
   const tokenName: string = await tokenContract.name();
   const abiEncodedFunctionSig = tokenContract.interface.encodeFunctionData(
     "approve",
@@ -884,8 +903,8 @@ async function fillOrder() {
     primaryType: "Details",
     domain: {
       name: "SX Bet",
-      version: process.env.DOMAIN_VERSION, // get from https://api.sx.bet/metadata
-      chainId: 416 // get from https://api.sx.bet/metadata,
+      version: domainVersion,
+      chainId: chainId,
       verifyingContract: EIP712FillHasherAddress,
     },
     message: {
@@ -932,11 +951,11 @@ async function fillOrder() {
     domain: {
       name: tokenName,
       version: "1",
-      salt: utils.hexZeroPad(utils.hexlify(416), 32), https://api.sx.bet/metadata
+      salt: utils.hexZeroPad(utils.hexlify(chainId), 32),
       verifyingContract: tokenAddress,
     },
     message: {
-      nonce,
+      nonce: nonce.toNumber(),
       from: takerAddress,
       functionSignature: abiEncodedFunctionSig,
     },
