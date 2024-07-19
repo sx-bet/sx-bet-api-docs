@@ -142,7 +142,7 @@ await tokenContract.approve(tokenTransferProxyAddress, MaxUInt256, {
 });
 ```
 
-To enable betting, you need to approve the `TokenTransferProxy` contract for each token for which you wish to trade. Otherwise, any endpoints that create/cancel or fill orders will fail. For example if you want to trade with both ETH and USDC, you'll need to approve the contract twice, once for each token. The address of the `TokenTransferProxy` is available at `https://api.sx.bet/metadata` and the address of each token is given in [the tokens section](#tokens)
+To enable betting (filling or posting orders), you need to approve the `TokenTransferProxy` contract for each token for which you wish to trade. Otherwise, any endpoints that create/cancel or fill orders will fail. For example if you want to trade with both ETH and USDC, you'll need to approve the contract twice, once for each token. The address of the `TokenTransferProxy` is available at `https://api.sx.bet/metadata` and the address of each token is given in [the tokens section](#tokens)
 
 If you don't wish to do this programmatically, you can simply go to `https://sx.bet`, make a test bet with the account and token you'll be using, and you will be good to go.
 

@@ -26,9 +26,37 @@ Allowed values for `chainVersion` are:
 | SXN            | Legacy SX Network |
 | SXR            | SX Rollup         |
 
+WHEN `chainVersion` IS EMPTY FOR GET REQUESTS, RESULT WILL SHOW DATA FOR BOTH CHAINS.
+WHEN `chainVersion` IS EMPTY FOR POST REQUESTS, WE DEFAULT TO SXN.
+
+This ensures the changes are least disruptive, and changes are only required when handling games on the new chain.
+
+### Metadata
+
+`GET https://api.sx.bet/metadata?chainVersion=SXR`
+
+### Leagues
+
+`GET https://api.sx.bet/leagues/active?chainVersion=SXR
+
+
 ### Markets
 
+`GET https://api.sx.bet/markets/active?chainVersion=SXR`
+`GET https://api.sx.bet/markets/popular?chainVersion=SXR`
+
+### Trades
+
+`GET https://api.sx.bet/trades?chainVersion=SXR`
+
+### Consolidated Trades
+
+`GET https://api.sx.bet/trades/consolidated?chainVersion=SXR`
 
 ### Orders
 
-There is no change to GET /orders endpoints. When you query a SXN or SXR market, you will use that marketHash to query orders. A fixture/event will either be on SXN or SXR, never both. Hence markets associated to an event, and orders associated with those markets will only ever be on SXN or SXR, not both.
+`GET https://api.sx.bet/orders?chainVersion=SXR`
+`POST https://api.sx.bet/orders/new?chainVersion=SXR`
+`POST https://api.sx.bet/orders/cancel/v2?chainVersion=SXR`
+`POST https://api.sx.bet/orders/cancel/event?chainVersion=SXR`
+`POST https://api.sx.bet/orders/cancel/all?chainVersion=SXR`

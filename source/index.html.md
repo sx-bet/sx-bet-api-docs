@@ -10,7 +10,7 @@ language_tabs: # must be one of https://git.io/vQNgJ
 
 includes:
   - rollupmigrationguide
-  - Testnet
+  - testnet
   - metadata
   - websocket
   - apiKey
