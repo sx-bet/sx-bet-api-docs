@@ -9,20 +9,22 @@ language_tabs: # must be one of https://git.io/vQNgJ
   - javascript
 
 includes:
+  - rollupmigrationguide
+  - Testnet
+  - metadata
+  - websocket
   - apiKey
-  - markets
-  - parlaymarkets
   - leagues
   - sports
   - fixtures
-  - trades
   - livescores
-  - metadata
+  - markets
+  - parlaymarkets
+  - trades
   - orders
   - unitconversion
   - eip712signing
   - fees
-  - websocket
 
 search: true
 
