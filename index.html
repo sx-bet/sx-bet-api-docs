@@ -596,14 +596,36 @@ All ETH addresses used in this API are in check-summed format. If you pass in lo
 <td>SX Rollup</td>
 </tr>
 </tbody></table>
-<h3 id='markets'>Markets</h3><h3 id='orders'>Orders</h3>
-<p>There is no change to GET /orders endpoints. When you query a SXN or SXR market, you will use that marketHash to query orders. A fixture/event will either be on SXN or SXR, never both. Hence markets associated to an event, and orders associated with those markets will only ever be on SXN or SXR, not both.</p>
+
+<p>WHEN <code>chainVersion</code> IS EMPTY FOR GET REQUESTS, RESULT WILL SHOW DATA FOR BOTH CHAINS.
+WHEN <code>chainVersion</code> IS EMPTY FOR POST REQUESTS, WE DEFAULT TO SXN.</p>
+
+<p>This ensures the changes are least disruptive, and changes are only required when handling games on the new chain.</p>
+<h3 id='metadata'>Metadata</h3>
+<p><code>GET https://api.sx.bet/metadata?chainVersion=SXR</code></p>
+<h3 id='leagues'>Leagues</h3>
+<p>`GET https://api.sx.bet/leagues/active?chainVersion=SXR</p>
+<h3 id='markets'>Markets</h3>
+<p><code>GET https://api.sx.bet/markets/active?chainVersion=SXR</code>
+<code>GET https://api.sx.bet/markets/popular?chainVersion=SXR</code></p>
+<h3 id='trades'>Trades</h3>
+<p><code>GET https://api.sx.bet/trades?chainVersion=SXR</code></p>
+<h3 id='consolidated-trades'>Consolidated Trades</h3>
+<p><code>GET https://api.sx.bet/trades/consolidated?chainVersion=SXR</code></p>
+<h3 id='orders'>Orders</h3>
+<p><code>GET https://api.sx.bet/orders?chainVersion=SXR</code>
+<code>POST https://api.sx.bet/orders/new?chainVersion=SXR</code>
+<code>POST https://api.sx.bet/orders/cancel/v2?chainVersion=SXR</code>
+<code>POST https://api.sx.bet/orders/cancel/event?chainVersion=SXR</code>
+<code>POST https://api.sx.bet/orders/cancel/all?chainVersion=SXR</code></p>
 <h1 id='testnet'>Testnet</h1>
 <p>We have deployed a testnet chain and application.</p>
 
 <p>API: https://api.toronto.sx.bet</p>
 
-<p>To get all the necessary testnet configuration information, visit <a href="#metadata">MetaData</a></p>
+<p>Anywhere where the documentation references the api url, please use the above for testnet instead. </p>
+
+<p>To get all the necessary testnet configuration information, use <a href="#metadata">metadata</a>.</p>
 <h1 id='metadata'>Metadata</h1><h2 id='get-metadata'>Get metadata</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.sx.bet/metadata'</span>
 </code></pre></div>
 <blockquote>
@@ -3920,7 +3942,7 @@ Note that <code>totalBetSize</code> and <code>fillAmount</code> are from *the pe
   <span class="na">gasLimit</span><span class="p">:</span> <span class="mi">100000</span><span class="p">,</span>
 <span class="p">});</span>
 </code></pre></div>
-<p>To enable betting, you need to approve the <code>TokenTransferProxy</code> contract for each token for which you wish to trade. Otherwise, any endpoints that create/cancel or fill orders will fail. For example if you want to trade with both ETH and USDC, you&#39;ll need to approve the contract twice, once for each token. The address of the <code>TokenTransferProxy</code> is available at <code>https://api.sx.bet/metadata</code> and the address of each token is given in <a href="#tokens">the tokens section</a></p>
+<p>To enable betting (filling or posting orders), you need to approve the <code>TokenTransferProxy</code> contract for each token for which you wish to trade. Otherwise, any endpoints that create/cancel or fill orders will fail. For example if you want to trade with both ETH and USDC, you&#39;ll need to approve the contract twice, once for each token. The address of the <code>TokenTransferProxy</code> is available at <code>https://api.sx.bet/metadata</code> and the address of each token is given in <a href="#tokens">the tokens section</a></p>
 
 <p>If you don&#39;t wish to do this programmatically, you can simply go to <code>https://sx.bet</code>, make a test bet with the account and token you&#39;ll be using, and you will be good to go.</p>
 
