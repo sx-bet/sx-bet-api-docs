@@ -26,8 +26,12 @@ Allowed values for `chainVersion` are:
 | SXN            | Legacy SX Network |
 | SXR            | SX Rollup         |
 
+<aside class="warning">
 WHEN `chainVersion` IS EMPTY FOR GET REQUESTS, RESULT WILL SHOW DATA FOR BOTH CHAINS.
+</aside>
+<aside class="warning">
 WHEN `chainVersion` IS EMPTY FOR POST REQUESTS, WE DEFAULT TO SXN.
+</aside>
 
 This ensures the changes are least disruptive, and changes are only required when handling games on the new chain.
 
