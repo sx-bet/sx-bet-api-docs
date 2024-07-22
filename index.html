@@ -597,8 +597,13 @@ All ETH addresses used in this API are in check-summed format. If you pass in lo
 </tr>
 </tbody></table>
 
-<p>WHEN <code>chainVersion</code> IS EMPTY FOR GET REQUESTS, RESULT WILL SHOW DATA FOR BOTH CHAINS.
-WHEN <code>chainVersion</code> IS EMPTY FOR POST REQUESTS, WE DEFAULT TO SXN.</p>
+<aside class="warning">
+WHEN `chainVersion` IS EMPTY FOR GET REQUESTS, RESULT WILL SHOW DATA FOR BOTH CHAINS.
+</aside>
+
+<aside class="warning">
+WHEN `chainVersion` IS EMPTY FOR POST REQUESTS, WE DEFAULT TO SXN.
+</aside>
 
 <p>This ensures the changes are least disruptive, and changes are only required when handling games on the new chain.</p>
 <h3 id='metadata'>Metadata</h3>
