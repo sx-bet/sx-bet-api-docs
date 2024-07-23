@@ -10,10 +10,13 @@ You can read more about the rationale [here](https://medium.com/sportx-bet/sx-ro
 
 Our plan is to migrate by sport to reduce impact as much as possible. Our migration by sport schedule is as follows:
 
-| Sport(s)        | Date        |
-| --------------- | ----------- |
-| Sport1, Sport2  | Aug 1, 2024 |
-| Sport3          | Aug 8, 2024 |
+| Sport(s)                                                                        | Date           |
+| ------------------------------------------------------------------------------- | -------------- |
+| E Sports, Novelty Markets, Rugby, Politics, Entertainment, NFTs, Daily Parlays  | July 29, 2024  |
+| Boxing, Olympics, Racing, Cricket                                               | July 30, 2024  |
+| Football, Hockey, Basketball                                                    | July 31, 2024  |
+| Baseball, Golf, Soccer, Tennis, Mixed Martial Arts                              | August 5, 2024 |
+| Crypto, Degen Crypto                                                            | August 6, 2024 |
 
 ## Endpoints
 
@@ -27,40 +30,39 @@ Allowed values for `chainVersion` are:
 | SXR            | SX Rollup         |
 
 <aside class="warning">
-WHEN `chainVersion` IS EMPTY FOR GET REQUESTS, RESULT WILL SHOW DATA FOR BOTH CHAINS.
+When `chainVersion` is empty for GET requests, the result will show data for both chains.
 </aside>
 <aside class="warning">
-WHEN `chainVersion` IS EMPTY FOR POST REQUESTS, WE DEFAULT TO SXN.
+When `chainVersion` is empty for POST requests, the default data is for SXN chain.
 </aside>
 
 This ensures the changes are least disruptive, and changes are only required when handling games on the new chain.
 
-### Metadata
-
+### SXR Metadata
+#### Get SXR Metadata
 `GET https://api.sx.bet/metadata?chainVersion=SXR`
-
-### Leagues
-
+### SXR Leagues
+#### Get Active SXR Leagues
 `GET https://api.sx.bet/leagues/active?chainVersion=SXR
-
-
-### Markets
-
+### SXR Markets
+#### Get Active SXR Markets
 `GET https://api.sx.bet/markets/active?chainVersion=SXR`
+#### Get Popular SXR Markets
 `GET https://api.sx.bet/markets/popular?chainVersion=SXR`
-
-### Trades
-
+### SXR Trades
+#### Get SXR Trades
 `GET https://api.sx.bet/trades?chainVersion=SXR`
-
-### Consolidated Trades
-
+### SXR Consolidated Trades
+#### Get SXR Consolidated Trades
 `GET https://api.sx.bet/trades/consolidated?chainVersion=SXR`
-
-### Orders
-
+### SXR Orders
+#### Get SXR Orders
 `GET https://api.sx.bet/orders?chainVersion=SXR`
+#### Post New SXR Orders
 `POST https://api.sx.bet/orders/new?chainVersion=SXR`
+#### Cancel SXR Orders
 `POST https://api.sx.bet/orders/cancel/v2?chainVersion=SXR`
+#### Cancel SXR Orders by Event
 `POST https://api.sx.bet/orders/cancel/event?chainVersion=SXR`
+#### Cancel all SXR Orders
 `POST https://api.sx.bet/orders/cancel/all?chainVersion=SXR`

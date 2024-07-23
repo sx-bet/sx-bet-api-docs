@@ -49,11 +49,18 @@ curl --location --request GET 'https://api.sx.bet/metadata'
 }
 ```
 
+
 This endpoint retrieves metadata on the exchange itself and useful parameters to interact with the exchange.
 
 ### HTTP Request
 
 `GET https://api.sx.bet/metadata`
+
+### Query parameters
+
+| Name         | Required | Type   | Description                                                                                       |
+| ------------ | -------- | ------ | ------------------------------------------------------------------------------------------------- |
+| chainVersion | false    | string | Must  be either `SXN` or `SXR`.<br/>**Default is `SXN`**. See [migration docs](#sx-rollup-migration-guide) |
 
 ### Response format
 

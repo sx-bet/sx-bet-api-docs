@@ -209,9 +209,10 @@ Note that this endpoint is only updated every 10m.
 
 ### Query parameters
 
-| Name    | Required | Type   | Description                                 |
-| ------- | -------- | ------ | ------------------------------------------- |
-| sportId | true     | number | Only return active leagues under this sport |
+| Name         | Required | Type   | Description                                                                                                                                 |
+| ------------ | -------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| sportId      | true     | number | Only return active leagues under this sport                                                                                                 |
+| chainVersion | false    | string | Must  be either `SXN` or `SXR`.<br/>**If not passed, data from both chains are returned**. See [migration docs](#sx-rollup-migration-guide) |
 
 ### Response format
 

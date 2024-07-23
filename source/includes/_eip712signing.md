@@ -6,10 +6,6 @@ As of now we have not tested other libraries in other languages that support EIP
 
 ## Private key signing example
 
-```shell
-See the javascript section
-```
-
 ```javascript
 import ethSigUtil from "eth-sig-util";
 
@@ -48,10 +44,6 @@ const signature = ethSigUtil.signTypedData_v4(
 Here we use a private key directly which is the most straightforward way to sign data and does not require access to an authenticated node. It's also the fastest.
 
 ## Injected provider signing example
-
-```shell
-See the javascript section
-```
 
 ```javascript
 import { providers } from "ethers";
