@@ -295,7 +295,7 @@
     </script>
   </head>
 
-  <body class="index" data-languages="[&quot;shell&quot;,&quot;javascript&quot;]">
+  <body class="index" data-languages="[]">
     <a href="#" id="nav-button">
       <span>
         NAV
@@ -304,10 +304,6 @@
     </a>
     <div class="toc-wrapper">
       <img src="images/logo-ca58ac21.png" class="logo" alt="" />
-        <div class="lang-selector">
-              <a href="#" data-language-name="shell">shell</a>
-              <a href="#" data-language-name="javascript">javascript</a>
-        </div>
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Search">
         </div>
@@ -525,9 +521,9 @@
 
 <p>Technical questions or need support? <a href="mailto:api-support@sx.bet">Send us an e-mail</a>. </p>
 
-<p>We support betting in USDC, WETH, and WSX</p>
+<p><strong>All documentation is provided in JavaScript.</strong></p>
 
-<p>DEPRECATED: If you wish to use our wrapper for javascript you can do so <a href="https://github.com/sportx-bet/sportx-js">here</a></p>
+<p>We support betting in USDC and WSX.</p>
 
 <table><thead>
 <tr>
@@ -538,10 +534,6 @@
 <tr>
 <td>USDC</td>
 <td><code>0xe2aa35C2039Bd0Ff196A6Ef99523CC0D3972ae3e</code></td>
-</tr>
-<tr>
-<td>WETH</td>
-<td><code>0xA173954Cc4b1810C0dBdb007522ADbC182DaB380</code></td>
 </tr>
 <tr>
 <td>WSX</td>
@@ -568,12 +560,24 @@ All ETH addresses used in this API are in check-summed format. If you pass in lo
 </tr>
 </thead><tbody>
 <tr>
-<td>Sport1, Sport2</td>
-<td>Aug 1, 2024</td>
+<td>E Sports, Novelty Markets, Rugby, Politics, Entertainment, NFTs, Daily Parlays</td>
+<td>July 29, 2024</td>
 </tr>
 <tr>
-<td>Sport3</td>
-<td>Aug 8, 2024</td>
+<td>Boxing, Olympics, Racing, Cricket</td>
+<td>July 30, 2024</td>
+</tr>
+<tr>
+<td>Football, Hockey, Basketball</td>
+<td>July 31, 2024</td>
+</tr>
+<tr>
+<td>Baseball, Golf, Soccer, Tennis, Mixed Martial Arts</td>
+<td>August 5, 2024</td>
+</tr>
+<tr>
+<td>Crypto, Degen Crypto</td>
+<td>August 6, 2024</td>
 </tr>
 </tbody></table>
 <h2 id='endpoints'>Endpoints</h2>
@@ -598,37 +602,42 @@ All ETH addresses used in this API are in check-summed format. If you pass in lo
 </tbody></table>
 
 <aside class="warning">
-WHEN `chainVersion` IS EMPTY FOR GET REQUESTS, RESULT WILL SHOW DATA FOR BOTH CHAINS.
+When `chainVersion` is empty for GET requests, the result will show data for both chains.
 </aside>
 
 <aside class="warning">
-WHEN `chainVersion` IS EMPTY FOR POST REQUESTS, WE DEFAULT TO SXN.
+When `chainVersion` is empty for POST requests, the default data is for SXN chain.
 </aside>
 
 <p>This ensures the changes are least disruptive, and changes are only required when handling games on the new chain.</p>
-<h3 id='metadata'>Metadata</h3>
+<h3 id='sxr-metadata'>SXR Metadata</h3><h4 id='get-sxr-metadata'>Get SXR Metadata</h4>
 <p><code>GET https://api.sx.bet/metadata?chainVersion=SXR</code></p>
-<h3 id='leagues'>Leagues</h3>
+<h3 id='sxr-leagues'>SXR Leagues</h3><h4 id='get-active-sxr-leagues'>Get Active SXR Leagues</h4>
 <p>`GET https://api.sx.bet/leagues/active?chainVersion=SXR</p>
-<h3 id='markets'>Markets</h3>
-<p><code>GET https://api.sx.bet/markets/active?chainVersion=SXR</code>
-<code>GET https://api.sx.bet/markets/popular?chainVersion=SXR</code></p>
-<h3 id='trades'>Trades</h3>
+<h3 id='sxr-markets'>SXR Markets</h3><h4 id='get-active-sxr-markets'>Get Active SXR Markets</h4>
+<p><code>GET https://api.sx.bet/markets/active?chainVersion=SXR</code></p>
+<h4 id='get-popular-sxr-markets'>Get Popular SXR Markets</h4>
+<p><code>GET https://api.sx.bet/markets/popular?chainVersion=SXR</code></p>
+<h3 id='sxr-trades'>SXR Trades</h3><h4 id='get-sxr-trades'>Get SXR Trades</h4>
 <p><code>GET https://api.sx.bet/trades?chainVersion=SXR</code></p>
-<h3 id='consolidated-trades'>Consolidated Trades</h3>
+<h3 id='sxr-consolidated-trades'>SXR Consolidated Trades</h3><h4 id='get-sxr-consolidated-trades'>Get SXR Consolidated Trades</h4>
 <p><code>GET https://api.sx.bet/trades/consolidated?chainVersion=SXR</code></p>
-<h3 id='orders'>Orders</h3>
-<p><code>GET https://api.sx.bet/orders?chainVersion=SXR</code>
-<code>POST https://api.sx.bet/orders/new?chainVersion=SXR</code>
-<code>POST https://api.sx.bet/orders/cancel/v2?chainVersion=SXR</code>
-<code>POST https://api.sx.bet/orders/cancel/event?chainVersion=SXR</code>
-<code>POST https://api.sx.bet/orders/cancel/all?chainVersion=SXR</code></p>
+<h3 id='sxr-orders'>SXR Orders</h3><h4 id='get-sxr-orders'>Get SXR Orders</h4>
+<p><code>GET https://api.sx.bet/orders?chainVersion=SXR</code></p>
+<h4 id='post-new-sxr-orders'>Post New SXR Orders</h4>
+<p><code>POST https://api.sx.bet/orders/new?chainVersion=SXR</code></p>
+<h4 id='cancel-sxr-orders'>Cancel SXR Orders</h4>
+<p><code>POST https://api.sx.bet/orders/cancel/v2?chainVersion=SXR</code></p>
+<h4 id='cancel-sxr-orders-by-event'>Cancel SXR Orders by Event</h4>
+<p><code>POST https://api.sx.bet/orders/cancel/event?chainVersion=SXR</code></p>
+<h4 id='cancel-all-sxr-orders'>Cancel all SXR Orders</h4>
+<p><code>POST https://api.sx.bet/orders/cancel/all?chainVersion=SXR</code></p>
 <h1 id='testnet'>Testnet</h1>
 <p>We have deployed a testnet chain and application.</p>
 
-<p>API: https://api.toronto.sx.bet</p>
+<p>API: <code>https://api.toronto.sx.bet</code></p>
 
-<p>Anywhere where the documentation references the api url, please use the above for testnet instead. </p>
+<p>Anywhere the documentation references an api url, please use the above for testnet instead. </p>
 
 <p>To get all the necessary testnet configuration information, use <a href="#metadata">metadata</a>.</p>
 <h1 id='metadata'>Metadata</h1><h2 id='get-metadata'>Get metadata</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.sx.bet/metadata'</span>
@@ -678,6 +687,22 @@ WHEN `chainVersion` IS EMPTY FOR POST REQUESTS, WE DEFAULT TO SXN.
 <p>This endpoint retrieves metadata on the exchange itself and useful parameters to interact with the exchange.</p>
 <h3 id='http-request'>HTTP Request</h3>
 <p><code>GET https://api.sx.bet/metadata</code></p>
+<h3 id='query-parameters'>Query parameters</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>chainVersion</td>
+<td>false</td>
+<td>string</td>
+<td>Must  be either <code>SXN</code> or <code>SXR</code>.<br/><strong>Default is <code>SXN</code></strong>. See <a href="#sx-rollup-migration-guide">migration docs</a></td>
+</tr>
+</tbody></table>
 <h3 id='response-format'>Response format</h3>
 <table><thead>
 <tr>
@@ -762,7 +787,7 @@ WHEN `chainVersion` IS EMPTY FOR POST REQUESTS, WE DEFAULT TO SXN.
 <div>You must have a valid API key to subscribe to realtime channels via the API. See <b>API Key</b> for more info.</div>
 </aside>
 
-<p>You can connect to the websocket API and listen for realtime changes in several things such as order books, markets, scores, and line updates.</p>
+<p>You can connect to the websocket API and listen for realtime changes on several resources such as the order book, markets, scores, and line updates.</p>
 <h2 id='initialization'>Initialization</h2><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">import</span> <span class="o">*</span> <span class="k">as</span> <span class="nx">ably</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">ably</span><span class="dl">"</span><span class="p">;</span>
 <span class="k">import</span> <span class="nx">axios</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">axios</span><span class="dl">"</span><span class="p">;</span>
 
@@ -1456,10 +1481,12 @@ Note that the `requestSize` is only indicating what the user is requesting, but 
 <p>For optimal state updates, we recommend a combination of HTTP requests and channel subscriptions, utilizing the rewind parameter. HTTP requests provide the current state, while channel subscriptions keep the state updated. The rewind parameter ensures playback of past events, preventing any missed events between the HTTP call and subscription.
 See <a href="https://ably.com/docs/channels/options/rewind?lang=nodejs">this link</a> for an overview of the rewind parameter and more.</p>
 <h1 id='api-key'>API Key</h1>
-<p>In order to use the SX.Bet API, you do NOT need an API Key. The standard API user can perform all the requests provided in this document. There is a baseline rate limiter applied to all requests with or without an API Key. The API Key will give you elevated privilages on certain functions.</p>
+<p>This key is currently required to access the WebSocket through Ably, for realtime updates. Otherwise, in order to use the SX.Bet API, you do NOT need an API Key. The standard API user can perform all the requests provided in this document. There is a baseline rate limiter applied to all requests, regardless of API key.</p>
+
+<p>The API Key will </p>
 
 <aside class="notice">
-The main usecase for the API Key is to connect to the WebSocket via Ably.
+You must obtain an API Key in order to connect to the WebSocket via Ably.
 </aside>
 <h2 id='generating-api-key'>Generating API Key</h2>
 <ol>
@@ -1732,6 +1759,12 @@ Note that this endpoint is only updated every 10m.
 <td>true</td>
 <td>number</td>
 <td>Only return active leagues under this sport</td>
+</tr>
+<tr>
+<td>chainVersion</td>
+<td>false</td>
+<td>string</td>
+<td>Must  be either <code>SXN</code> or <code>SXR</code>.<br/><strong>If not passed, data from both chains are returned</strong>. See <a href="#sx-rollup-migration-guide">migration docs</a></td>
 </tr>
 </tbody></table>
 <h3 id='response-format-2'>Response format</h3>
@@ -2616,6 +2649,12 @@ Up to 50 event IDs can be supplied at a time.
 <td>number</td>
 <td>Used for pagination. Requested page size. Each call will only return up to this amount of records. Maximum of 50</td>
 </tr>
+<tr>
+<td>chainVersion</td>
+<td>false</td>
+<td>string</td>
+<td>Must  be either <code>SXN</code> or <code>SXR</code>.  <br/><strong>If not passed, data from both chains are returned</strong>. See <a href="#sx-rollup-migration-guide">migration docs</a></td>
+</tr>
 </tbody></table>
 
 <aside class="notice">
@@ -2774,6 +2813,11 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
 <td>legs</td>
 <td>Market[]?</td>
 <td>If this is a Parlay Market, this field will contain an array of the underlying Legs as a Market object</td>
+</tr>
+<tr>
+<td>chainVersion</td>
+<td>string?</td>
+<td><code>SXN</code> or <code>SXR</code>. See <a href="#sx-rollup-migration-guide">migration docs</a>.</td>
 </tr>
 </tbody></table>
 
@@ -3173,6 +3217,22 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
 <p>This endpoint retrieves the top 10 popular markets by volume.</p>
 <h3 id='http-request-3'>HTTP Request</h3>
 <p><code>GET https://api.sx.bet/markets/popular</code></p>
+<h3 id='query-parameters-3'>Query parameters</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>chainVersion</td>
+<td>false</td>
+<td>string</td>
+<td>Must  be either <code>SXN</code> or <code>SXR</code>.<br/><strong>If not passed, data from both chains are returned</strong>. See <a href="#sx-rollup-migration-guide">migration docs</a></td>
+</tr>
+</tbody></table>
 <h3 id='response-format-3'>Response format</h3>
 <table><thead>
 <tr>
@@ -3379,6 +3439,12 @@ Parlay Markets act as regular markets, but with additional fields to indicate th
 <td>string</td>
 <td>Filter trades to see only those with <code>SUCCESS</code> or <code>FAILED</code> status&#39;</td>
 </tr>
+<tr>
+<td>chainVersion</td>
+<td>false</td>
+<td>string</td>
+<td>Must  be either <code>SXN</code> or <code>SXR</code>.<br/><strong>If not passed, data from both chains are returned</strong>. See <a href="#sx-rollup-migration-guide">migration docs</a></td>
+</tr>
 </tbody></table>
 <h3 id='response-format'>Response format</h3>
 <table><thead>
@@ -3499,6 +3565,11 @@ Parlay Markets act as regular markets, but with additional fields to indicate th
 <td>string</td>
 <td>ISO formatted date string of when the trade was settled</td>
 </tr>
+<tr>
+<td>chainVersion</td>
+<td>string?</td>
+<td><code>SXN</code> or <code>SXR</code>. See <a href="#sx-rollup-migration-guide">migration docs</a>.</td>
+</tr>
 </tbody></table>
 <h2 id='get-consolidated-trades'>Get consolidated trades</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.sx.bet/trades/consolidated'</span>
 </code></pre></div>
@@ -3617,6 +3688,12 @@ Parlay Markets act as regular markets, but with additional fields to indicate th
 <td>false</td>
 <td>string</td>
 <td>Filter trades to see only those with <code>SUCCESS</code> or <code>FAILED</code> status&#39;</td>
+</tr>
+<tr>
+<td>chainVersion</td>
+<td>false</td>
+<td>string</td>
+<td>Must  be either <code>SXN</code> or <code>SXR</code>.<br/><strong>If not passed, data from both chains are returned</strong>. See <a href="#sx-rollup-migration-guide">migration docs</a></td>
 </tr>
 </tbody></table>
 <h3 id='response-format-2'>Response format</h3>
@@ -3738,6 +3815,11 @@ Parlay Markets act as regular markets, but with additional fields to indicate th
 <td>number</td>
 <td>With <code>settled=true</code>, this will be 0, 1, or 2 depending on the final outcome of the market</td>
 </tr>
+<tr>
+<td>chainVersion</td>
+<td>string?</td>
+<td><code>SXN</code> or <code>SXR</code>. See <a href="#sx-rollup-migration-guide">migration docs</a>.</td>
+</tr>
 </tbody></table>
 <h1 id='orders'>Orders</h1><h2 id='get-active-orders'>Get active orders</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.sx.bet/orders'</span>
 </code></pre></div>
@@ -3834,6 +3916,12 @@ Parlay Markets act as regular markets, but with additional fields to indicate th
 <td>string</td>
 <td>Only get orders for this event ID</td>
 </tr>
+<tr>
+<td>chainVersion</td>
+<td>false</td>
+<td>string</td>
+<td>Must  be either <code>SXN</code> or <code>SXR</code>.<br/><strong>If not passed, data from both chains are returned</strong>. See <a href="#sx-rollup-migration-guide">migration docs</a></td>
+</tr>
 </tbody></table>
 
 <p>Note that one of <code>marketHashes</code> or <code>maker</code> is required.</p>
@@ -3915,8 +4003,7 @@ Parlay Markets act as regular markets, but with additional fields to indicate th
 <aside class="notice">
 Note that <code>totalBetSize</code> and <code>fillAmount</code> are from *the perspective of the market maker*. <code>totalBetSize</code> can be thought of as the maximum amount of tokens the maker will be putting into the pot if the order was fully filled. <code>fillAmount</code> can be thought of as how many tokens the maker has already put into the pot. To compute how much space there is left from the taker's perspective, you can use the formula <code>remainingTakerSpace = (totalBetSize - fillAmount) * 10^20 / percentageOdds - (totalBetSize - fillAmount)</code>
 </aside>
-<h2 id='enabling-betting'>Enabling betting</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>See the javascript section.
-</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">MaxUint256</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">ethers/constants</span><span class="dl">"</span><span class="p">;</span>
+<h2 id='enabling-betting'>Enabling betting</h2><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">MaxUint256</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">ethers/constants</span><span class="dl">"</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">Contract</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">ethers</span><span class="dl">"</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">JsonRpcProvider</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">ethers/providers</span><span class="dl">"</span><span class="p">;</span>
 
@@ -4124,6 +4211,12 @@ Odds not on the ladder will be rejected and your order(s) will not be posted.
 <td>true</td>
 <td>SignedNewOrder[]</td>
 <td>The new orders to post</td>
+</tr>
+<tr>
+<td>chainVersion</td>
+<td>false</td>
+<td>string</td>
+<td>Must  be either <code>SXN</code> or <code>SXR</code>.<br/><strong>If not passed, Default will be SXN.</strong>. See <a href="#sx-rollup-migration-guide">migration docs</a></td>
 </tr>
 </tbody></table>
 
@@ -4351,6 +4444,12 @@ Ensure you use the <code>chainId</code> of SX Network, not the <code>chainId</co
 <td>true</td>
 <td>The current timestamp in UNIX seconds to protect against replay</td>
 </tr>
+<tr>
+<td>chainVersion</td>
+<td>false</td>
+<td>string</td>
+<td>Must  be either <code>SXN</code> or <code>SXR</code>.<br/><strong>If not passed, Default will be SXN.</strong>. See <a href="#sx-rollup-migration-guide">migration docs</a></td>
+</tr>
 </tbody></table>
 <h3 id='response-format-3'>Response format</h3>
 <table><thead>
@@ -4510,6 +4609,12 @@ Ensure you use the <code>chainId</code> of SX Network, not the <code>chainId</co
 <td>true</td>
 <td>The current timestamp in UNIX seconds to protect against replay</td>
 </tr>
+<tr>
+<td>chainVersion</td>
+<td>false</td>
+<td>string</td>
+<td>Must  be either <code>SXN</code> or <code>SXR</code>.<br/><strong>If not passed, Default will be SXN.</strong>. See <a href="#sx-rollup-migration-guide">migration docs</a></td>
+</tr>
 </tbody></table>
 <h3 id='response-format-4'>Response format</h3>
 <table><thead>
@@ -4647,6 +4752,12 @@ Ensure you use the <code>chainId</code> of SX Network, not the <code>chainId</co
 <td>required</td>
 <td>true</td>
 <td>The current timestamp in UNIX seconds to protect against replay.</td>
+</tr>
+<tr>
+<td>chainVersion</td>
+<td>false</td>
+<td>string</td>
+<td>Must  be either <code>SXN</code> or <code>SXR</code>.<br/><strong>If not passed, Default will be SXN.</strong>. See <a href="#sx-rollup-migration-guide">migration docs</a></td>
 </tr>
 </tbody></table>
 <h3 id='response-format-5'>Response format</h3>
@@ -5176,11 +5287,6 @@ To convert a <code>fillAmount</code> (what the market maker pays) to what the ta
 <td>6</td>
 </tr>
 <tr>
-<td>WETH</td>
-<td>See <code>https://api.sx.bet/metadata</code> for address</td>
-<td>18</td>
-</tr>
-<tr>
 <td>WSX</td>
 <td>See <code>https://api.sx.bet/metadata</code> for address</td>
 <td>18</td>
@@ -5228,8 +5334,7 @@ To convert a <code>fillAmount</code> (what the market maker pays) to what the ta
 <p>For certain operations with the API, we require you to sign data using the <a href="https://eips.ethereum.org/EIPS/eip-712">EIP712 specification</a>. We provide two examples to sign data in the EIP712 fashion in JavaScript if you&#39;re using an injected provider (such as MetaMask or another wallet) or a private key.</p>
 
 <p>As of now we have not tested other libraries in other languages that support EIP712.</p>
-<h2 id='private-key-signing-example'>Private key signing example</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>See the javascript section
-</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">import</span> <span class="nx">ethSigUtil</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">eth-sig-util</span><span class="dl">"</span><span class="p">;</span>
+<h2 id='private-key-signing-example'>Private key signing example</h2><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">import</span> <span class="nx">ethSigUtil</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">eth-sig-util</span><span class="dl">"</span><span class="p">;</span>
 
 <span class="kd">const</span> <span class="nx">privateKey</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PRIVATE_KEY</span>
 <span class="c1">// Assuming process.env.PRIVATE_KEY is "0x"-prefixed</span>
@@ -5263,8 +5368,7 @@ To convert a <code>fillAmount</code> (what the market maker pays) to what the ta
 <span class="p">);</span>
 </code></pre></div>
 <p>Here we use a private key directly which is the most straightforward way to sign data and does not require access to an authenticated node. It&#39;s also the fastest.</p>
-<h2 id='injected-provider-signing-example'>Injected provider signing example</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>See the javascript section
-</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">providers</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">ethers</span><span class="dl">"</span><span class="p">;</span>
+<h2 id='injected-provider-signing-example'>Injected provider signing example</h2><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">providers</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">ethers</span><span class="dl">"</span><span class="p">;</span>
 
 <span class="kd">const</span> <span class="nx">walletAddress</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">0xa1e32a027271f7d3d5c629b1c87289ccf9611533</span><span class="dl">"</span>
 <span class="kd">const</span> <span class="nx">provider</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">providers</span><span class="p">.</span><span class="nx">Web3Provider</span><span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">ethereum</span><span class="p">)</span>
@@ -5299,10 +5403,6 @@ To convert a <code>fillAmount</code> (what the market maker pays) to what the ta
 
       </div>
       <div class="dark-box">
-          <div class="lang-selector">
-                <a href="#" data-language-name="shell">shell</a>
-                <a href="#" data-language-name="javascript">javascript</a>
-          </div>
       </div>
     </div>
   </body>
