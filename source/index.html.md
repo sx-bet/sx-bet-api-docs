@@ -47,8 +47,8 @@ We support betting in USDC and WSX.
 
 | Token | SX Network Address                           |
 | ----- | -------------------------------------------- |
-| USDC  | `0xe2aa35C2039Bd0Ff196A6Ef99523CC0D3972ae3e` |
-| WSX   | `0xaa99bE3356a11eE92c3f099BD7a038399633566f` |
+| USDC  | `0x6629Ce1Cf35Cc1329ebB4F63202F3f197b3F050B` |
+| WSX   | `0x3E96B0a25d51e3Cc89C557f152797c33B839968f` |
 
 Explorer available [here](https://explorer.sx.technology) 
 

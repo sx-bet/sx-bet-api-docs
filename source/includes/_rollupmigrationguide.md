@@ -20,14 +20,7 @@ Our plan is to migrate by sport to reduce impact as much as possible. Our migrat
 
 ## Endpoints
 
-The following endpoints allow a new query parameter: `chainVersion`. This will filter out response to only the specific chain you are looking for. If no parameter is passed, the data will return for both chains.
-
-Allowed values for `chainVersion` are:
-
-| `chainVersion` | Description       |
-| -------------- | ----------------- |
-| SXN            | Legacy SX Network |
-| SXR            | SX Rollup         |
+The following endpoints allow a new query parameter: `chainVersion`. This will filter out response to only the specific chain you are looking for. If no parameter is passed, there is a non-intrusive default used.
 
 <aside class="warning">
 When `chainVersion` is empty for GET requests, the result will show data for both chains.
@@ -38,12 +31,20 @@ When `chainVersion` is empty for POST requests, the default data is for SXN chai
 
 This ensures the changes are least disruptive, and changes are only required when handling games on the new chain.
 
+**Allowed values for `chainVersion` are:**
+
+| `chainVersion` | Description       |
+| -------------- | ----------------- |
+| SXN            | Legacy SX Network |
+| SXR            | SX Rollup         |
+
+
 ### SXR Metadata
 #### Get SXR Metadata
 `GET https://api.sx.bet/metadata?chainVersion=SXR`
 ### SXR Leagues
 #### Get Active SXR Leagues
-`GET https://api.sx.bet/leagues/active?chainVersion=SXR
+`GET https://api.sx.bet/leagues/active?chainVersion=SXR`
 ### SXR Markets
 #### Get Active SXR Markets
 `GET https://api.sx.bet/markets/active?chainVersion=SXR`
