@@ -533,11 +533,11 @@
 </thead><tbody>
 <tr>
 <td>USDC</td>
-<td><code>0xe2aa35C2039Bd0Ff196A6Ef99523CC0D3972ae3e</code></td>
+<td><code>0x6629Ce1Cf35Cc1329ebB4F63202F3f197b3F050B</code></td>
 </tr>
 <tr>
 <td>WSX</td>
-<td><code>0xaa99bE3356a11eE92c3f099BD7a038399633566f</code></td>
+<td><code>0x3E96B0a25d51e3Cc89C557f152797c33B839968f</code></td>
 </tr>
 </tbody></table>
 
@@ -581,9 +581,19 @@ All ETH addresses used in this API are in check-summed format. If you pass in lo
 </tr>
 </tbody></table>
 <h2 id='endpoints'>Endpoints</h2>
-<p>The following endpoints allow a new query parameter: <code>chainVersion</code>. This will filter out response to only the specific chain you are looking for. If no parameter is passed, the data will return for both chains.</p>
+<p>The following endpoints allow a new query parameter: <code>chainVersion</code>. This will filter out response to only the specific chain you are looking for. If no parameter is passed, there is a non-intrusive default used.</p>
 
-<p>Allowed values for <code>chainVersion</code> are:</p>
+<aside class="warning">
+When `chainVersion` is empty for GET requests, the result will show data for both chains.
+</aside>
+
+<aside class="warning">
+When `chainVersion` is empty for POST requests, the default data is for SXN chain.
+</aside>
+
+<p>This ensures the changes are least disruptive, and changes are only required when handling games on the new chain.</p>
+
+<p><strong>Allowed values for <code>chainVersion</code> are:</strong></p>
 
 <table><thead>
 <tr>
@@ -600,20 +610,10 @@ All ETH addresses used in this API are in check-summed format. If you pass in lo
 <td>SX Rollup</td>
 </tr>
 </tbody></table>
-
-<aside class="warning">
-When `chainVersion` is empty for GET requests, the result will show data for both chains.
-</aside>
-
-<aside class="warning">
-When `chainVersion` is empty for POST requests, the default data is for SXN chain.
-</aside>
-
-<p>This ensures the changes are least disruptive, and changes are only required when handling games on the new chain.</p>
 <h3 id='sxr-metadata'>SXR Metadata</h3><h4 id='get-sxr-metadata'>Get SXR Metadata</h4>
 <p><code>GET https://api.sx.bet/metadata?chainVersion=SXR</code></p>
 <h3 id='sxr-leagues'>SXR Leagues</h3><h4 id='get-active-sxr-leagues'>Get Active SXR Leagues</h4>
-<p>`GET https://api.sx.bet/leagues/active?chainVersion=SXR</p>
+<p><code>GET https://api.sx.bet/leagues/active?chainVersion=SXR</code></p>
 <h3 id='sxr-markets'>SXR Markets</h3><h4 id='get-active-sxr-markets'>Get Active SXR Markets</h4>
 <p><code>GET https://api.sx.bet/markets/active?chainVersion=SXR</code></p>
 <h4 id='get-popular-sxr-markets'>Get Popular SXR Markets</h4>
@@ -640,6 +640,8 @@ When `chainVersion` is empty for POST requests, the default data is for SXN chai
 <p>Anywhere the documentation references an api url, please use the above for testnet instead. </p>
 
 <p>To get all the necessary testnet configuration information, use <a href="#metadata">metadata</a>.</p>
+
+<p>Contact the team at <a href="mailto:api-support@sx.bet">api-support@sx.bet</a> to receive testnet funds.</p>
 <h1 id='metadata'>Metadata</h1><h2 id='get-metadata'>Get metadata</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.sx.bet/metadata'</span>
 </code></pre></div>
 <blockquote>
