@@ -44,8 +44,6 @@ Technical questions or need support? [Send us an e-mail](mailto:api-support@sx.b
 
 **All documentation is provided in JavaScript.**
 
-Explorer available [here](https://explorer.sx.technology) 
-
 <aside class="notice">
 All ETH addresses used in this API are in check-summed format. If you pass in lowercase-only addresses, you won't get results.
 </aside>
