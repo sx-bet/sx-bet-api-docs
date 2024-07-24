@@ -9,8 +9,8 @@ language_tabs: # must be one of https://git.io/vQNgJ
   # - javascript
 
 includes:
-  - references
   - rollupmigrationguide
+  - references
   - testnet
   - metadata
   - websocket
