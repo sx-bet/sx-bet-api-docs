@@ -762,7 +762,7 @@ For the purposes of this migration, we will refer to current (legacy) chain as S
 
 <ul>
 <li>Update token addresses for USDC and WSX with the new token addresses</li>
-<li>Update rest api calls shown (here)[#endpoint-changes]</li>
+<li>Update rest api calls shown <a href="#endpoint-changes">here</a></li>
 <li>Update websocket streams handler for orders, trades, and markets (they will now include <code>chainVersion</code>)</li>
 <li>Migrate funds from SXN to SXR using our bridge</li>
 <li>Configure the payloads with the new chainId and other configs found <a href="#references">here</a> and/or <a href="#metadata">here</a></li>
@@ -822,13 +822,9 @@ When `chainVersion` is empty for POST requests, the default data is for SXN chai
 <h4 id='cancel-all-sxr-orders'>Cancel all SXR Orders</h4>
 <p><code>POST https://api.sx.bet/orders/cancel/all?chainVersion=SXR</code></p>
 <h1 id='testnet'>Testnet</h1>
-<p>We have deployed a testnet chain and application.</p>
+<p>We have deployed a testnet chain and application (https://toronto.sx.bet).</p>
 
-<p>API: <code>https://api.toronto.sx.bet</code></p>
-
-<p>Anywhere the documentation references an api url, please use the above for testnet instead. </p>
-
-<p>To get all the necessary testnet configuration information, use <a href="#metadata">metadata</a>.</p>
+<p>See configuration for testnet <a href="#references">here</a>.</p>
 
 <p>Contact the team at <a href="mailto:api-support@sx.bet">api-support@sx.bet</a> to receive testnet funds.</p>
 <h1 id='metadata'>Metadata</h1><h2 id='get-metadata'>Get metadata</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.sx.bet/metadata'</span>
