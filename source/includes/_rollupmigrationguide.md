@@ -8,8 +8,9 @@ You can read more about the rationale [here](https://medium.com/sportx-bet/sx-ro
 
 <aside class="notice">
 For the purposes of this migration, we will refer to current (legacy) chain as SXN and the new chain as SXR.
-## Sport Migration Schedule
 </aside>
+
+## Sport Migration Schedule
 
 Our plan is to migrate by sport to reduce impact as much as possible. Our migration by sport schedule is as follows:
 
