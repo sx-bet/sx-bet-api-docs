@@ -1,12 +1,12 @@
 # SX Rollup Migration Guide
 
-## What is this migration and why are we migrating?
+## What is this migration?
 
 The current version of SX Network was built on the Polygon Edge SDK. This project has since been discontinued, and so there is no support or improvements coming for the chain. For a number of reasons including improving block times, making use of a canonical bridge, better stability and developer support, we have decided to migrate our chain to an Arbitrum Orbit Rollup chain.
 
 You can read more about the rationale [here](https://medium.com/sportx-bet/sx-rollup-ca33079d1b8b).
 
-## How will the migration affect betting?
+## Sport Migration Schedule
 
 Our plan is to migrate by sport to reduce impact as much as possible. Our migration by sport schedule is as follows:
 
@@ -18,7 +18,7 @@ Our plan is to migrate by sport to reduce impact as much as possible. Our migrat
 | Baseball, Golf, Soccer, Tennis, Mixed Martial Arts                              | August 5, 2024 |
 | Crypto, Degen Crypto                                                            | August 6, 2024 |
 
-## Endpoints
+## Endpoint Changes
 
 The following endpoints allow a new query parameter: `chainVersion`. This will filter out response to only the specific chain you are looking for. If no parameter is passed, there is a non-intrusive default used.
 

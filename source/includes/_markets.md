@@ -232,7 +232,7 @@ This endpoint retrieves specific markets
 
 | Name         | Required | Type     | Description                                                                |
 | ------------ | -------- | -------- | -------------------------------------------------------------------------- |
-| marketHashes | true     | string[] | The market hashes of the markets to retrieve. Maximum 30. Comma separated. |
+| marketHashes | true     | string[] | The market hashes of the markets to retrieve. Comma separated. **Maximum 30.** |
 
 ### Response format
 
@@ -249,6 +249,12 @@ See [active markets section](#get-active-markets) for how the `Market` object is
 | outcome      | number | The outcome of the market. Can be one of 0 1 or 2. 0 means the market was voided and stakes were returned to bettors. 1 means the outcome labeled `outcomeOneName` was the outcome. 2 means the outcome labeled `outcomeTwoName` was the outcome. |
 | teamOneScore | number | Final score of team one                                                                                                                                                                                                                           |
 | teamTwoScore | number | Final score of team two                                                                                                                                                                                                                           |
+
+### Error Responses
+
+| Error Code        | Description                                                   |
+| ----------------- | ------------------------------------------------------------- |
+| BAD_MARKET_HASHES | Invalid `marketHashes` or more than 30 `marketHashes` queried |
 
 ## Popular markets
 

@@ -80,7 +80,13 @@ This endpoint returns active orders on the exchange based on a few parameters
 | sportXeventId | false    | string   | Only get orders for this event ID                         |
 | chainVersion  | false    | string   | Must  be either `SXN` or `SXR`.<br/>**If not passed, data from both chains are returned**. See [migration docs](#sx-rollup-migration-guide) |
 
-Note that one of `marketHashes` or `maker` is required.
+<aside class="notice">
+One of `marketHashes` or `maker` is required.
+</aside>
+
+<aside class="notice">
+Only one of `marketHashes` and `sportXeventId` can be present.
+</aside>
 
 ### Response format
 
@@ -99,6 +105,13 @@ Note that one of `marketHashes` or `maker` is required.
 | salt                     | string  | A random number to differentiate identical orders                                                                                                                                                                                                                                                                                              |
 | isMakerBettingOutcomeOne | boolean | `true` if the maker is betting outcome one (and hence taker is betting outcome two if filled)                                                                                                                                                                                                                                                  |
 | signature                | string  | Signature of the maker on this order                                                                                                                                                                                                                                                                                                           |
+
+### Error Responses
+
+| Error Code                              | Description                                            |
+| --------------------------------------- | ------------------------------------------------------ |
+| RATE_LIMIT_ORDER_REQUEST_MARKET_COUNT   | More than 1000 `marketHashes` queried                  |
+| BOTH_SPORTXEVENTID_MARKETHASHES_PRESENT | Can only send one of `marketHashes` or `sportXeventId` |
 
 <aside class="notice">
 Note that <code>totalBetSize</code> and <code>fillAmount</code> are from *the perspective of the market maker*. <code>totalBetSize</code> can be thought of as the maximum amount of tokens the maker will be putting into the pot if the order was fully filled. <code>fillAmount</code> can be thought of as how many tokens the maker has already put into the pot. To compute how much space there is left from the taker's perspective, you can use the formula <code>remainingTakerSpace = (totalBetSize - fillAmount) * 10^20 / percentageOdds - (totalBetSize - fillAmount)</code>
@@ -353,6 +366,14 @@ The address in the <code>maker</code> field must match the account being used to
 Note that <code>totalBetSize</code> is from *the perspective of the market maker*. <code>totalBetSize</code> can be thought of as the maximum amount of tokens the maker (you) will be putting into the pot if the order was fully filled. This is the maximum amount you will risk.
 </aside>
 
+### Error Responses
+
+| Error Code                        | Description                                                        |
+| --------------------------------- | ------------------------------------------------------------------ |
+| TOO_MANY_DIFFERENT_MARKETS        | More than 3 different markets queried                              |
+| ORDERS_MUST_HAVE_IDENTICAL_MARKET | All orders must be for the same network, either `SXN` or `SXR`     |
+| BAD_BASE_TOKEN                    | All orders must be for the same base token, either `USDC` or `WSX` |
+
 ## Cancel individual orders
 
 ```shell
@@ -470,6 +491,12 @@ Ensure you use the <code>chainId</code> of SX Network, not the <code>chainId</co
 | status           | string   | `success` or `failure` if the request succeeded or not |
 | data             | object   | The response data                                      |
 | > cancelledCount | string[] | How many orders were cancelled, of the orders passed   |
+
+### Error Responses
+
+| Error Code                       | Description                            |
+| -------------------------------- | -------------------------------------- |
+| CANCEL_REQUEST_ALREADY_PROCESSED | This cancellation is already processed |
 
 ## Cancel event orders
 
@@ -596,6 +623,12 @@ Ensure you use the <code>chainId</code> of SX Network, not the <code>chainId</co
 | data             | object   | The response data                                      |
 | > cancelledCount | string[] | How many orders were cancelled, of the orders passed   |
 
+### Error Responses
+
+| Error Code                       | Description                            |
+| -------------------------------- | -------------------------------------- |
+| CANCEL_REQUEST_ALREADY_PROCESSED | This cancellation is already processed |
+
 ## Cancel all orders
 
 ```shell
@@ -704,6 +737,12 @@ Ensure you use the <code>chainId</code> of SX Network, not the <code>chainId</co
 | status           | string   | `success` or `failure` if the request succeeded or not |
 | data             | object   | The response data                                      |
 | > cancelledCount | string[] | How many orders were cancelled, of the orders passed   |
+
+### Error Responses
+
+| Error Code                       | Description                            |
+| -------------------------------- | -------------------------------------- |
+| CANCEL_REQUEST_ALREADY_PROCESSED | This cancellation is already processed |
 
 ## Filling orders
 
@@ -1074,3 +1113,18 @@ Note that <code>fillAmounts</code> are from *the perspective of the market maker
 <aside class="notice">
 To convert a <code>fillAmount</code> (what the market maker pays) to what the taker will pay, you can use the formula <code>takerPayAmount = fillAmount * 10^20 / percentageOdds - fillAmount </code>. Intuitively, this is the pot size (<code>fillAmount * 10^20 / percentageOdds)</code> minus what the maker is putting in
 </aside>
+
+### Error Responses
+
+| Error Code                 | Description                                                                  |
+| ---------------------------| ---------------------------------------------------------------------------- |
+| ORDERS_NOT_UNIQUE          | Only unique `orderHashes` should be sent                                     |
+| INCORRECT_ARRAY_LENGTHS    | `orderHashes` and `takerAmounts` arrays are different lengths.               |
+| ORDERS_DONT_EXIST          | One of the orders do not exist                                               |
+| AFTER_ORDER_EXPIRY         | One of the orders have expired                                               |
+| BASE_TOKENS_NOT_SAME       | All orders must be for the same `baseToken`                                  |
+| MARKETS_NOT_SAME           | All orders must be for the same market                                       |
+| DIRECTIONS_NOT_SAME        | All orders must be betting on the same side `isMakerBettingOutcomeOne`       |
+| INVALID_ORDERS             | Order is now inactive                                                        |
+| MATCH_STATE_INVALID        | The fixture for the order is in an invalid state and is not bettable anymore |
+| META_TX_RATE_LIMIT_REACHED | Cannot have more than 10 meta transactions at once                           |
