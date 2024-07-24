@@ -23,15 +23,15 @@ Our plan is to migrate by sport to reduce impact as much as possible. Our migrat
 
 ## What do I have to do?
 
-When the sport you're interested in has moved over to SXR, you'll have to:
+When the sport you're interested in has moved over to **SXR**, you'll have to:
 
-- Update token addresses for USDC and WSX with the new token addresses
-- Update rest api calls shown [here](#endpoint-changes)
-- Update websocket streams handler for orders, trades, and markets (they will now include `chainVersion`)
-- Migrate funds from SXN to SXR using our bridge
-- Configure the payloads with the new chainId and other configs found [here](#references) and/or [here](#metadata)
-- Reenable betting for each token
-- Start using api as normal for SXR Markets
+- Update token addresses for `USDC` and `WSX` with the new token addresses
+- Update rest api calls as shown [here](#endpoint-changes)
+- Update websocket streams handlers for orders, trades, and markets *(they will now include `chainVersion`)*
+- Migrate funds from **SXN** to **SXR** using our bridge
+- Configure the payloads with the new `chainId` and other configs found [here](#references) and/or [here](#metadata)
+- Reenable betting for each token as described [here](#enabling-betting)
+- Start using api as normal for **SXR** Markets
 
 ## Endpoint Changes
 
