@@ -8,19 +8,7 @@ You can read more about the rationale [here](https://medium.com/sportx-bet/sx-ro
 
 <aside class="notice">
 For the purposes of this migration, we will refer to current (legacy) chain as SXN and the new chain as SXR.
-</aside>
-
-## Sport Migration Schedule
-
-Our plan is to migrate by sport to reduce impact as much as possible. Our migration by sport schedule is as follows:
-
-| Sport(s)                                                                        | Date           |
-| ------------------------------------------------------------------------------- | -------------- |
-| E Sports, Novelty Markets, Rugby, Politics, Entertainment, NFTs, Daily Parlays  | July 29, 2024  |
-| Boxing, Olympics, Racing, Cricket                                               | July 30, 2024  |
-| Football, Hockey, Basketball                                                    | July 31, 2024  |
-| Baseball, Golf, Soccer, Tennis, Mixed Martial Arts                              | August 5, 2024 |
-| Crypto, Degen Crypto                                                            | August 6, 2024 |
+</aside>                                                        | August 6, 2024 |
 
 ## What do I have to do?
 
@@ -83,3 +71,15 @@ This ensures the changes are least disruptive, and changes are only required whe
 `POST https://api.sx.bet/orders/cancel/event?chainVersion=SXR`
 #### Cancel all SXR Orders
 `POST https://api.sx.bet/orders/cancel/all?chainVersion=SXR`
+
+## Sport Migration Schedule
+
+Our plan is to migrate by sport to reduce impact as much as possible. Our migration by sport schedule is as follows:
+
+| Sport(s)                                                                        | Date           |
+| ------------------------------------------------------------------------------- | -------------- |
+| E Sports, Novelty Markets, Rugby, Politics, Entertainment, NFTs, Daily Parlays  | July 29, 2024  |
+| Boxing, Olympics, Racing, Cricket                                               | July 30, 2024  |
+| Football, Hockey, Basketball                                                    | July 31, 2024  |
+| Baseball, Golf, Soccer, Tennis, Mixed Martial Arts                              | August 5, 2024 |
+| Crypto, Degen Crypto    
