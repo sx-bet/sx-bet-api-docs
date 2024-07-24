@@ -313,6 +313,20 @@
             <a href="#introduction" class="toc-h1 toc-link" data-title="Introduction">Introduction</a>
           </li>
           <li>
+            <a href="#sx-rollup-migration-guide" class="toc-h1 toc-link" data-title="SX Rollup Migration Guide">SX Rollup Migration Guide</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#what-is-this-migration" class="toc-h2 toc-link" data-title="What is this migration?">What is this migration?</a>
+                  </li>
+                  <li>
+                    <a href="#what-do-i-have-to-do" class="toc-h2 toc-link" data-title="What do I have to do?">What do I have to do?</a>
+                  </li>
+                  <li>
+                    <a href="#endpoint-changes" class="toc-h2 toc-link" data-title="Endpoint Changes">Endpoint Changes</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
             <a href="#references" class="toc-h1 toc-link" data-title="References">References</a>
               <ul class="toc-list-h2">
                   <li>
@@ -329,20 +343,6 @@
                   </li>
                   <li>
                     <a href="#versions-of-dependencies" class="toc-h2 toc-link" data-title="Versions of dependencies">Versions of dependencies</a>
-                  </li>
-              </ul>
-          </li>
-          <li>
-            <a href="#sx-rollup-migration-guide" class="toc-h1 toc-link" data-title="SX Rollup Migration Guide">SX Rollup Migration Guide</a>
-              <ul class="toc-list-h2">
-                  <li>
-                    <a href="#what-is-this-migration" class="toc-h2 toc-link" data-title="What is this migration?">What is this migration?</a>
-                  </li>
-                  <li>
-                    <a href="#what-do-i-have-to-do" class="toc-h2 toc-link" data-title="What do I have to do?">What do I have to do?</a>
-                  </li>
-                  <li>
-                    <a href="#endpoint-changes" class="toc-h2 toc-link" data-title="Endpoint Changes">Endpoint Changes</a>
                   </li>
               </ul>
           </li>
@@ -546,6 +546,109 @@
 <aside class="notice">
 All ETH addresses used in this API are in check-summed format. If you pass in lowercase-only addresses, you won't get results.
 </aside>
+<h1 id='sx-rollup-migration-guide'>SX Rollup Migration Guide</h1><h2 id='what-is-this-migration'>What is this migration?</h2>
+<p>The current version of SX Network was built on the Polygon Edge SDK. This project has since been discontinued, and so there is no support or improvements coming for the chain. For a number of reasons including improving block times, making use of a canonical bridge, better stability and developer support, we have decided to migrate our chain to an Arbitrum Orbit Rollup chain.</p>
+
+<p>You can read more about the rationale <a href="https://medium.com/sportx-bet/sx-rollup-ca33079d1b8b">here</a>.</p>
+
+<aside class="notice">
+For the purposes of this migration, we will refer to current (legacy) chain as SXN and the new chain as SXR.
+## Sport Migration Schedule
+</aside>
+
+<p>Our plan is to migrate by sport to reduce impact as much as possible. Our migration by sport schedule is as follows:</p>
+
+<table><thead>
+<tr>
+<th>Sport(s)</th>
+<th>Date</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>E Sports, Novelty Markets, Rugby, Politics, Entertainment, NFTs, Daily Parlays</td>
+<td>July 29, 2024</td>
+</tr>
+<tr>
+<td>Boxing, Olympics, Racing, Cricket</td>
+<td>July 30, 2024</td>
+</tr>
+<tr>
+<td>Football, Hockey, Basketball</td>
+<td>July 31, 2024</td>
+</tr>
+<tr>
+<td>Baseball, Golf, Soccer, Tennis, Mixed Martial Arts</td>
+<td>August 5, 2024</td>
+</tr>
+<tr>
+<td>Crypto, Degen Crypto</td>
+<td>August 6, 2024</td>
+</tr>
+</tbody></table>
+<h2 id='what-do-i-have-to-do'>What do I have to do?</h2>
+<p>When the sport you&#39;re interested in has moved over to <strong>SXR</strong>, you&#39;ll have to:</p>
+
+<ul>
+<li>Update token addresses for <code>USDC</code> and <code>WSX</code> with the new token addresses</li>
+<li>Update rest api calls as shown <a href="#endpoint-changes">here</a></li>
+<li>Update websocket streams handlers for orders, trades, and markets <em>(they will now include <code>chainVersion</code>)</em></li>
+<li>Migrate funds from <strong>SXN</strong> to <strong>SXR</strong> using our bridge</li>
+<li>Configure the payloads with the new <code>chainId</code> and other configs found <a href="#references">here</a> and/or <a href="#metadata">here</a></li>
+<li>Reenable betting for each token as described <a href="#enabling-betting">here</a></li>
+<li>Start using api as normal for <strong>SXR</strong> Markets</li>
+</ul>
+<h2 id='endpoint-changes'>Endpoint Changes</h2>
+<p>The following endpoints allow a new query parameter: <code>chainVersion</code>. This will filter out response to only the specific chain you are looking for. If no parameter is passed, there is a non-intrusive default used.</p>
+
+<aside class="warning">
+When `chainVersion` is empty for GET requests, the result will show data for both chains.
+</aside>
+
+<aside class="warning">
+When `chainVersion` is empty for POST requests, the default data is for SXN chain.
+</aside>
+
+<p>This ensures the changes are least disruptive, and changes are only required when handling games on the new chain.</p>
+
+<p><strong>Allowed values for <code>chainVersion</code> are:</strong></p>
+
+<table><thead>
+<tr>
+<th><code>chainVersion</code></th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>SXN</td>
+<td>Legacy SX Network</td>
+</tr>
+<tr>
+<td>SXR</td>
+<td>SX Rollup</td>
+</tr>
+</tbody></table>
+<h3 id='sxr-metadata'>SXR Metadata</h3><h4 id='get-sxr-metadata'>Get SXR Metadata</h4>
+<p><code>GET https://api.sx.bet/metadata?chainVersion=SXR</code></p>
+<h3 id='sxr-leagues'>SXR Leagues</h3><h4 id='get-active-sxr-leagues'>Get Active SXR Leagues</h4>
+<p><code>GET https://api.sx.bet/leagues/active?chainVersion=SXR</code></p>
+<h3 id='sxr-markets'>SXR Markets</h3><h4 id='get-active-sxr-markets'>Get Active SXR Markets</h4>
+<p><code>GET https://api.sx.bet/markets/active?chainVersion=SXR</code></p>
+<h4 id='get-popular-sxr-markets'>Get Popular SXR Markets</h4>
+<p><code>GET https://api.sx.bet/markets/popular?chainVersion=SXR</code></p>
+<h3 id='sxr-trades'>SXR Trades</h3><h4 id='get-sxr-trades'>Get SXR Trades</h4>
+<p><code>GET https://api.sx.bet/trades?chainVersion=SXR</code></p>
+<h3 id='sxr-consolidated-trades'>SXR Consolidated Trades</h3><h4 id='get-sxr-consolidated-trades'>Get SXR Consolidated Trades</h4>
+<p><code>GET https://api.sx.bet/trades/consolidated?chainVersion=SXR</code></p>
+<h3 id='sxr-orders'>SXR Orders</h3><h4 id='get-sxr-orders'>Get SXR Orders</h4>
+<p><code>GET https://api.sx.bet/orders?chainVersion=SXR</code></p>
+<h4 id='post-new-sxr-orders'>Post New SXR Orders</h4>
+<p><code>POST https://api.sx.bet/orders/new?chainVersion=SXR</code></p>
+<h4 id='cancel-sxr-orders'>Cancel SXR Orders</h4>
+<p><code>POST https://api.sx.bet/orders/cancel/v2?chainVersion=SXR</code></p>
+<h4 id='cancel-sxr-orders-by-event'>Cancel SXR Orders by Event</h4>
+<p><code>POST https://api.sx.bet/orders/cancel/event?chainVersion=SXR</code></p>
+<h4 id='cancel-all-sxr-orders'>Cancel all SXR Orders</h4>
+<p><code>POST https://api.sx.bet/orders/cancel/all?chainVersion=SXR</code></p>
 <h1 id='references'>References</h1>
 <p><strong>SXN</strong> = Legacy SX Network<br>
 <strong>SXR</strong> =  New SX Network</p>
@@ -716,109 +819,6 @@ All ETH addresses used in this API are in check-summed format. If you pass in lo
 <li><code>eth-sig-util</code>: 2.5.4</li>
 <li><code>ethers</code>: 5.7.2</li>
 </ul>
-<h1 id='sx-rollup-migration-guide'>SX Rollup Migration Guide</h1><h2 id='what-is-this-migration'>What is this migration?</h2>
-<p>The current version of SX Network was built on the Polygon Edge SDK. This project has since been discontinued, and so there is no support or improvements coming for the chain. For a number of reasons including improving block times, making use of a canonical bridge, better stability and developer support, we have decided to migrate our chain to an Arbitrum Orbit Rollup chain.</p>
-
-<p>You can read more about the rationale <a href="https://medium.com/sportx-bet/sx-rollup-ca33079d1b8b">here</a>.</p>
-
-<aside class="notice">
-For the purposes of this migration, we will refer to current (legacy) chain as SXN and the new chain as SXR.
-## Sport Migration Schedule
-</aside>
-
-<p>Our plan is to migrate by sport to reduce impact as much as possible. Our migration by sport schedule is as follows:</p>
-
-<table><thead>
-<tr>
-<th>Sport(s)</th>
-<th>Date</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>E Sports, Novelty Markets, Rugby, Politics, Entertainment, NFTs, Daily Parlays</td>
-<td>July 29, 2024</td>
-</tr>
-<tr>
-<td>Boxing, Olympics, Racing, Cricket</td>
-<td>July 30, 2024</td>
-</tr>
-<tr>
-<td>Football, Hockey, Basketball</td>
-<td>July 31, 2024</td>
-</tr>
-<tr>
-<td>Baseball, Golf, Soccer, Tennis, Mixed Martial Arts</td>
-<td>August 5, 2024</td>
-</tr>
-<tr>
-<td>Crypto, Degen Crypto</td>
-<td>August 6, 2024</td>
-</tr>
-</tbody></table>
-<h2 id='what-do-i-have-to-do'>What do I have to do?</h2>
-<p>When the sport you&#39;re interested in has moved over to <strong>SXR</strong>, you&#39;ll have to:</p>
-
-<ul>
-<li>Update token addresses for <code>USDC</code> and <code>WSX</code> with the new token addresses</li>
-<li>Update rest api calls as shown <a href="#endpoint-changes">here</a></li>
-<li>Update websocket streams handlers for orders, trades, and markets <em>(they will now include <code>chainVersion</code>)</em></li>
-<li>Migrate funds from <strong>SXN</strong> to <strong>SXR</strong> using our bridge</li>
-<li>Configure the payloads with the new <code>chainId</code> and other configs found <a href="#references">here</a> and/or <a href="#metadata">here</a></li>
-<li>Reenable betting for each token as described <a href="#enabling-betting">here</a></li>
-<li>Start using api as normal for <strong>SXR</strong> Markets</li>
-</ul>
-<h2 id='endpoint-changes'>Endpoint Changes</h2>
-<p>The following endpoints allow a new query parameter: <code>chainVersion</code>. This will filter out response to only the specific chain you are looking for. If no parameter is passed, there is a non-intrusive default used.</p>
-
-<aside class="warning">
-When `chainVersion` is empty for GET requests, the result will show data for both chains.
-</aside>
-
-<aside class="warning">
-When `chainVersion` is empty for POST requests, the default data is for SXN chain.
-</aside>
-
-<p>This ensures the changes are least disruptive, and changes are only required when handling games on the new chain.</p>
-
-<p><strong>Allowed values for <code>chainVersion</code> are:</strong></p>
-
-<table><thead>
-<tr>
-<th><code>chainVersion</code></th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>SXN</td>
-<td>Legacy SX Network</td>
-</tr>
-<tr>
-<td>SXR</td>
-<td>SX Rollup</td>
-</tr>
-</tbody></table>
-<h3 id='sxr-metadata'>SXR Metadata</h3><h4 id='get-sxr-metadata'>Get SXR Metadata</h4>
-<p><code>GET https://api.sx.bet/metadata?chainVersion=SXR</code></p>
-<h3 id='sxr-leagues'>SXR Leagues</h3><h4 id='get-active-sxr-leagues'>Get Active SXR Leagues</h4>
-<p><code>GET https://api.sx.bet/leagues/active?chainVersion=SXR</code></p>
-<h3 id='sxr-markets'>SXR Markets</h3><h4 id='get-active-sxr-markets'>Get Active SXR Markets</h4>
-<p><code>GET https://api.sx.bet/markets/active?chainVersion=SXR</code></p>
-<h4 id='get-popular-sxr-markets'>Get Popular SXR Markets</h4>
-<p><code>GET https://api.sx.bet/markets/popular?chainVersion=SXR</code></p>
-<h3 id='sxr-trades'>SXR Trades</h3><h4 id='get-sxr-trades'>Get SXR Trades</h4>
-<p><code>GET https://api.sx.bet/trades?chainVersion=SXR</code></p>
-<h3 id='sxr-consolidated-trades'>SXR Consolidated Trades</h3><h4 id='get-sxr-consolidated-trades'>Get SXR Consolidated Trades</h4>
-<p><code>GET https://api.sx.bet/trades/consolidated?chainVersion=SXR</code></p>
-<h3 id='sxr-orders'>SXR Orders</h3><h4 id='get-sxr-orders'>Get SXR Orders</h4>
-<p><code>GET https://api.sx.bet/orders?chainVersion=SXR</code></p>
-<h4 id='post-new-sxr-orders'>Post New SXR Orders</h4>
-<p><code>POST https://api.sx.bet/orders/new?chainVersion=SXR</code></p>
-<h4 id='cancel-sxr-orders'>Cancel SXR Orders</h4>
-<p><code>POST https://api.sx.bet/orders/cancel/v2?chainVersion=SXR</code></p>
-<h4 id='cancel-sxr-orders-by-event'>Cancel SXR Orders by Event</h4>
-<p><code>POST https://api.sx.bet/orders/cancel/event?chainVersion=SXR</code></p>
-<h4 id='cancel-all-sxr-orders'>Cancel all SXR Orders</h4>
-<p><code>POST https://api.sx.bet/orders/cancel/all?chainVersion=SXR</code></p>
 <h1 id='testnet'>Testnet</h1>
 <p>We have deployed a testnet chain and application (https://toronto.sx.bet).</p>
 
