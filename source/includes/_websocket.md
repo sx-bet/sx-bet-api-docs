@@ -1,8 +1,6 @@
 # Websocket API
 
-<aside class="info">
-<div>You must have a valid API key to subscribe to realtime channels via the API. See <b>API Key</b> for more info.</div>
-</aside>
+You must have a valid API key to subscribe to realtime channels via the API. See **[API Key](#api-key)** for more info.
 
 You can connect to the websocket API and listen for realtime changes on several resources such as the order book, markets, scores, and line updates.
 
