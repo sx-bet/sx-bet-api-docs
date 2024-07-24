@@ -5732,7 +5732,8 @@ To convert a <code>fillAmount</code> (what the market maker pays) to what the ta
 </code></pre></div>
 <p>Here we use <code>ethers.js</code> and show an example with MetaMask but provided the injected provider has a <code>send()</code> function and supports the <code>eth_signTypedData</code> JSON-RPC method, it will work. Note that in some wallets, such as metamask, <code>eth_signTypedData_v4</code> is the most up to date version of <code>eth_signTypedData</code>.</p>
 <h1 id='fees'>Fees</h1><h2 id='trading'>Trading</h2>
-<p>Fees are capped at 4% on the profits of your bet. This fee can be reduced by staking SX. For example, if you bet 100 USDC to win 200 USDC and you win, your profit is <code>200 - 100 = 100 USDC</code> and the fees paid is <code>100 * 0.04 = 4 USDC</code>. See the <a href="https://sx.bet/token/discount">fee discount page</a> for details. Your fee is further dependent on whether you are a maker or taker in the transaction.</p>
+<p>Fees are currently 0% for makers and takers.
+&lt;!-- Fees are capped at 4% on the profits of your bet. This fee can be reduced by staking SX. For example, if you bet 100 USDC to win 200 USDC and you win, your profit is <code>200 - 100 = 100 USDC</code> and the fees paid is <code>100 * 0.04 = 4 USDC</code>. See the <a href="https://sx.bet/token/discount">fee discount page</a> for details. Your fee is further dependent on whether you are a maker or taker in the transaction. --&gt;</p>
 
       </div>
       <div class="dark-box">
