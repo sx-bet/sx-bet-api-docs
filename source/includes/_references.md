@@ -1,6 +1,6 @@
 # References
 
-**SXN** = Legacy SX Network\
+**SXN** = Legacy SX Network  
 **SXR** =  New SX Network
 
 ## SXR Mainnet
