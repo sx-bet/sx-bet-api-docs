@@ -8,7 +8,7 @@ You can read more about the rationale [here](https://medium.com/sportx-bet/sx-ro
 
 <aside class="notice">
 For the purposes of this migration, we will refer to current (legacy) chain as SXN and the new chain as SXR.
-</aside>                                                        | August 6, 2024 |
+</aside>
 
 ## What do I have to do?
 
@@ -82,4 +82,4 @@ Our plan is to migrate by sport to reduce impact as much as possible. Our migrat
 | Boxing, Olympics, Racing, Cricket                                               | July 30, 2024  |
 | Football, Hockey, Basketball                                                    | July 31, 2024  |
 | Baseball, Golf, Soccer, Tennis, Mixed Martial Arts                              | August 5, 2024 |
-| Crypto, Degen Crypto    
+| Crypto, Degen Crypto                                                            | August 6, 2024 |
