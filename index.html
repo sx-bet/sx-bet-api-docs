@@ -313,13 +313,33 @@
             <a href="#introduction" class="toc-h1 toc-link" data-title="Introduction">Introduction</a>
           </li>
           <li>
+            <a href="#references" class="toc-h1 toc-link" data-title="References">References</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#sxr-mainnet" class="toc-h2 toc-link" data-title="SXR Mainnet">SXR Mainnet</a>
+                  </li>
+                  <li>
+                    <a href="#sxr-testnet" class="toc-h2 toc-link" data-title="SXR Testnet">SXR Testnet</a>
+                  </li>
+                  <li>
+                    <a href="#sxn-mainnet" class="toc-h2 toc-link" data-title="SXN Mainnet">SXN Mainnet</a>
+                  </li>
+                  <li>
+                    <a href="#sxn-testnet" class="toc-h2 toc-link" data-title="SXN Testnet">SXN Testnet</a>
+                  </li>
+                  <li>
+                    <a href="#versions-of-dependencies" class="toc-h2 toc-link" data-title="Versions of dependencies">Versions of dependencies</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
             <a href="#sx-rollup-migration-guide" class="toc-h1 toc-link" data-title="SX Rollup Migration Guide">SX Rollup Migration Guide</a>
               <ul class="toc-list-h2">
                   <li>
                     <a href="#what-is-this-migration" class="toc-h2 toc-link" data-title="What is this migration?">What is this migration?</a>
                   </li>
                   <li>
-                    <a href="#sport-migration-schedule" class="toc-h2 toc-link" data-title="Sport Migration Schedule">Sport Migration Schedule</a>
+                    <a href="#what-do-i-have-to-do" class="toc-h2 toc-link" data-title="What do I have to do?">What do I have to do?</a>
                   </li>
                   <li>
                     <a href="#endpoint-changes" class="toc-h2 toc-link" data-title="Endpoint Changes">Endpoint Changes</a>
@@ -523,34 +543,191 @@
 
 <p><strong>All documentation is provided in JavaScript.</strong></p>
 
-<p>We support betting in USDC and WSX.</p>
-
-<table><thead>
-<tr>
-<th>Token</th>
-<th>SX Network Address</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>USDC</td>
-<td><code>0x6629Ce1Cf35Cc1329ebB4F63202F3f197b3F050B</code></td>
-</tr>
-<tr>
-<td>WSX</td>
-<td><code>0x3E96B0a25d51e3Cc89C557f152797c33B839968f</code></td>
-</tr>
-</tbody></table>
-
 <p>Explorer available <a href="https://explorer.sx.technology">here</a> </p>
 
 <aside class="notice">
 All ETH addresses used in this API are in check-summed format. If you pass in lowercase-only addresses, you won't get results.
 </aside>
+<h1 id='references'>References</h1>
+<p>** SXN = Legacy SX Network**
+** SXR = New SX Network **</p>
+<h2 id='sxr-mainnet'>SXR Mainnet</h2>
+<table><thead>
+<tr>
+<th>Reference Type</th>
+<th>Data</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Chain ID</td>
+<td>4162</td>
+</tr>
+<tr>
+<td>USDC Token Address</td>
+<td><code>0x6629Ce1Cf35Cc1329ebB4F63202F3f197b3F050B</code></td>
+</tr>
+<tr>
+<td>WSX Token Address</td>
+<td><code>0x3E96B0a25d51e3Cc89C557f152797c33B839968f</code></td>
+</tr>
+<tr>
+<td>SX Application</td>
+<td>https://sx.bet</td>
+</tr>
+<tr>
+<td>SX API URL</td>
+<td>https://api.sx.bet</td>
+</tr>
+<tr>
+<td>RPC URL</td>
+<td>https://rpc.sx-rollup.gelato.digital</td>
+</tr>
+<tr>
+<td>Explorer Page</td>
+<td>https://explorerl2.sx.technology (this will migrate to the current explorer domain once migration is fully complete)</td>
+</tr>
+<tr>
+<td>METADATA</td>
+<td>https://api.sx.bet/metadata?chainVersion=SXR</td>
+</tr>
+</tbody></table>
+<h2 id='sxr-testnet'>SXR Testnet</h2>
+<table><thead>
+<tr>
+<th>Reference Type</th>
+<th>Data</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Chain ID</td>
+<td>79479957</td>
+</tr>
+<tr>
+<td>USDC Token Address</td>
+<td><code>0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956</code></td>
+</tr>
+<tr>
+<td>WSX Token Address</td>
+<td><code>0x5c02932f8422D943647682E95c87ea0333191e08</code></td>
+</tr>
+<tr>
+<td>SX Application</td>
+<td>https://toronto.sx.bet</td>
+</tr>
+<tr>
+<td>SX API URL</td>
+<td>https://api.toronto.sx.bet</td>
+</tr>
+<tr>
+<td>RPC URL</td>
+<td>https://rpc.sx-rollup-testnet.t.raas.gelato.cloud/</td>
+</tr>
+<tr>
+<td>Explorer Page</td>
+<td>https://explorerl2.toronto.sx.technology (this will migrate to the current explorer domain once migration is fully complete)</td>
+</tr>
+<tr>
+<td>METADATA</td>
+<td>https://api.toronto.sx.bet/metadata?chainVersion=SXR</td>
+</tr>
+</tbody></table>
+<h2 id='sxn-mainnet'>SXN Mainnet</h2>
+<table><thead>
+<tr>
+<th>Reference Type</th>
+<th>Data</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Chain ID</td>
+<td>416</td>
+</tr>
+<tr>
+<td>USDC Token Address</td>
+<td><code>0xe2aa35C2039Bd0Ff196A6Ef99523CC0D3972ae3e</code></td>
+</tr>
+<tr>
+<td>WSX Token Address</td>
+<td><code>0xaa99bE3356a11eE92c3f099BD7a038399633566f</code></td>
+</tr>
+<tr>
+<td>SX Application</td>
+<td>https://sx.bet</td>
+</tr>
+<tr>
+<td>SX API URL</td>
+<td>https://api.sx.bet</td>
+</tr>
+<tr>
+<td>RPC URL</td>
+<td>https://rpc.sx.technology</td>
+</tr>
+<tr>
+<td>Explorer Page</td>
+<td>https://explorer.sx.technology</td>
+</tr>
+<tr>
+<td>METADATA</td>
+<td>https://api.sx.bet/metadata?chainVersion=SXN</td>
+</tr>
+</tbody></table>
+<h2 id='sxn-testnet'>SXN Testnet</h2>
+<table><thead>
+<tr>
+<th>Reference Type</th>
+<th>Data</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Chain ID</td>
+<td>647</td>
+</tr>
+<tr>
+<td>USDC Token Address</td>
+<td><code>0x5147891461a7C81075950f8eE6384e019e39ab98</code></td>
+</tr>
+<tr>
+<td>WSX Token Address</td>
+<td><code>0x2D4e10Ee64CCF407C7F765B363348f7F62D2E06e</code></td>
+</tr>
+<tr>
+<td>SX Application</td>
+<td>https://toronto.sx.bet</td>
+</tr>
+<tr>
+<td>SX API URL</td>
+<td>https://api.toronto.sx.bet</td>
+</tr>
+<tr>
+<td>RPC URL</td>
+<td>https://rpc.toronto.sx.technology</td>
+</tr>
+<tr>
+<td>Explorer Page</td>
+<td>https://explorer.toronto.sx.technology</td>
+</tr>
+<tr>
+<td>METADATA</td>
+<td>https://api.toronto.sx.bet/metadata?chainVersion=SXN</td>
+</tr>
+</tbody></table>
+<h2 id='versions-of-dependencies'>Versions of dependencies</h2>
+<p>These are the latest versions of js dependencies that are referenced in documentation:</p>
+
+<ul>
+<li><code>eth-sig-util</code>: 2.5.4</li>
+<li><code>ethers</code>: 5.7.2</li>
+</ul>
 <h1 id='sx-rollup-migration-guide'>SX Rollup Migration Guide</h1><h2 id='what-is-this-migration'>What is this migration?</h2>
 <p>The current version of SX Network was built on the Polygon Edge SDK. This project has since been discontinued, and so there is no support or improvements coming for the chain. For a number of reasons including improving block times, making use of a canonical bridge, better stability and developer support, we have decided to migrate our chain to an Arbitrum Orbit Rollup chain.</p>
 
 <p>You can read more about the rationale <a href="https://medium.com/sportx-bet/sx-rollup-ca33079d1b8b">here</a>.</p>
-<h2 id='sport-migration-schedule'>Sport Migration Schedule</h2>
+
+<aside class="notice">
+For the purposes of this migration, we will refer to current (legacy) chain as SXN and the new chain as SXR.
+## Sport Migration Schedule
+</aside>
+
 <p>Our plan is to migrate by sport to reduce impact as much as possible. Our migration by sport schedule is as follows:</p>
 
 <table><thead>
@@ -580,6 +757,18 @@ All ETH addresses used in this API are in check-summed format. If you pass in lo
 <td>August 6, 2024</td>
 </tr>
 </tbody></table>
+<h2 id='what-do-i-have-to-do'>What do I have to do?</h2>
+<p>When the sport you&#39;re interested in has moved over to SXR, you&#39;ll have to:</p>
+
+<ul>
+<li>Update token addresses for USDC and WSX with the new token addresses</li>
+<li>Update rest api calls shown (here)[#endpoint-changes]</li>
+<li>Update websocket streams handler for orders, trades, and markets (they will now include <code>chainVersion</code>)</li>
+<li>Migrate funds from SXN to SXR using our bridge</li>
+<li>Configure the payloads with the new chainId and other configs found <a href="#references">here</a> and/or <a href="#metadata">here</a></li>
+<li>Reenable betting for each token</li>
+<li>Start using api as normal for SXR Markets</li>
+</ul>
 <h2 id='endpoint-changes'>Endpoint Changes</h2>
 <p>The following endpoints allow a new query parameter: <code>chainVersion</code>. This will filter out response to only the specific chain you are looking for. If no parameter is passed, there is a non-intrusive default used.</p>
 
@@ -847,7 +1036,7 @@ You only need one instance of the <code>ably</code> object to connect to the API
     </span><span class="nl">"outcomeVoidName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"NO_GAME_OR_EVEN"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
     </span><span class="nl">"sportLabel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Baseball"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"sportXeventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"L7186379"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"sportXEventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"L7186379"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ACTIVE"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"teamOneName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tampa Bay Rays"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"teamTwoName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Cleveland Indians"</span><span class="p">,</span><span class="w">
@@ -956,7 +1145,7 @@ Note that the `requestSize` is only indicating what the user is requesting, but 
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
   </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x38cceead7bda65c18574a34994ebd8af154725d08aa735dcbf26247a7dcc67bd"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"marketType"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"sportXeventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"L7178624"</span><span class="w">
+  </span><span class="nl">"sportXEventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"L7178624"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <p>Subscribe to all line changes. Messages are sent for particular combinations of event IDs and market types. Note that only market types with lines will have updates sent. See <a href="#get-active-markets">the active markets section</a> for details on which types have lines.</p>
@@ -981,15 +1170,15 @@ Note that the `requestSize` is only indicating what the user is requesting, but 
 <td>The type of market this update refers to.</td>
 </tr>
 <tr>
-<td>sportXeventId</td>
+<td>sportXEventId</td>
 <td>string</td>
 <td>The event ID for this update</td>
 </tr>
 </tbody></table>
 
 <p>To get the actual line, you&#39;ll have to fetch the market using the <code>marketHash</code></p>
-<h2 id='live-score-updates'>Live score updates</h2><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">sportXeventId</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">L7178624</span><span class="dl">"</span><span class="p">;</span>
-<span class="kd">const</span> <span class="nx">channel</span> <span class="o">=</span> <span class="nx">realtime</span><span class="p">.</span><span class="nx">channels</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s2">`live_scores:</span><span class="p">${</span><span class="nx">sportXeventId</span><span class="p">}</span><span class="s2">`</span><span class="p">);</span>
+<h2 id='live-score-updates'>Live score updates</h2><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">sportXEventId</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">L7178624</span><span class="dl">"</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">channel</span> <span class="o">=</span> <span class="nx">realtime</span><span class="p">.</span><span class="nx">channels</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s2">`live_scores:</span><span class="p">${</span><span class="nx">sportXEventId</span><span class="p">}</span><span class="s2">`</span><span class="p">);</span>
 <span class="nx">channel</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">((</span><span class="nx">message</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">message</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
 <span class="p">});</span>
@@ -1000,7 +1189,7 @@ Note that the `requestSize` is only indicating what the user is requesting, but 
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
   </span><span class="nl">"teamOneScore"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
   </span><span class="nl">"teamTwoScore"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"sportXeventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"L7178624"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"sportXEventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"L7178624"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"currentPeriod"</span><span class="p">:</span><span class="w"> </span><span class="s2">"4th Set"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"periodTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"-1"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
@@ -1042,7 +1231,7 @@ Note that the `requestSize` is only indicating what the user is requesting, but 
 </span></code></pre></div>
 <p>Subscribe to live score changes for a particular event.</p>
 <h3 id='channel-name-format-3'>Channel name format</h3>
-<p><code>live_scores:{sportXeventId}</code></p>
+<p><code>live_scores:{sportXEventId}</code></p>
 
 <table><thead>
 <tr>
@@ -1052,7 +1241,7 @@ Note that the `requestSize` is only indicating what the user is requesting, but 
 </tr>
 </thead><tbody>
 <tr>
-<td>sportXeventId</td>
+<td>sportXEventId</td>
 <td>string</td>
 <td>The event ID you wish to subscribe to</td>
 </tr>
@@ -1076,7 +1265,7 @@ Note that the `requestSize` is only indicating what the user is requesting, but 
 <td>The current score for team two. Referring to <code>teamTwoName</code> in the <code>Market</code> object itself</td>
 </tr>
 <tr>
-<td>sportXeventId</td>
+<td>sportXEventId</td>
 <td>string</td>
 <td>The event ID for this update</td>
 </tr>
@@ -1196,7 +1385,8 @@ Note that the `requestSize` is only indicating what the user is requesting, but 
     </span><span class="s2">"1271418014917937117393617219009886912225128221921196717331617268846160092273"</span><span class="p">,</span><span class="w">
     </span><span class="kc">false</span><span class="p">,</span><span class="w">
     </span><span class="s2">"0xbf099ab02255d5e2a9e063dc43a7afe96e65f5e8fc2ed3d2ba60b0a3fcadb3441bf32271293e85b7a795c9d86a2304035a0da3285113e746547e236bc58885e01c"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"6982204685293715457"</span><span class="w">
+    </span><span class="s2">"6982204685293715457"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"SXR"</span><span class="w">
   </span><span class="p">]</span><span class="w">
 </span><span class="p">]</span><span class="w">
 </span></code></pre></div>
@@ -1292,6 +1482,11 @@ Note that the `requestSize` is only indicating what the user is requesting, but 
 <td>string</td>
 <td>Server-side clock time for the last modification of this order.</td>
 </tr>
+<tr>
+<td>chainVersion</td>
+<td>string</td>
+<td><code>SXN</code> or <code>SXR</code></td>
+</tr>
 </tbody></table>
 
 <p>Note that the messages are sent in batches in an array. If you receive two updates for the same <code>orderHash</code> within an update, you can order them by <code>updateTime</code> after converting the <code>updateTime</code> to a BigInt or BigNumber.</p>
@@ -1319,7 +1514,8 @@ Note that the `requestSize` is only indicating what the user is requesting, but 
     </span><span class="s2">"1271418014917937117393617219009886912225128221921196717331617268846160092273"</span><span class="p">,</span><span class="w">
     </span><span class="kc">false</span><span class="p">,</span><span class="w">
     </span><span class="s2">"0xbf099ab02255d5e2a9e063dc43a7afe96e65f5e8fc2ed3d2ba60b0a3fcadb3441bf32271293e85b7a795c9d86a2304035a0da3285113e746547e236bc58885e01c"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"6982204685293715457"</span><span class="w">
+    </span><span class="s2">"6982204685293715457"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"SXR"</span><span class="w">
   </span><span class="p">]</span><span class="w">
 </span><span class="p">]</span><span class="w">
 </span></code></pre></div>
@@ -1414,6 +1610,11 @@ Note that the `requestSize` is only indicating what the user is requesting, but 
 <td>updateTime</td>
 <td>string</td>
 <td>Server-side clock time for the last modification of this order.</td>
+</tr>
+<tr>
+<td>chainVersion</td>
+<td>string</td>
+<td><code>SXN</code> or <code>SXR</code></td>
 </tr>
 </tbody></table>
 
@@ -2227,7 +2428,7 @@ Note that this endpoint is only updated every 10m.
 </tr>
 </thead><tbody>
 <tr>
-<td>sportXeventIds</td>
+<td>sportXEventIds</td>
 <td>true</td>
 <td>string[]</td>
 <td>An array of event IDs (comma separated)</td>
@@ -2376,7 +2577,7 @@ Note that this endpoint is only updated every 10m.
       </span><span class="nl">"teamOneScore"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
       </span><span class="nl">"teamTwoScore"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
       </span><span class="nl">"updatedAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-07-08T20:35:21.607Z"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"sportXeventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"L7187811"</span><span class="w">
+      </span><span class="nl">"sportXEventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"L7187811"</span><span class="w">
     </span><span class="p">}</span><span class="w">
   </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
@@ -2474,7 +2675,7 @@ Up to 50 event IDs can be supplied at a time.
 <td>The current score for team two</td>
 </tr>
 <tr>
-<td>sportXeventId</td>
+<td>sportXEventId</td>
 <td>string</td>
 <td>The event ID for this match</td>
 </tr>
@@ -2529,7 +2730,7 @@ Up to 50 event IDs can be supplied at a time.
         </span><span class="nl">"teamTwoName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Carlos Alcaraz"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="mi">226</span><span class="p">,</span><span class="w">
         </span><span class="nl">"gameTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1622735700</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"sportXeventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"L7032829"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"sportXEventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"L7032829"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"liveEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
         </span><span class="nl">"sportLabel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tennis"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
@@ -2549,7 +2750,7 @@ Up to 50 event IDs can be supplied at a time.
         </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
         </span><span class="nl">"gameTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1622735700</span><span class="p">,</span><span class="w">
         </span><span class="nl">"line"</span><span class="p">:</span><span class="w"> </span><span class="mf">36.5</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"sportXeventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"L7032829"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"sportXEventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"L7032829"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"liveEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
         </span><span class="nl">"sportLabel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tennis"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
@@ -2570,7 +2771,7 @@ Up to 50 event IDs can be supplied at a time.
         </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
         </span><span class="nl">"gameTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1622735700</span><span class="p">,</span><span class="w">
         </span><span class="nl">"line"</span><span class="p">:</span><span class="w"> </span><span class="mf">1.5</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"sportXeventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"L7032829"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"sportXEventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"L7032829"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"liveEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
         </span><span class="nl">"sportLabel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Tennis"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
@@ -2607,7 +2808,7 @@ Up to 50 event IDs can be supplied at a time.
 <td>eventId</td>
 <td>false</td>
 <td>string</td>
-<td>If set, it will only include markets for a particular sportXeventId</td>
+<td>If set, it will only include markets for a particular sportXEventId</td>
 </tr>
 <tr>
 <td>leagueId</td>
@@ -2752,7 +2953,7 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
 <td>The line of the market. Only applicable to markets with a line</td>
 </tr>
 <tr>
-<td>sportXeventId</td>
+<td>sportXEventId</td>
 <td>string</td>
 <td>The unique event ID for this market</td>
 </tr>
@@ -3084,7 +3285,7 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
       </span><span class="nl">"outcome"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
       </span><span class="nl">"teamOneScore"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
       </span><span class="nl">"teamTwoScore"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"sportXeventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"L6247212"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"sportXEventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"L6247212"</span><span class="p">,</span><span class="w">
       </span><span class="nl">"liveEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
       </span><span class="nl">"sportLabel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Soccer"</span><span class="p">,</span><span class="w">
       </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
@@ -3195,7 +3396,7 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
       </span><span class="nl">"teamTwoName"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Rafael da Silva Alves"</span><span class="p">,</span><span class="w">
       </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="mi">226</span><span class="p">,</span><span class="w">
       </span><span class="nl">"gameTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1621724400</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"sportXeventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"L6896568"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"sportXEventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"L6896568"</span><span class="p">,</span><span class="w">
       </span><span class="nl">"liveEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
       </span><span class="nl">"sportLabel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Mixed Martial Arts"</span><span class="p">,</span><span class="w">
       </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w">
@@ -3215,7 +3416,7 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
       </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w">
       </span><span class="nl">"gameTime"</span><span class="p">:</span><span class="w"> </span><span class="mi">1621782000</span><span class="p">,</span><span class="w">
       </span><span class="nl">"line"</span><span class="p">:</span><span class="w"> </span><span class="mf">-0.5</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"sportXeventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"L6973172"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"sportXEventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"L6973172"</span><span class="p">,</span><span class="w">
       </span><span class="nl">"liveEnabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
       </span><span class="nl">"sportLabel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Soccer"</span><span class="p">,</span><span class="w">
       </span><span class="nl">"sportId"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
@@ -3606,7 +3807,7 @@ Parlay Markets act as regular markets, but with additional fields to indicate th
         </span><span class="nl">"fillHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xc44e72f94e70ede9742c6b8aeb77e743e0cbf753ff3eae8bd4f1ab98b9260f0e"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"gameLabel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Australia vs New Zealand"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"bettingOutcomeLabel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Australia"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"sportXeventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"L6350002"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"sportXEventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"L6350002"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"bettingOutcome"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
         </span><span class="nl">"gameTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-01-06T23:30:00.000Z"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"leagueLabel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"International Test"</span><span class="p">,</span><span class="w">
@@ -3625,7 +3826,7 @@ Parlay Markets act as regular markets, but with additional fields to indicate th
         </span><span class="nl">"fillHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xc44e72f94e70ede9742c6b8aeb77e743e0cbf753ff3eae8bd4f1ab98b9260f0e"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"gameLabel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Australia vs New Zealand"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"bettingOutcomeLabel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Australia"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"sportXeventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"L6350002"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"sportXEventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"L6350002"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"bettingOutcome"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
         </span><span class="nl">"gameTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-01-06T23:30:00.000Z"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"leagueLabel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"International Test"</span><span class="p">,</span><span class="w">
@@ -3692,7 +3893,7 @@ Parlay Markets act as regular markets, but with additional fields to indicate th
 <td>If <code>true</code>, only gets trades where the bettor was a market maker</td>
 </tr>
 <tr>
-<td>sportXeventId</td>
+<td>sportXEventId</td>
 <td>false</td>
 <td>string</td>
 <td>Only gets trades for this event ID</td>
@@ -3805,7 +4006,7 @@ Parlay Markets act as regular markets, but with additional fields to indicate th
 <td>Which team/side the bettor bet</td>
 </tr>
 <tr>
-<td>sportXeventId</td>
+<td>sportXEventId</td>
 <td>string</td>
 <td>The unique fixture ID for this trade</td>
 </tr>
@@ -3925,7 +4126,7 @@ Parlay Markets act as regular markets, but with additional fields to indicate th
 <td>Only get orders for this market maker</td>
 </tr>
 <tr>
-<td>sportXeventId</td>
+<td>sportXEventId</td>
 <td>false</td>
 <td>string</td>
 <td>Only get orders for this event ID</td>
@@ -3943,7 +4144,7 @@ One of `marketHashes` or `maker` is required.
 </aside>
 
 <aside class="notice">
-Only one of `marketHashes` and `sportXeventId` can be present.
+Only one of `marketHashes` and `sportXEventId` can be present.
 </aside>
 <h3 id='response-format'>Response format</h3>
 <table><thead>
@@ -4032,7 +4233,7 @@ Only one of `marketHashes` and `sportXeventId` can be present.
 </tr>
 <tr>
 <td>BOTH_SPORTXEVENTID_MARKETHASHES_PRESENT</td>
-<td>Can only send one of <code>marketHashes</code> or <code>sportXeventId</code></td>
+<td>Can only send one of <code>marketHashes</code> or <code>sportXEventId</code></td>
 </tr>
 </tbody></table>
 
@@ -4046,7 +4247,7 @@ Note that <code>totalBetSize</code> and <code>fillAmount</code> are from *the pe
 <span class="kd">const</span> <span class="nx">walletAddress</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">WALLET_ADDRESS</span><span class="p">;</span>
 <span class="kd">const</span> <span class="nx">tokenAddress</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">TOKEN_ADDRESS</span><span class="p">;</span>
 <span class="kd">const</span> <span class="nx">tokenTransferProxyAddress</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">TOKEN_TRANSFER_PROXY_ADDRESS</span><span class="p">;</span>
-<span class="kd">const</span> <span class="nx">provider</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">providers</span><span class="p">.</span><span class="nx">JsonRpcProvider</span><span class="p">(</span><span class="s2">`https://rpc.sx.technology`</span><span class="p">);</span>
+<span class="kd">const</span> <span class="nx">provider</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">providers</span><span class="p">.</span><span class="nx">JsonRpcProvider</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">RPC_URL</span><span class="p">);</span> <span class="c1">// find this under the 'references' section</span>
 <span class="kd">const</span> <span class="nx">wallet</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Wallet</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PRIVATE_KEY</span><span class="p">).</span><span class="nx">connect</span><span class="p">(</span><span class="nx">provider</span><span class="p">);</span>
 <span class="kd">const</span> <span class="nx">tokenContract</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Contract</span><span class="p">(</span>
   <span class="nx">tokenAddress</span><span class="p">,</span>
@@ -4546,7 +4747,7 @@ Ensure you use the <code>chainId</code> of SX Network, not the <code>chainId</co
 <h2 id='cancel-event-orders'>Cancel event orders</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://api.sx.bet/orders/cancel/event'</span> <span class="se">\</span>
 <span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
 <span class="nt">--data-raw</span> <span class="s1">'{
-    "sportXeventId": "L1234123",
+    "sportXEventId": "L1234123",
     "signature": "0x1763cb98a069657cb778fdc295eac48741b957bfe58e54f7f9ad03c6c1ca3d053d9ca2e6957af794991217752b69cb9aa4ac9330395c92e24c8c25ec19220e5a1b",
     "salt": "0x6845028402f518a1c90770554a71017cd434ae9f2c09aa56c9560835c1929650",
     "maker": "0xe087299AE9Acd0133d6D1544A97Bb0EEe24a2671",
@@ -4560,13 +4761,13 @@ Ensure you use the <code>chainId</code> of SX Network, not the <code>chainId</co
 
 <span class="kd">const</span> <span class="nx">privateKey</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PRIVATE_KEY</span><span class="p">;</span>
 <span class="kd">const</span> <span class="nx">bufferPrivateKey</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="nx">privateKey</span><span class="p">.</span><span class="nx">substring</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="dl">"</span><span class="s2">hex</span><span class="dl">"</span><span class="p">);</span>
-<span class="kd">const</span> <span class="nx">sportXeventId</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">L1231231</span><span class="dl">"</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">sportXEventId</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">L1231231</span><span class="dl">"</span><span class="p">;</span>
 <span class="kd">const</span> <span class="nx">salt</span> <span class="o">=</span> <span class="s2">`0x</span><span class="p">${</span><span class="nx">Buffer</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="nx">randomBytes</span><span class="p">(</span><span class="mi">32</span><span class="p">)).</span><span class="nx">toString</span><span class="p">(</span><span class="dl">"</span><span class="s2">hex</span><span class="dl">"</span><span class="p">)}</span><span class="s2">`</span><span class="p">;</span>
 <span class="kd">const</span> <span class="nx">timestamp</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">()</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">);</span>
 <span class="kd">const</span> <span class="nx">wallet</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Wallet</span><span class="p">(</span><span class="nx">privateKey</span><span class="p">);</span>
 
 <span class="kd">function</span> <span class="nx">getCancelOrderEventsEIP712Payload</span><span class="p">(</span>
-  <span class="nx">sportXeventId</span><span class="p">,</span>
+  <span class="nx">sportXEventId</span><span class="p">,</span>
   <span class="nx">salt</span><span class="p">,</span>
   <span class="nx">timestamp</span><span class="p">,</span>
   <span class="nx">chainId</span>
@@ -4580,7 +4781,7 @@ Ensure you use the <code>chainId</code> of SX Network, not the <code>chainId</co
         <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">salt</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">bytes32</span><span class="dl">"</span> <span class="p">},</span>
       <span class="p">],</span>
       <span class="na">Details</span><span class="p">:</span> <span class="p">[</span>
-        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">sportXeventId</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">sportXEventId</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span> <span class="p">},</span>
         <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">timestamp</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span> <span class="p">},</span>
       <span class="p">],</span>
     <span class="p">},</span>
@@ -4591,13 +4792,13 @@ Ensure you use the <code>chainId</code> of SX Network, not the <code>chainId</co
       <span class="nx">chainId</span><span class="p">,</span>
       <span class="nx">salt</span><span class="p">,</span>
     <span class="p">},</span>
-    <span class="na">message</span><span class="p">:</span> <span class="p">{</span> <span class="nx">sportXeventId</span><span class="p">,</span> <span class="nx">timestamp</span> <span class="p">},</span>
+    <span class="na">message</span><span class="p">:</span> <span class="p">{</span> <span class="nx">sportXEventId</span><span class="p">,</span> <span class="nx">timestamp</span> <span class="p">},</span>
   <span class="p">};</span>
   <span class="k">return</span> <span class="nx">payload</span><span class="p">;</span>
 <span class="p">}</span>
 
 <span class="kd">const</span> <span class="nx">payload</span> <span class="o">=</span> <span class="nx">getCancelOrderEventsEIP712Payload</span><span class="p">(</span>
-  <span class="nx">sportXeventId</span><span class="p">,</span>
+  <span class="nx">sportXEventId</span><span class="p">,</span>
   <span class="nx">salt</span><span class="p">,</span>
   <span class="nx">timestamp</span><span class="p">,</span>
   <span class="nx">chainId</span>
@@ -4609,7 +4810,7 @@ Ensure you use the <code>chainId</code> of SX Network, not the <code>chainId</co
 
 <span class="kd">const</span> <span class="nx">apiPayload</span> <span class="o">=</span> <span class="p">{</span>
   <span class="nx">signature</span><span class="p">,</span>
-  <span class="nx">sportXeventId</span><span class="p">,</span>
+  <span class="nx">sportXEventId</span><span class="p">,</span>
   <span class="nx">salt</span><span class="p">,</span>
   <span class="na">maker</span><span class="p">:</span> <span class="nx">wallet</span><span class="p">.</span><span class="nx">address</span><span class="p">,</span>
   <span class="nx">timestamp</span><span class="p">,</span>
@@ -4648,7 +4849,7 @@ Ensure you use the <code>chainId</code> of SX Network, not the <code>chainId</co
 </tr>
 </thead><tbody>
 <tr>
-<td>sportXeventId</td>
+<td>sportXEventId</td>
 <td>true</td>
 <td>string</td>
 <td>The event for which orders should be cancelled</td>
@@ -4771,7 +4972,7 @@ Ensure you use the <code>chainId</code> of SX Network, not the <code>chainId</co
 
 <span class="kd">const</span> <span class="nx">apiPayload</span> <span class="o">=</span> <span class="p">{</span>
   <span class="nx">signature</span><span class="p">,</span>
-  <span class="nx">sportXeventId</span><span class="p">,</span>
+  <span class="nx">sportXEventId</span><span class="p">,</span>
   <span class="nx">salt</span><span class="p">,</span>
   <span class="na">maker</span><span class="p">:</span> <span class="nx">wallet</span><span class="p">.</span><span class="nx">address</span><span class="p">,</span>
   <span class="nx">timestamp</span><span class="p">,</span>
@@ -4903,7 +5104,7 @@ Ensure you use the <code>chainId</code> of SX Network, not the <code>chainId</co
 
   <span class="kd">const</span> <span class="nx">bufferPrivateKey</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="nx">privateKey</span><span class="o">!</span><span class="p">.</span><span class="nx">substring</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="dl">"</span><span class="s2">hex</span><span class="dl">"</span><span class="p">);</span>
   <span class="kd">const</span> <span class="nx">wallet</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Wallet</span><span class="p">(</span><span class="nx">privateKey</span><span class="p">).</span><span class="nx">connect</span><span class="p">(</span>
-    <span class="k">new</span> <span class="nx">providers</span><span class="p">.</span><span class="nx">JsonRpcProvider</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PROVIDER_URL</span><span class="p">)</span>
+    <span class="k">new</span> <span class="nx">providers</span><span class="p">.</span><span class="nx">JsonRpcProvider</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">RPC_URL</span><span class="p">)</span> <span class="c1">// find this under the 'references' section</span>
   <span class="p">);</span>
   <span class="kd">const</span> <span class="nx">takerAmounts</span> <span class="o">=</span> <span class="p">[</span><span class="dl">"</span><span class="s2">10000000000000000000</span><span class="dl">"</span><span class="p">,</span> <span class="dl">"</span><span class="s2">10000000000000000000</span><span class="dl">"</span><span class="p">];</span>
   <span class="kd">const</span> <span class="nx">fillSalt</span> <span class="o">=</span> <span class="nx">BigNumber</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="nx">randomBytes</span><span class="p">(</span><span class="mi">32</span><span class="p">)).</span><span class="nx">toString</span><span class="p">();</span>
