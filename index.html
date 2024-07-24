@@ -319,6 +319,12 @@
                     <a href="#what-is-this-migration" class="toc-h2 toc-link" data-title="What is this migration?">What is this migration?</a>
                   </li>
                   <li>
+                    <a href="#what-do-i-have-to-do" class="toc-h2 toc-link" data-title="What do I have to do?">What do I have to do?</a>
+                  </li>
+                  <li>
+                    <a href="#endpoint-changes" class="toc-h2 toc-link" data-title="Endpoint Changes">Endpoint Changes</a>
+                  </li>
+                  <li>
                     <a href="#sport-migration-schedule" class="toc-h2 toc-link" data-title="Sport Migration Schedule">Sport Migration Schedule</a>
                   </li>
               </ul>
@@ -550,23 +556,21 @@ All ETH addresses used in this API are in check-summed format. If you pass in lo
 
 <aside class="notice">
 For the purposes of this migration, we will refer to current (legacy) chain as SXN and the new chain as SXR.
-</aside>                                                        | August 6, 2024 |
+</aside>
+<h2 id='what-do-i-have-to-do'>What do I have to do?</h2>
+<p>When the sport you&#39;re interested in has moved over to <strong>SXR</strong>, you&#39;ll have to:</p>
 
-## What do I have to do?
-
-When the sport you're interested in has moved over to **SXR**, you'll have to:
-
-- Update token addresses for `USDC` and `WSX` with the new token addresses
-- Update rest api calls as shown [here](#endpoint-changes)
-- Update websocket streams handlers for orders, trades, and markets *(they will now include `chainVersion`)*
-- Migrate funds from **SXN** to **SXR** using our bridge
-- Configure the payloads with the new `chainId` and other configs found [here](#references) and/or [here](#metadata)
-- Reenable betting for each token as described [here](#enabling-betting)
-- Start using api as normal for **SXR** Markets
-
-## Endpoint Changes
-
-The following endpoints allow a new query parameter: `chainVersion`. This will filter out response to only the specific chain you are looking for. If no parameter is passed, there is a non-intrusive default used.
+<ul>
+<li>Update token addresses for <code>USDC</code> and <code>WSX</code> with the new token addresses</li>
+<li>Update rest api calls as shown <a href="#endpoint-changes">here</a></li>
+<li>Update websocket streams handlers for orders, trades, and markets <em>(they will now include <code>chainVersion</code>)</em></li>
+<li>Migrate funds from <strong>SXN</strong> to <strong>SXR</strong> using our bridge</li>
+<li>Configure the payloads with the new <code>chainId</code> and other configs found <a href="#references">here</a> and/or <a href="#metadata">here</a></li>
+<li>Reenable betting for each token as described <a href="#enabling-betting">here</a></li>
+<li>Start using api as normal for <strong>SXR</strong> Markets</li>
+</ul>
+<h2 id='endpoint-changes'>Endpoint Changes</h2>
+<p>The following endpoints allow a new query parameter: <code>chainVersion</code>. This will filter out response to only the specific chain you are looking for. If no parameter is passed, there is a non-intrusive default used.</p>
 
 <aside class="warning">
 When `chainVersion` is empty for GET requests, the result will show data for both chains.
@@ -644,7 +648,7 @@ When `chainVersion` is empty for POST requests, the default data is for SXN chai
 </tr>
 <tr>
 <td>Crypto, Degen Crypto</td>
-<td></td>
+<td>August 6, 2024</td>
 </tr>
 </tbody></table>
 <h1 id='references'>References</h1>
