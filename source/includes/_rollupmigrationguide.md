@@ -15,16 +15,16 @@ For the purposes of this migration, we will refer to current (legacy) chain as S
 When the sport you're interested in has moved over to **SXR**, you'll have to:
 
 - Update token addresses for `USDC` and `WSX` with the new token addresses
-- Update rest api calls as shown [here](#endpoint-changes)
+- Update rest API calls as shown [here](#endpoint-changes)
 - Update websocket streams handlers for orders, trades, and markets *(they will now include `chainVersion`)*
 - Migrate funds from **SXN** to **SXR** using our bridge
 - Configure the payloads with the new `chainId` and other configs found [here](#references) and/or [here](#metadata)
 - Reenable betting for each token as described [here](#enabling-betting)
-- Start using api as normal for **SXR** Markets
+- Start using API as normal for **SXR** Markets
 
 ## Endpoint Changes
 
-The following endpoints allow a new query parameter: `chainVersion`. This will filter out response to only the specific chain you are looking for. If no parameter is passed, there is a non-intrusive default used.
+The following endpoints allow a new query parameter: `chainVersion`. This will filter the API response to only the specific chain you are looking for. If no parameter is passed, there is a non-intrusive default used.
 
 <aside class="warning">
 When `chainVersion` is empty for GET requests, the result will show data for both chains.

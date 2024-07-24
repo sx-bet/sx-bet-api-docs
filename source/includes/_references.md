@@ -13,7 +13,7 @@
 | SX Application | `https://sx.bet` |
 | SX API URL | `https://api.sx.bet` |
 | RPC URL | `https://rpc.sx-rollup.gelato.digital` |
-| Explorer Page | `https://explorerl2.sx.technology` (this will migrate to the current explorer domain once migration is fully complete) |
+| Explorer Page | `https://explorerl2.sx.technology` (this will be replaced by the current explorer domain once migration is fully complete) |
 | METADATA | `https://api.sx.bet/metadata?chainVersion=SXR` |
 
 ## SXR Testnet
@@ -26,7 +26,7 @@
 | SX Application | `https://toronto.sx.bet` |
 | SX API URL | `https://api.toronto.sx.bet` |
 | RPC URL | `https://rpc.sx-rollup-testnet.t.raas.gelato.cloud` |
-| Explorer Page | `https://explorerl2.toronto.sx.technology` (this will migrate to the current explorer domain once migration is fully complete) |
+| Explorer Page | `https://explorerl2.toronto.sx.technology` (this will be replaced by the current explorer domain once migration is fully complete) |
 | METADATA | `https://api.toronto.sx.bet/metadata?chainVersion=SXR` |
 
 ## SXN Mainnet
