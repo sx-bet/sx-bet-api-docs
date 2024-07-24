@@ -316,13 +316,13 @@
             <a href="#sx-rollup-migration-guide" class="toc-h1 toc-link" data-title="SX Rollup Migration Guide">SX Rollup Migration Guide</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#what-is-this-migration-and-why-are-we-migrating" class="toc-h2 toc-link" data-title="What is this migration and why are we migrating?">What is this migration and why are we migrating?</a>
+                    <a href="#what-is-this-migration" class="toc-h2 toc-link" data-title="What is this migration?">What is this migration?</a>
                   </li>
                   <li>
-                    <a href="#how-will-the-migration-affect-betting" class="toc-h2 toc-link" data-title="How will the migration affect betting?">How will the migration affect betting?</a>
+                    <a href="#sport-migration-schedule" class="toc-h2 toc-link" data-title="Sport Migration Schedule">Sport Migration Schedule</a>
                   </li>
                   <li>
-                    <a href="#endpoints" class="toc-h2 toc-link" data-title="Endpoints">Endpoints</a>
+                    <a href="#endpoint-changes" class="toc-h2 toc-link" data-title="Endpoint Changes">Endpoint Changes</a>
                   </li>
               </ul>
           </li>
@@ -546,11 +546,11 @@
 <aside class="notice">
 All ETH addresses used in this API are in check-summed format. If you pass in lowercase-only addresses, you won't get results.
 </aside>
-<h1 id='sx-rollup-migration-guide'>SX Rollup Migration Guide</h1><h2 id='what-is-this-migration-and-why-are-we-migrating'>What is this migration and why are we migrating?</h2>
+<h1 id='sx-rollup-migration-guide'>SX Rollup Migration Guide</h1><h2 id='what-is-this-migration'>What is this migration?</h2>
 <p>The current version of SX Network was built on the Polygon Edge SDK. This project has since been discontinued, and so there is no support or improvements coming for the chain. For a number of reasons including improving block times, making use of a canonical bridge, better stability and developer support, we have decided to migrate our chain to an Arbitrum Orbit Rollup chain.</p>
 
 <p>You can read more about the rationale <a href="https://medium.com/sportx-bet/sx-rollup-ca33079d1b8b">here</a>.</p>
-<h2 id='how-will-the-migration-affect-betting'>How will the migration affect betting?</h2>
+<h2 id='sport-migration-schedule'>Sport Migration Schedule</h2>
 <p>Our plan is to migrate by sport to reduce impact as much as possible. Our migration by sport schedule is as follows:</p>
 
 <table><thead>
@@ -580,7 +580,7 @@ All ETH addresses used in this API are in check-summed format. If you pass in lo
 <td>August 6, 2024</td>
 </tr>
 </tbody></table>
-<h2 id='endpoints'>Endpoints</h2>
+<h2 id='endpoint-changes'>Endpoint Changes</h2>
 <p>The following endpoints allow a new query parameter: <code>chainVersion</code>. This will filter out response to only the specific chain you are looking for. If no parameter is passed, there is a non-intrusive default used.</p>
 
 <aside class="warning">
@@ -3112,7 +3112,7 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
 <td>marketHashes</td>
 <td>true</td>
 <td>string[]</td>
-<td>The market hashes of the markets to retrieve. Maximum 30. Comma separated.</td>
+<td>The market hashes of the markets to retrieve. Comma separated. <strong>Maximum 30.</strong></td>
 </tr>
 </tbody></table>
 <h3 id='response-format-2'>Response format</h3>
@@ -3163,6 +3163,18 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
 <td>teamTwoScore</td>
 <td>number</td>
 <td>Final score of team two</td>
+</tr>
+</tbody></table>
+<h3 id='error-responses'>Error Responses</h3>
+<table><thead>
+<tr>
+<th>Error Code</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>BAD_MARKET_HASHES</td>
+<td>Invalid <code>marketHashes</code> or more than 30 <code>marketHashes</code> queried</td>
 </tr>
 </tbody></table>
 <h2 id='popular-markets'>Popular markets</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.sx.bet/markets/popular'</span>
@@ -3926,7 +3938,13 @@ Parlay Markets act as regular markets, but with additional fields to indicate th
 </tr>
 </tbody></table>
 
-<p>Note that one of <code>marketHashes</code> or <code>maker</code> is required.</p>
+<aside class="notice">
+One of `marketHashes` or `maker` is required.
+</aside>
+
+<aside class="notice">
+Only one of `marketHashes` and `sportXeventId` can be present.
+</aside>
 <h3 id='response-format'>Response format</h3>
 <table><thead>
 <tr>
@@ -3999,6 +4017,22 @@ Parlay Markets act as regular markets, but with additional fields to indicate th
 <td>signature</td>
 <td>string</td>
 <td>Signature of the maker on this order</td>
+</tr>
+</tbody></table>
+<h3 id='error-responses'>Error Responses</h3>
+<table><thead>
+<tr>
+<th>Error Code</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>RATE_LIMIT_ORDER_REQUEST_MARKET_COUNT</td>
+<td>More than 1000 <code>marketHashes</code> queried</td>
+</tr>
+<tr>
+<td>BOTH_SPORTXEVENTID_MARKETHASHES_PRESENT</td>
+<td>Can only send one of <code>marketHashes</code> or <code>sportXeventId</code></td>
 </tr>
 </tbody></table>
 
@@ -4319,6 +4353,26 @@ The address in the <code>maker</code> field must match the account being used to
 <aside class="notice">
 Note that <code>totalBetSize</code> is from *the perspective of the market maker*. <code>totalBetSize</code> can be thought of as the maximum amount of tokens the maker (you) will be putting into the pot if the order was fully filled. This is the maximum amount you will risk.
 </aside>
+<h3 id='error-responses-2'>Error Responses</h3>
+<table><thead>
+<tr>
+<th>Error Code</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>TOO_MANY_DIFFERENT_MARKETS</td>
+<td>More than 3 different markets queried</td>
+</tr>
+<tr>
+<td>ORDERS_MUST_HAVE_IDENTICAL_MARKET</td>
+<td>All orders must be for the same network, either <code>SXN</code> or <code>SXR</code></td>
+</tr>
+<tr>
+<td>BAD_BASE_TOKEN</td>
+<td>All orders must be for the same base token, either <code>USDC</code> or <code>WSX</code></td>
+</tr>
+</tbody></table>
 <h2 id='cancel-individual-orders'>Cancel individual orders</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://api.sx.bet/orders/cancel/v2'</span> <span class="se">\</span>
 <span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
 <span class="nt">--data-raw</span> <span class="s1">'{
@@ -4475,6 +4529,18 @@ Ensure you use the <code>chainId</code> of SX Network, not the <code>chainId</co
 <td>&gt; cancelledCount</td>
 <td>string[]</td>
 <td>How many orders were cancelled, of the orders passed</td>
+</tr>
+</tbody></table>
+<h3 id='error-responses-3'>Error Responses</h3>
+<table><thead>
+<tr>
+<th>Error Code</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>CANCEL_REQUEST_ALREADY_PROCESSED</td>
+<td>This cancellation is already processed</td>
 </tr>
 </tbody></table>
 <h2 id='cancel-event-orders'>Cancel event orders</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://api.sx.bet/orders/cancel/event'</span> <span class="se">\</span>
@@ -4642,6 +4708,18 @@ Ensure you use the <code>chainId</code> of SX Network, not the <code>chainId</co
 <td>How many orders were cancelled, of the orders passed</td>
 </tr>
 </tbody></table>
+<h3 id='error-responses-4'>Error Responses</h3>
+<table><thead>
+<tr>
+<th>Error Code</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>CANCEL_REQUEST_ALREADY_PROCESSED</td>
+<td>This cancellation is already processed</td>
+</tr>
+</tbody></table>
 <h2 id='cancel-all-orders'>Cancel all orders</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://api.sx.bet/orders/cancel/all'</span> <span class="se">\</span>
 <span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
 <span class="nt">--data-raw</span> <span class="s1">'{
@@ -4784,6 +4862,18 @@ Ensure you use the <code>chainId</code> of SX Network, not the <code>chainId</co
 <td>&gt; cancelledCount</td>
 <td>string[]</td>
 <td>How many orders were cancelled, of the orders passed</td>
+</tr>
+</tbody></table>
+<h3 id='error-responses-5'>Error Responses</h3>
+<table><thead>
+<tr>
+<th>Error Code</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>CANCEL_REQUEST_ALREADY_PROCESSED</td>
+<td>This cancellation is already processed</td>
 </tr>
 </tbody></table>
 <h2 id='filling-orders'>Filling orders</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://api.sx.bet/orders/fill'</span> <span class="se">\</span>
@@ -5273,6 +5363,54 @@ Note that <code>fillAmounts</code> are from *the perspective of the market maker
 <aside class="notice">
 To convert a <code>fillAmount</code> (what the market maker pays) to what the taker will pay, you can use the formula <code>takerPayAmount = fillAmount * 10^20 / percentageOdds - fillAmount </code>. Intuitively, this is the pot size (<code>fillAmount * 10^20 / percentageOdds)</code> minus what the maker is putting in
 </aside>
+<h3 id='error-responses-6'>Error Responses</h3>
+<table><thead>
+<tr>
+<th>Error Code</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>ORDERS_NOT_UNIQUE</td>
+<td>Only unique <code>orderHashes</code> should be sent</td>
+</tr>
+<tr>
+<td>INCORRECT_ARRAY_LENGTHS</td>
+<td><code>orderHashes</code> and <code>takerAmounts</code> arrays are different lengths.</td>
+</tr>
+<tr>
+<td>ORDERS_DONT_EXIST</td>
+<td>One of the orders do not exist</td>
+</tr>
+<tr>
+<td>AFTER_ORDER_EXPIRY</td>
+<td>One of the orders have expired</td>
+</tr>
+<tr>
+<td>BASE_TOKENS_NOT_SAME</td>
+<td>All orders must be for the same <code>baseToken</code></td>
+</tr>
+<tr>
+<td>MARKETS_NOT_SAME</td>
+<td>All orders must be for the same market</td>
+</tr>
+<tr>
+<td>DIRECTIONS_NOT_SAME</td>
+<td>All orders must be betting on the same side <code>isMakerBettingOutcomeOne</code></td>
+</tr>
+<tr>
+<td>INVALID_ORDERS</td>
+<td>Order is now inactive</td>
+</tr>
+<tr>
+<td>MATCH_STATE_INVALID</td>
+<td>The fixture for the order is in an invalid state and is not bettable anymore</td>
+</tr>
+<tr>
+<td>META_TX_RATE_LIMIT_REACHED</td>
+<td>Cannot have more than 10 meta transactions at once</td>
+</tr>
+</tbody></table>
 <h1 id='unit-conversion'>Unit Conversion</h1><h2 id='tokens'>Tokens</h2>
 <p>Every token in Ethereum has an associated &quot;decimals&quot; value. This effectively specifies how divisible the token is. For example, 100 USDC is actually stored as 100 * 10^18 USDC on Ethereum itself. Here is a table for the tokens supported by SX.bet and their associated decimals value</p>
 
