@@ -23,7 +23,7 @@ curl --location --request GET 'https://api.sx.bet/markets/active?onlyMainLine=tr
         "teamTwoName": "Carlos Alcaraz",
         "type": 226,
         "gameTime": 1622735700,
-        "sportXeventId": "L7032829",
+        "sportXEventId": "L7032829",
         "liveEnabled": true,
         "sportLabel": "Tennis",
         "sportId": 6,
@@ -43,7 +43,7 @@ curl --location --request GET 'https://api.sx.bet/markets/active?onlyMainLine=tr
         "type": 2,
         "gameTime": 1622735700,
         "line": 36.5,
-        "sportXeventId": "L7032829",
+        "sportXEventId": "L7032829",
         "liveEnabled": true,
         "sportLabel": "Tennis",
         "sportId": 6,
@@ -64,7 +64,7 @@ curl --location --request GET 'https://api.sx.bet/markets/active?onlyMainLine=tr
         "type": 3,
         "gameTime": 1622735700,
         "line": 1.5,
-        "sportXeventId": "L7032829",
+        "sportXEventId": "L7032829",
         "liveEnabled": true,
         "sportLabel": "Tennis",
         "sportId": 6,
@@ -91,7 +91,7 @@ This endpoint retrieves active markets on the exchange. It does not return marke
 | Name          | Required | Type     | Description                                                                                                      |
 | ------------- | -------- | -------- | ---------------------------------------------------------------------------------------------------------------- |
 | onlyMainLine  | false    | boolean  | If set to true, the result will only include main lines on spread and over under markets                         |
-| eventId       | false    | string   | If set, it will only include markets for a particular sportXeventId                                              |
+| eventId       | false    | string   | If set, it will only include markets for a particular sportXEventId                                              |
 | leagueId      | false    | number   | If set, it will only include markets for a particular league ID                                                  |
 | sportIds      | false    | number[] | If set, it will only include markets for particular sport IDs (comma separated)                                  |
 | liveOnly      | false    | boolean  | If set, it will only include markets that are currently available for in-play betting                            |
@@ -128,7 +128,7 @@ A `market` object looks like this
 | type            | MarketType | The type of the market                                                                                                              |
 | gameTime        | number     | The UNIX timestamp of the game                                                                                                      |
 | line            | number?    | The line of the market. Only applicable to markets with a line                                                                      |
-| sportXeventId   | string     | The unique event ID for this market                                                                                                 |
+| sportXEventId   | string     | The unique event ID for this market                                                                                                 |
 | liveEnabled     | boolean    | Whether or not this match is available for live betting                                                                             |
 | sportLabel      | string     | The name of the sport for this market                                                                                               |
 | sportId         | number     | The ID of the sport for this market                                                                                                 |
@@ -209,7 +209,7 @@ curl --location --request GET 'https://api.sx.bet/markets/find'
       "outcome": 2,
       "teamOneScore": 0,
       "teamTwoScore": 0,
-      "sportXeventId": "L6247212",
+      "sportXEventId": "L6247212",
       "liveEnabled": false,
       "sportLabel": "Soccer",
       "sportId": 5,
@@ -278,7 +278,7 @@ curl --location --request GET 'https://api.sx.bet/markets/popular'
       "teamTwoName": "Rafael da Silva Alves",
       "type": 226,
       "gameTime": 1621724400,
-      "sportXeventId": "L6896568",
+      "sportXEventId": "L6896568",
       "liveEnabled": false,
       "sportLabel": "Mixed Martial Arts",
       "sportId": 7,
@@ -298,7 +298,7 @@ curl --location --request GET 'https://api.sx.bet/markets/popular'
       "type": 3,
       "gameTime": 1621782000,
       "line": -0.5,
-      "sportXeventId": "L6973172",
+      "sportXEventId": "L6973172",
       "liveEnabled": false,
       "sportLabel": "Soccer",
       "sportId": 5,

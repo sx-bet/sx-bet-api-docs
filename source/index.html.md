@@ -9,6 +9,7 @@ language_tabs: # must be one of https://git.io/vQNgJ
   # - javascript
 
 includes:
+  - references
   - rollupmigrationguide
   - testnet
   - metadata
@@ -42,13 +43,6 @@ Be your own bookmaker or fill orders programmatically with the SX.bet API!
 Technical questions or need support? [Send us an e-mail](mailto:api-support@sx.bet). 
 
 **All documentation is provided in JavaScript.**
-
-We support betting in USDC and WSX.
-
-| Token | SX Network Address                           |
-| ----- | -------------------------------------------- |
-| USDC  | `0x6629Ce1Cf35Cc1329ebB4F63202F3f197b3F050B` |
-| WSX   | `0x3E96B0a25d51e3Cc89C557f152797c33B839968f` |
 
 Explorer available [here](https://explorer.sx.technology) 
 

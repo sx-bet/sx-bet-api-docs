@@ -170,7 +170,7 @@ curl --location --request GET 'https://api.sx.bet/trades/consolidated'
         "fillHash": "0xc44e72f94e70ede9742c6b8aeb77e743e0cbf753ff3eae8bd4f1ab98b9260f0e",
         "gameLabel": "Australia vs New Zealand",
         "bettingOutcomeLabel": "Australia",
-        "sportXeventId": "L6350002",
+        "sportXEventId": "L6350002",
         "bettingOutcome": 1,
         "gameTime": "2021-01-06T23:30:00.000Z",
         "leagueLabel": "International Test",
@@ -189,7 +189,7 @@ curl --location --request GET 'https://api.sx.bet/trades/consolidated'
         "fillHash": "0xc44e72f94e70ede9742c6b8aeb77e743e0cbf753ff3eae8bd4f1ab98b9260f0e",
         "gameLabel": "Australia vs New Zealand",
         "bettingOutcomeLabel": "Australia",
-        "sportXeventId": "L6350002",
+        "sportXEventId": "L6350002",
         "bettingOutcome": 1,
         "gameTime": "2021-01-06T23:30:00.000Z",
         "leagueLabel": "International Test",
@@ -219,7 +219,7 @@ This endpoint retrieves past consolidated trades on the exchange via pagination.
 | sortBy        | true     | string  | Which field to sort by (see response for field names)              |
 | sortAsc       | true     | boolean | If `true`, sorts in ascending order                                |
 | maker         | false    | boolean | If `true`, only gets trades where the bettor was a market maker    |
-| sportXeventId | false    | string  | Only gets trades for this event ID                                 |
+| sportXEventId | false    | string  | Only gets trades for this event ID                                 |
 | tradeStatus   | false    | string  | Filter trades to see only those with `SUCCESS` or `FAILED` status' |
 | chainVersion  | false    | string  | Must  be either `SXN` or `SXR`.<br/>**If not passed, data from both chains are returned**. See [migration docs](#sx-rollup-migration-guide) |
 ### Response format
@@ -246,7 +246,7 @@ A `ConsolidatedTrade` object has the following format
 | fillHash            | string  | The unique identifier for this trade                                                                                                        |
 | gameLabel           | string  | A general label for the market                                                                                                              |
 | bettingOutcomeLabel | string  | Which team/side the bettor bet                                                                                                              |
-| sportXeventId       | string  | The unique fixture ID for this trade                                                                                                        |
+| sportXEventId       | string  | The unique fixture ID for this trade                                                                                                        |
 | bettingOutcome      | number  | `1` if the bettor is betting outcome one, `2` otherwise                                                                                     |
 | gameTime            | string  | ISO formatted date string of when the game is suppossed to occur                                                                            |
 | leagueLabel         | string  | The name of this league                                                                                                                     |

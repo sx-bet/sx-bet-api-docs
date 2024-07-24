@@ -77,7 +77,7 @@ This endpoint returns active orders on the exchange based on a few parameters
 | marketHashes  | false    | string[] | Only get orders for these market hashes. Comma separated. |
 | baseToken     | false    | string   | Only get orders denominated in this base token            |
 | maker         | false    | string   | Only get orders for this market maker                     |
-| sportXeventId | false    | string   | Only get orders for this event ID                         |
+| sportXEventId | false    | string   | Only get orders for this event ID                         |
 | chainVersion  | false    | string   | Must  be either `SXN` or `SXR`.<br/>**If not passed, data from both chains are returned**. See [migration docs](#sx-rollup-migration-guide) |
 
 <aside class="notice">
@@ -85,7 +85,7 @@ One of `marketHashes` or `maker` is required.
 </aside>
 
 <aside class="notice">
-Only one of `marketHashes` and `sportXeventId` can be present.
+Only one of `marketHashes` and `sportXEventId` can be present.
 </aside>
 
 ### Response format
@@ -111,7 +111,7 @@ Only one of `marketHashes` and `sportXeventId` can be present.
 | Error Code                              | Description                                            |
 | --------------------------------------- | ------------------------------------------------------ |
 | RATE_LIMIT_ORDER_REQUEST_MARKET_COUNT   | More than 1000 `marketHashes` queried                  |
-| BOTH_SPORTXEVENTID_MARKETHASHES_PRESENT | Can only send one of `marketHashes` or `sportXeventId` |
+| BOTH_SPORTXEVENTID_MARKETHASHES_PRESENT | Can only send one of `marketHashes` or `sportXEventId` |
 
 <aside class="notice">
 Note that <code>totalBetSize</code> and <code>fillAmount</code> are from *the perspective of the market maker*. <code>totalBetSize</code> can be thought of as the maximum amount of tokens the maker will be putting into the pot if the order was fully filled. <code>fillAmount</code> can be thought of as how many tokens the maker has already put into the pot. To compute how much space there is left from the taker's perspective, you can use the formula <code>remainingTakerSpace = (totalBetSize - fillAmount) * 10^20 / percentageOdds - (totalBetSize - fillAmount)</code>
@@ -127,7 +127,7 @@ import { JsonRpcProvider } from "ethers/providers";
 const walletAddress = process.env.WALLET_ADDRESS;
 const tokenAddress = process.env.TOKEN_ADDRESS;
 const tokenTransferProxyAddress = process.env.TOKEN_TRANSFER_PROXY_ADDRESS;
-const provider = new providers.JsonRpcProvider(`https://rpc.sx.technology`);
+const provider = new providers.JsonRpcProvider(process.env.RPC_URL); // find this under the 'references' section
 const wallet = new Wallet(process.env.PRIVATE_KEY).connect(provider);
 const tokenContract = new Contract(
   tokenAddress,
@@ -504,7 +504,7 @@ Ensure you use the <code>chainId</code> of SX Network, not the <code>chainId</co
 curl --location --request POST 'https://api.sx.bet/orders/cancel/event' \
 --header 'Content-Type: application/json' \
 --data-raw '{
-    "sportXeventId": "L1234123",
+    "sportXEventId": "L1234123",
     "signature": "0x1763cb98a069657cb778fdc295eac48741b957bfe58e54f7f9ad03c6c1ca3d053d9ca2e6957af794991217752b69cb9aa4ac9330395c92e24c8c25ec19220e5a1b",
     "salt": "0x6845028402f518a1c90770554a71017cd434ae9f2c09aa56c9560835c1929650",
     "maker": "0xe087299AE9Acd0133d6D1544A97Bb0EEe24a2671",
@@ -521,13 +521,13 @@ import { Wallet } from "@ethersproject/wallet";
 
 const privateKey = process.env.PRIVATE_KEY;
 const bufferPrivateKey = Buffer.from(privateKey.substring(2), "hex");
-const sportXeventId = "L1231231";
+const sportXEventId = "L1231231";
 const salt = `0x${Buffer.from(randomBytes(32)).toString("hex")}`;
 const timestamp = Math.floor(new Date().getTime() / 1000);
 const wallet = new Wallet(privateKey);
 
 function getCancelOrderEventsEIP712Payload(
-  sportXeventId,
+  sportXEventId,
   salt,
   timestamp,
   chainId
@@ -541,7 +541,7 @@ function getCancelOrderEventsEIP712Payload(
         { name: "salt", type: "bytes32" },
       ],
       Details: [
-        { name: "sportXeventId", type: "string" },
+        { name: "sportXEventId", type: "string" },
         { name: "timestamp", type: "uint256" },
       ],
     },
@@ -552,13 +552,13 @@ function getCancelOrderEventsEIP712Payload(
       chainId,
       salt,
     },
-    message: { sportXeventId, timestamp },
+    message: { sportXEventId, timestamp },
   };
   return payload;
 }
 
 const payload = getCancelOrderEventsEIP712Payload(
-  sportXeventId,
+  sportXEventId,
   salt,
   timestamp,
   chainId
@@ -570,7 +570,7 @@ const signature = ethSigUtil.signTypedData_v4(bufferPrivateKey, {
 
 const apiPayload = {
   signature,
-  sportXeventId,
+  sportXEventId,
   salt,
   maker: wallet.address,
   timestamp,
@@ -608,7 +608,7 @@ Ensure you use the <code>chainId</code> of SX Network, not the <code>chainId</co
 
 | Name          | Required | Type   | Description                                                                                                                                            |
 | ------------- | -------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| sportXeventId | true     | string | The event for which orders should be cancelled                                                                                                         |
+| sportXEventId | true     | string | The event for which orders should be cancelled                                                                                                         |
 | signature     | true     | string | The EIP712 signature on the cancel order payload. See the [EIP712 signing section](#eip712-signing) for more details on how to compute this signature. |
 | salt          | required | string | A random 32 bytes hex string to protect against replay                                                                                                 |
 | maker         | required | true   | The account from which you are cancelling orders                                                                                                       |
@@ -686,7 +686,7 @@ const signature = ethSigUtil.signTypedData_v4(bufferPrivateKey, {
 
 const apiPayload = {
   signature,
-  sportXeventId,
+  sportXEventId,
   salt,
   maker: wallet.address,
   timestamp,
@@ -777,7 +777,7 @@ async function fillOrder() {
 
   const bufferPrivateKey = Buffer.from(privateKey!.substring(2), "hex");
   const wallet = new Wallet(privateKey).connect(
-    new providers.JsonRpcProvider(process.env.PROVIDER_URL)
+    new providers.JsonRpcProvider(process.env.RPC_URL) // find this under the 'references' section
   );
   const takerAmounts = ["10000000000000000000", "10000000000000000000"];
   const fillSalt = BigNumber.from(randomBytes(32)).toString();
