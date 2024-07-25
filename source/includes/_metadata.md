@@ -6,7 +6,7 @@
 curl --location --request GET 'https://api.sx.bet/metadata'
 ```
 
-> The above command returns JSON structured like this
+> The above command returns JSON structured like this (this just a sample, visit the link for upto date info)
 
 ```json
 {
@@ -40,7 +40,7 @@ curl --location --request GET 'https://api.sx.bet/metadata'
       }
     },
     "totalVolume": 214120305.80276245,
-    "domainVersion": "4.0",
+    "domainVersion": "5.0",
     "EIP712FillHasher": "0x3E96B0a25d51e3Cc89C557f152797c33B839968f",
     "TokenTransferProxy": "0xCc4fBba7D0E0F2A03113F42f5D3aE80d9B2aD55d",
     "bridgeFee": 1,
