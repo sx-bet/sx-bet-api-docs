@@ -312,6 +312,48 @@ Subscribe to all trade updates on the exchange. You will receive updates when a 
 
 See [the trades section](#get-active-trades) for the format of the message
 
+## Consolidated Trade updates
+
+```javascript
+const channel = realtime.channels.get(`recent_trades_consolidated`);
+channel.subscribe((message) => {
+  console.log(message.data);
+});
+```
+
+> The above command returns JSON structured like this
+
+```json
+{
+  "baseToken": "0x5147891461a7C81075950f8eE6384e019e39ab98",
+  "tradeStatus": "PENDING",
+  "bettor": "0x1562258769E6c0527bd83502E9dfc803929fa446",
+  "totalStake": "10.0",
+  "weightedAverageOdds": "70750000000000000000",
+  "marketHash": "0x5bea2dc8ad1be455547d1ed043cea34457c049a4f6aad0d4ddcb19107e9057f3",
+  "maker": false,
+  "settled": false,
+  "fillHash": "0xd81d39b80f1336affc84c6f03944ad5bc6d6ee1cd7a6ba8318595812d8ad11c7",
+  "gameLabel": "Andrey Rublev vs Fabian Marozsan",
+  "sportXeventId": "L13351999",
+  "gameTime": "2024-07-25T16:00:00.000Z",
+  "leagueLabel": "ATP Umag",
+  "bettingOutcomeLabel": "Andrey Rublev",
+  "bettingOutcome": 1,
+  "chainVersion": "SXN",
+}
+```
+
+Subscribe to all consolidated trade updates on the exchange. You will receive updates when a consolidated trade is settled or a new consolidated trade available.
+
+### Channel name format
+
+`recent_trades_consolidated`
+
+### Message payload format
+
+See [the trades section](#get-consolidated-trades) for the format of the message
+
 ## Active order updates
 
 ```javascript
