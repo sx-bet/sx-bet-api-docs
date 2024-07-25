@@ -382,6 +382,9 @@
                     <a href="#trade-updates" class="toc-h2 toc-link" data-title="Trade updates">Trade updates</a>
                   </li>
                   <li>
+                    <a href="#consolidated-trade-updates" class="toc-h2 toc-link" data-title="Consolidated Trade updates">Consolidated Trade updates</a>
+                  </li>
+                  <li>
                     <a href="#active-order-updates" class="toc-h2 toc-link" data-title="Active order updates">Active order updates</a>
                   </li>
                   <li>
@@ -1356,6 +1359,38 @@ Note that the `requestSize` is only indicating what the user is requesting, but 
 <p><code>recent_trades</code></p>
 <h3 id='message-payload-format-4'>Message payload format</h3>
 <p>See <a href="#get-active-trades">the trades section</a> for the format of the message</p>
+<h2 id='consolidated-trade-updates'>Consolidated Trade updates</h2><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">channel</span> <span class="o">=</span> <span class="nx">realtime</span><span class="p">.</span><span class="nx">channels</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s2">`recent_trades_consolidated`</span><span class="p">);</span>
+<span class="nx">channel</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">((</span><span class="nx">message</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">message</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div>
+<blockquote>
+<p>The above command returns JSON structured like this</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"baseToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x5147891461a7C81075950f8eE6384e019e39ab98"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"tradeStatus"</span><span class="p">:</span><span class="w"> </span><span class="s2">"PENDING"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"bettor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x1562258769E6c0527bd83502E9dfc803929fa446"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"totalStake"</span><span class="p">:</span><span class="w"> </span><span class="s2">"10.0"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"weightedAverageOdds"</span><span class="p">:</span><span class="w"> </span><span class="s2">"70750000000000000000"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x5bea2dc8ad1be455547d1ed043cea34457c049a4f6aad0d4ddcb19107e9057f3"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"maker"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"settled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"fillHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xd81d39b80f1336affc84c6f03944ad5bc6d6ee1cd7a6ba8318595812d8ad11c7"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"gameLabel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Andrey Rublev vs Fabian Marozsan"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"sportXeventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"L13351999"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"gameTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2024-07-25T16:00:00.000Z"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"leagueLabel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ATP Umag"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"bettingOutcomeLabel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Andrey Rublev"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"bettingOutcome"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"chainVersion"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SXN"</span><span class="p">,</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Subscribe to all consolidated trade updates on the exchange. You will receive updates when a consolidated trade is settled or a new consolidated trade available.</p>
+<h3 id='channel-name-format-5'>Channel name format</h3>
+<p><code>recent_trades_consolidated</code></p>
+<h3 id='message-payload-format-5'>Message payload format</h3>
+<p>See <a href="#get-consolidated-trades">the trades section</a> for the format of the message</p>
 <h2 id='active-order-updates'>Active order updates</h2><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">user</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">0x082605F78dD83A8423113ecbEB794Fb3FFE470a2</span><span class="dl">"</span><span class="p">;</span>
 <span class="kd">const</span> <span class="nx">token</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">USDC_TOKEN_ADDRESS</span><span class="p">;</span> <span class="c1">// get from https://api.sx.bet/metadata</span>
 <span class="kd">const</span> <span class="nx">channel</span> <span class="o">=</span> <span class="nx">realtime</span><span class="p">.</span><span class="nx">channels</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s2">`active_orders:</span><span class="p">${</span><span class="nx">token</span><span class="p">}</span><span class="s2">:</span><span class="p">${</span><span class="nx">user</span><span class="p">}</span><span class="s2">`</span><span class="p">);</span>
@@ -1385,7 +1420,7 @@ Note that the `requestSize` is only indicating what the user is requesting, but 
 </span><span class="p">]</span><span class="w">
 </span></code></pre></div>
 <p>Subscribe to changes in a particular user&#39;s orders. You will receive updates when orders are filled, cancelled, or posted. Note that for performance reasons, updates are delayed by at most 100ms.</p>
-<h3 id='channel-name-format-5'>Channel name format</h3>
+<h3 id='channel-name-format-6'>Channel name format</h3>
 <p><code>active_orders:{token}:{user}</code></p>
 
 <table><thead>
@@ -1406,7 +1441,7 @@ Note that the `requestSize` is only indicating what the user is requesting, but 
 <td>The user to subscribe to</td>
 </tr>
 </tbody></table>
-<h3 id='message-payload-format-5'>Message payload format</h3>
+<h3 id='message-payload-format-6'>Message payload format</h3>
 <p>The order is packed into an array and the fields are sent in the below order, with the 0th index as the first row. Note that these are the same fields as mentioned in the <a href="#get-active-orders">the orders section</a>, with an additional <code>status</code> and <code>updateTime</code> field.</p>
 
 <table><thead>
@@ -1514,7 +1549,7 @@ Note that the `requestSize` is only indicating what the user is requesting, but 
 </span><span class="p">]</span><span class="w">
 </span></code></pre></div>
 <p>Subscribe to changes in a particular order book. You will receive updates when orders are filled, cancelled, or posted. Note that for performance reasons, updates are delayed by at most 100ms. Updates are packed into arrays to reduce total bandwidth.</p>
-<h3 id='channel-name-format-6'>Channel name format</h3>
+<h3 id='channel-name-format-7'>Channel name format</h3>
 <p><code>order_book:{token}:{marketHash}</code></p>
 
 <table><thead>
@@ -1535,7 +1570,7 @@ Note that the `requestSize` is only indicating what the user is requesting, but 
 <td>The market to subscribe to</td>
 </tr>
 </tbody></table>
-<h3 id='message-payload-format-6'>Message payload format</h3>
+<h3 id='message-payload-format-7'>Message payload format</h3>
 <p>The order is packed into an array and the fields are sent in the below order, with the 0th index as the first row. Note that these are the same fields as mentioned in the <a href="#get-active-orders">the orders section</a>, with an additional <code>status</code> and <code>updateTime</code> field.</p>
 
 <table><thead>
