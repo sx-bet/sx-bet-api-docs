@@ -332,7 +332,7 @@ Odds not on the ladder will be rejected and your order(s) will not be posted.
 | Name   | Required | Type             | Description            |
 | ------ | -------- | ---------------- | ---------------------- |
 | orders | true     | SignedNewOrder[] | The new orders to post |
-| chainVersion  | false    | string   | Must  be either `SXN` or `SXR`.<br/>**If not passed, Default will be SXN.**. See [migration docs](#sx-rollup-migration-guide) |
+| chainVersion  | false    | string   | Must  be either `SXN` or `SXR`.<br/>**If not passed, Default will be SXN**. See [migration docs](#sx-rollup-migration-guide) |
 
 A `SignedNewOrder` object looks like this
 
@@ -482,7 +482,7 @@ Ensure you use the <code>chainId</code> of SX Network, not the <code>chainId</co
 | salt        | required | string   | A random 32 bytes hex string to protect against replay                                                                                                 |
 | maker       | required | true     | The account from which you are cancelling orders                                                                                                       |
 | timestamp   | required | true     | The current timestamp in UNIX seconds to protect against replay                                                                                        |
-| chainVersion  | false    | string   | Must  be either `SXN` or `SXR`.<br/>**If not passed, Default will be SXN.**. See [migration docs](#sx-rollup-migration-guide) |
+| chainVersion  | false    | string   | Must  be either `SXN` or `SXR`.<br/>**If not passed, Default will be SXN**. See [migration docs](#sx-rollup-migration-guide) |
 
 ### Response format
 
@@ -613,7 +613,7 @@ Ensure you use the <code>chainId</code> of SX Network, not the <code>chainId</co
 | salt          | required | string | A random 32 bytes hex string to protect against replay                                                                                                 |
 | maker         | required | true   | The account from which you are cancelling orders                                                                                                       |
 | timestamp     | required | true   | The current timestamp in UNIX seconds to protect against replay                                                                                        |
-| chainVersion  | false    | string   | Must  be either `SXN` or `SXR`.<br/>**If not passed, Default will be SXN.**. See [migration docs](#sx-rollup-migration-guide) |
+| chainVersion  | false    | string   | Must  be either `SXN` or `SXR`.<br/>**If not passed, Default will be SXN**. See [migration docs](#sx-rollup-migration-guide) |
 
 ### Response format
 
@@ -728,7 +728,7 @@ Ensure you use the <code>chainId</code> of SX Network, not the <code>chainId</co
 | salt      | required | string | A random 32 bytes hex string to protect against replay                                                                                                 |
 | maker     | required | true   | The account from which you are cancelling orders                                                                                                       |
 | timestamp | required | true   | The current timestamp in UNIX seconds to protect against replay.                                                                                       |
-| chainVersion  | false    | string   | Must  be either `SXN` or `SXR`.<br/>**If not passed, Default will be SXN.**. See [migration docs](#sx-rollup-migration-guide) |
+| chainVersion  | false    | string   | Must  be either `SXN` or `SXR`.<br/>**If not passed, Default will be SXN**. See [migration docs](#sx-rollup-migration-guide) |
 
 ### Response format
 
