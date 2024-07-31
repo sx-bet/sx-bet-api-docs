@@ -568,7 +568,8 @@ For the purposes of this migration, we will refer to current (legacy) chain as S
 <li>Update rest API calls as shown <a href="#endpoint-changes">here</a></li>
 <li>Update websocket streams handlers for orders, trades, and markets <em>(they will now include <code>chainVersion</code>)</em></li>
 <li>Migrate funds from <strong>SXN</strong> to <strong>SXR</strong> using our bridge</li>
-<li>Configure the payloads with the new <code>chainId</code> and other configs found <a href="#references">here</a> and/or <a href="#metadata">here</a></li>
+<li>Configure the payloads with the new <code>chainId</code>, <code>domainVersion</code> and other configs found <a href="#references">here</a> and/or <a href="#metadata">here</a></li>
+<li>If you are <a href="#filling-orders">filling orders programattically </a>, you must change the contract ABI (two new fields under FillObject type)</li>
 <li>Reenable betting for each token as described <a href="#enabling-betting">here</a></li>
 <li>Start using API as normal for <strong>SXR</strong> Markets</li>
 </ul>
@@ -5282,7 +5283,9 @@ Ensure you use the <code>chainId</code> of SX Network, not the <code>chainId</co
         <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">makerSigs</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">bytes[]</span><span class="dl">"</span> <span class="p">},</span>
         <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">takerAmounts</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256[]</span><span class="dl">"</span> <span class="p">},</span>
         <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">fillSalt</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span> <span class="p">},</span>
-        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">beneficiary</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span> <span class="p">}</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">beneficiary</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">beneficiaryType</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint8</span><span class="dl">"</span> <span class="p">}</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">cashOutTarget</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span> <span class="p">}</span>
       <span class="p">],</span>
       <span class="na">Order</span><span class="p">:</span> <span class="p">[</span>
         <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">marketHash</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">bytes32</span><span class="dl">"</span> <span class="p">},</span>
@@ -5325,7 +5328,9 @@ Ensure you use the <code>chainId</code> of SX Network, not the <code>chainId</co
         <span class="p">})),</span>
         <span class="nx">takerAmounts</span><span class="p">,</span>
         <span class="nx">fillSalt</span><span class="p">,</span>
-        <span class="na">beneficiary</span><span class="p">:</span> <span class="nx">constants</span><span class="p">.</span><span class="nx">AddressZero</span>
+        <span class="na">beneficiary</span><span class="p">:</span> <span class="nx">constants</span><span class="p">.</span><span class="nx">AddressZero</span><span class="p">,</span>
+        <span class="na">beneficiaryType</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="na">cashOutTarget</span><span class="p">:</span> <span class="nx">constants</span><span class="p">.</span><span class="nx">HashZero</span><span class="p">,</span>
       <span class="p">},</span>
     <span class="p">},</span>
   <span class="p">};</span>
