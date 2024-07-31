@@ -926,7 +926,9 @@ async function fillOrder() {
         { name: "makerSigs", type: "bytes[]" },
         { name: "takerAmounts", type: "uint256[]" },
         { name: "fillSalt", type: "uint256" },
-        { name: "beneficiary", type: "address" }
+        { name: "beneficiary", type: "address" },
+        { name: "beneficiaryType", type: "uint8" }
+        { name: "cashOutTarget", type: "string" }
       ],
       Order: [
         { name: "marketHash", type: "bytes32" },
@@ -969,7 +971,9 @@ async function fillOrder() {
         })),
         takerAmounts,
         fillSalt,
-        beneficiary: constants.AddressZero
+        beneficiary: constants.AddressZero,
+        beneficiaryType: 0,
+        cashOutTarget: constants.HashZero,
       },
     },
   };

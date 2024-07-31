@@ -18,7 +18,8 @@ When the sport you're interested in has moved over to **SXR**, you'll have to:
 - Update rest API calls as shown [here](#endpoint-changes)
 - Update websocket streams handlers for orders, trades, and markets *(they will now include `chainVersion`)*
 - Migrate funds from **SXN** to **SXR** using our bridge
-- Configure the payloads with the new `chainId` and other configs found [here](#references) and/or [here](#metadata)
+- Configure the payloads with the new `chainId`, `domainVersion` and other configs found [here](#references) and/or [here](#metadata)
+- If you are [filling orders programattically ](#filling-orders), you must change the contract ABI (two new fields under FillObject type)
 - Reenable betting for each token as described [here](#enabling-betting)
 - Start using API as normal for **SXR** Markets
 
