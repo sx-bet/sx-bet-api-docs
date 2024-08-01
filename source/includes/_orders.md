@@ -801,25 +801,6 @@ async function fillOrder() {
         inputs: [
           {
             internalType: "address",
-            name: "user",
-            type: "address",
-          },
-        ],
-        name: "getNonce",
-        outputs: [
-          {
-            internalType: "uint256",
-            name: "nonce",
-            type: "uint256",
-          },
-        ],
-        stateMutability: "view",
-        type: "function",
-      },
-      {
-        inputs: [
-          {
-            internalType: "address",
             name: "owner",
             type: "address",
           },
@@ -854,7 +835,7 @@ async function fillOrder() {
     wallet
   );
 
-  let nonce: BigNumber = await tokenContract.getNonce(takerAddress);
+  let nonce: BigNumber = await tokenContract.nonces(takerAddress);
   const tokenName: string = await tokenContract.name();
   const abiEncodedFunctionSig = tokenContract.interface.encodeFunctionData(
     "approve",
