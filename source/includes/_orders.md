@@ -156,7 +156,7 @@ To enable betting (filling or posting orders), you need to approve the `TokenTra
 
 If you don't wish to do this programmatically, you can simply go to `https://sx.bet`, make a test bet with the account and token you'll be using, and you will be good to go.
 
-If you want to do it programmatically, see the code sample on the right. Note you will need a little bit of MATIC to make this transaction (~$0.01 worth).
+If you want to do it programmatically, see the code sample on the right. Note you will need a tiny bit of SX to make this transaction.
 
 <aside class="notice">
 Your assets must be on SX Network to place or fill orders via the API.
@@ -301,7 +301,7 @@ export function roundDownOddsToNearestStep(
 }
 ```
 
-This endpoint offers new orders on the exchange (market making). Offering orders does not cost any fee or require you to have any MATIC tokens in your wallet.
+This endpoint offers new orders on the exchange (market making). Offering orders does not cost any fee.
 
 Note you can offer as many orders as you wish, provided your total exposure for each token (as measured by `totalBetSize - fillAmount`) remains under your wallet balance. If your wallet balance dips under your total exposure, orders will be removed from the book until it reaches the minimum again.
 
@@ -465,10 +465,6 @@ const result = await fetch("https://api.sx.bet/orders/cancel/v2", {
 
 This endpoint cancels existing orders on the exchange that you placed as a market maker. If passed orders that do not exist, they simply fail silently while the others will succeed.
 
-<aside class="notice">
-Ensure you use the <code>chainId</code> of SX Network, not the <code>chainId</code> of ETH mainnet or Polygon.
-</aside>
-
 ### HTTP Request
 
 `POST https://api.sx.bet/orders/cancel/v2`
@@ -596,10 +592,6 @@ const result = await fetch("https://api.sx.bet/orders/cancel/v2", {
 
 This endpoint cancels existing orders on the exchange for a particular event that you placed as a market maker.
 
-<aside class="notice">
-Ensure you use the <code>chainId</code> of SX Network, not the <code>chainId</code> of ETH mainnet or Polygon. 
-</aside>
-
 ### HTTP Request
 
 `POST https://api.sx.bet/orders/cancel/event`
@@ -711,10 +703,6 @@ const result = await fetch("https://api.sx.bet/orders/cancel/all", {
 ```
 
 This endpoint cancels ALL existing orders on the exchange that you placed as a market maker.
-
-<aside class="notice">
-Ensure you use the <code>chainId</code> of SX Network, not the <code>chainId</code> of ETH mainnet or Polygon.
-</aside>
 
 ### HTTP Request
 
@@ -1035,7 +1023,7 @@ async function fillOrder() {
 }
 ```
 
-This endpoint fills orders on the exchange. Multiple orders can be filled at once and no gas is paid as this is a meta transaction submitted by the API itself. _Therefore you do not require any MATIC in your wallet to fill orders_.
+This endpoint fills orders on the exchange. Multiple orders can be filled at once and no gas is paid as this is a meta transaction submitted by the API itself.
 
 Note that pre-game has a built-in betting delay of 5s and in-game betting has a built-in betting delay of 8s. This is added to guard against toxic flow and high spikes in latency from the bookmaker's side. It is effectively protection for the bookmaker. If the odds change within that delay time, the order will be cancelled and an error will be thrown.
 
@@ -1043,10 +1031,6 @@ To fill orders on sx.bet via the API, make sure you first enable betting by foll
 
 <aside class="notice">
 Your assets must be on SX Network to place bets.
-</aside>
-
-<aside class="notice">
-Ensure you use the <code>chainId</code> of SX Network, not the <code>chainId</code> of ETH mainnet or Polygon.
 </aside>
 
 ### HTTP Request

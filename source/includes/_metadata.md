@@ -78,5 +78,4 @@ This endpoint retrieves metadata on the exchange itself and useful parameters to
 | domainVersion      | string  | Used in EIP712 signing                                                                                                                                                      |
 | EIP712FillHasher   | string  | Address used in EIP712 signing for filling orders                                                                                                                           |
 | TokenTransferProxy | string  | Address used in EIP712 signing for enabling betting                                                                                                                         |
-| bridgeFee          | number  | USD fee for bridge transaction from Polygon to SX Network                                                                                                                   |
 | oddsLadderStepSize | number  | Odds ladder step size. See [the post a new order section](#post-a-new-order)                                                                                                |
