@@ -5158,25 +5158,6 @@ Ensure you use the <code>chainId</code> of SX Network, not the <code>chainId</co
         <span class="na">inputs</span><span class="p">:</span> <span class="p">[</span>
           <span class="p">{</span>
             <span class="na">internalType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span><span class="p">,</span>
-            <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">user</span><span class="dl">"</span><span class="p">,</span>
-            <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span><span class="p">,</span>
-          <span class="p">},</span>
-        <span class="p">],</span>
-        <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">getNonce</span><span class="dl">"</span><span class="p">,</span>
-        <span class="na">outputs</span><span class="p">:</span> <span class="p">[</span>
-          <span class="p">{</span>
-            <span class="na">internalType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span><span class="p">,</span>
-            <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">nonce</span><span class="dl">"</span><span class="p">,</span>
-            <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span><span class="p">,</span>
-          <span class="p">},</span>
-        <span class="p">],</span>
-        <span class="na">stateMutability</span><span class="p">:</span> <span class="dl">"</span><span class="s2">view</span><span class="dl">"</span><span class="p">,</span>
-        <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">function</span><span class="dl">"</span><span class="p">,</span>
-      <span class="p">},</span>
-      <span class="p">{</span>
-        <span class="na">inputs</span><span class="p">:</span> <span class="p">[</span>
-          <span class="p">{</span>
-            <span class="na">internalType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span><span class="p">,</span>
             <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">owner</span><span class="dl">"</span><span class="p">,</span>
             <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span><span class="p">,</span>
           <span class="p">},</span>
@@ -5211,7 +5192,7 @@ Ensure you use the <code>chainId</code> of SX Network, not the <code>chainId</co
     <span class="nx">wallet</span>
   <span class="p">);</span>
 
-  <span class="kd">let</span> <span class="nx">nonce</span><span class="p">:</span> <span class="nx">BigNumber</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">tokenContract</span><span class="p">.</span><span class="nx">getNonce</span><span class="p">(</span><span class="nx">takerAddress</span><span class="p">);</span>
+  <span class="kd">let</span> <span class="nx">nonce</span><span class="p">:</span> <span class="nx">BigNumber</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">tokenContract</span><span class="p">.</span><span class="nx">nonces</span><span class="p">(</span><span class="nx">takerAddress</span><span class="p">);</span>
   <span class="kd">const</span> <span class="nx">tokenName</span><span class="p">:</span> <span class="nx">string</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">tokenContract</span><span class="p">.</span><span class="nx">name</span><span class="p">();</span>
   <span class="kd">const</span> <span class="nx">abiEncodedFunctionSig</span> <span class="o">=</span> <span class="nx">tokenContract</span><span class="p">.</span><span class="kr">interface</span><span class="p">.</span><span class="nx">encodeFunctionData</span><span class="p">(</span>
     <span class="dl">"</span><span class="s2">approve</span><span class="dl">"</span><span class="p">,</span>
