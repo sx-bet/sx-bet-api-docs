@@ -897,7 +897,7 @@ async function fillOrder() {
         { name: "fillSalt", type: "uint256" },
         { name: "beneficiary", type: "address" },
         { name: "beneficiaryType", type: "uint8" }
-        { name: "cashOutTarget", type: "string" }
+        { name: "cashOutTarget", type: "bytes32" }
       ],
       Order: [
         { name: "marketHash", type: "bytes32" },
