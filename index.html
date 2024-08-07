@@ -617,8 +617,6 @@ When `chainVersion` is empty for POST requests, the default data is for SXN chai
 <p><code>GET https://api.sx.bet/trades/consolidated?chainVersion=SXR</code></p>
 <h3 id='sxr-orders'>SXR Orders</h3><h4 id='get-sxr-orders'>Get SXR Orders</h4>
 <p><code>GET https://api.sx.bet/orders?chainVersion=SXR</code></p>
-<h4 id='post-new-sxr-orders'>Post New SXR Orders</h4>
-<p><code>POST https://api.sx.bet/orders/new?chainVersion=SXR</code></p>
 <h4 id='cancel-sxr-orders'>Cancel SXR Orders</h4>
 <p><code>POST https://api.sx.bet/orders/cancel/v2?chainVersion=SXR</code></p>
 <h4 id='cancel-sxr-orders-by-event'>Cancel SXR Orders by Event</h4>
@@ -4473,12 +4471,6 @@ Odds not on the ladder will be rejected and your order(s) will not be posted.
 <td>true</td>
 <td>SignedNewOrder[]</td>
 <td>The new orders to post</td>
-</tr>
-<tr>
-<td>chainVersion</td>
-<td>false</td>
-<td>string</td>
-<td>Must  be either <code>SXN</code> or <code>SXR</code>.<br/><strong>If not passed, Default will be SXN</strong>. See <a href="#sx-rollup-migration-guide">migration docs</a></td>
 </tr>
 </tbody></table>
 
