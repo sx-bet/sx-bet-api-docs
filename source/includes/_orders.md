@@ -332,7 +332,6 @@ Odds not on the ladder will be rejected and your order(s) will not be posted.
 | Name   | Required | Type             | Description            |
 | ------ | -------- | ---------------- | ---------------------- |
 | orders | true     | SignedNewOrder[] | The new orders to post |
-| chainVersion  | false    | string   | Must  be either `SXN` or `SXR`.<br/>**If not passed, Default will be SXN**. See [migration docs](#sx-rollup-migration-guide) |
 
 A `SignedNewOrder` object looks like this
 

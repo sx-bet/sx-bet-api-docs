@@ -64,8 +64,6 @@ This ensures the changes are least disruptive, and changes are only required whe
 ### SXR Orders
 #### Get SXR Orders
 `GET https://api.sx.bet/orders?chainVersion=SXR`
-#### Post New SXR Orders
-`POST https://api.sx.bet/orders/new?chainVersion=SXR`
 #### Cancel SXR Orders
 `POST https://api.sx.bet/orders/cancel/v2?chainVersion=SXR`
 #### Cancel SXR Orders by Event
