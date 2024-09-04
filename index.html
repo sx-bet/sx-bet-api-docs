@@ -820,7 +820,7 @@ When `chainVersion` is empty for POST requests, the default data is for SXN chai
 <p>These are the latest versions of js dependencies that are referenced in documentation:</p>
 
 <ul>
-<li><code>eth-sig-util</code>: 2.5.4</li>
+<li><code>@metamask/eth-sig-util</code>: 7.0.3</li>
 <li><code>ethers</code>: 5.7.2</li>
 </ul>
 <h1 id='testnet'>Testnet</h1>
@@ -2860,8 +2860,8 @@ Up to 50 event IDs can be supplied at a time.
 <tr>
 <td>type</td>
 <td>false</td>
-<td>number</td>
-<td>If set, it will only include markets for a particular market type. See below for the options</td>
+<td>number[]</td>
+<td>If set, it will only include markets for those particular market types. See below for the options</td>
 </tr>
 <tr>
 <td>paginationKey</td>
@@ -4602,7 +4602,7 @@ Note that <code>totalBetSize</code> is from *the perspective of the market maker
     "maker": "0xe087299AE9Acd0133d6D1544A97Bb0EEe24a2671",
     "timestamp": 1643897553
 }'</span>
-</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">import</span> <span class="nx">ethSigUtil</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">eth-sig-util</span><span class="dl">"</span><span class="p">;</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">signTypedData</span><span class="p">,</span> <span class="nx">SignTypedDataVersion</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">@metamask/eth-sig-util</span><span class="dl">"</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">randomBytes</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">@ethersproject/random</span><span class="dl">"</span><span class="p">;</span>
 
 <span class="c1">// Example is shown using a private key</span>
@@ -4644,8 +4644,10 @@ Note that <code>totalBetSize</code> is from *the perspective of the market maker
 
 <span class="kd">const</span> <span class="nx">payload</span> <span class="o">=</span> <span class="nx">getCancelOrderEIP712Payload</span><span class="p">(</span><span class="nx">orderHashes</span><span class="p">,</span> <span class="nx">salt</span><span class="p">,</span> <span class="nx">timestamp</span><span class="p">,</span> <span class="nx">chainId</span><span class="p">);</span>
 
-<span class="kd">const</span> <span class="nx">signature</span> <span class="o">=</span> <span class="nx">ethSigUtil</span><span class="p">.</span><span class="nx">signTypedData_v4</span><span class="p">(</span><span class="nx">bufferPrivateKey</span><span class="p">,</span> <span class="p">{</span>
+<span class="kd">const</span> <span class="nx">signature</span> <span class="o">=</span> <span class="nx">signTypedData</span><span class="p">({</span>
+  <span class="na">privateKey</span><span class="p">:</span> <span class="nx">bufferPrivateKey</span><span class="p">,</span> 
   <span class="na">data</span><span class="p">:</span> <span class="nx">payload</span><span class="p">,</span>
+  <span class="na">version</span><span class="p">:</span> <span class="nx">SignTypedDataVersion</span><span class="p">.</span><span class="nx">V4</span><span class="p">,</span>
 <span class="p">});</span>
 
 <span class="kd">const</span> <span class="nx">apiPayload</span> <span class="o">=</span> <span class="p">{</span>
@@ -4675,6 +4677,22 @@ Note that <code>totalBetSize</code> is from *the perspective of the market maker
 <p>This endpoint cancels existing orders on the exchange that you placed as a market maker. If passed orders that do not exist, they simply fail silently while the others will succeed.</p>
 <h3 id='http-request-3'>HTTP Request</h3>
 <p><code>POST https://api.sx.bet/orders/cancel/v2</code></p>
+<h3 id='query-parameters-2'>Query parameters</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>chainVersion</td>
+<td>false</td>
+<td>string</td>
+<td>Must  be either <code>SXN</code> or <code>SXR</code>.<br/><strong>If not passed, Default will be SXN</strong>. See <a href="#sx-rollup-migration-guide">migration docs</a></td>
+</tr>
+</tbody></table>
 <h3 id='request-payload-parameters-2'>Request payload parameters</h3>
 <table><thead>
 <tr>
@@ -4713,12 +4731,6 @@ Note that <code>totalBetSize</code> is from *the perspective of the market maker
 <td>required</td>
 <td>true</td>
 <td>The current timestamp in UNIX seconds to protect against replay</td>
-</tr>
-<tr>
-<td>chainVersion</td>
-<td>false</td>
-<td>string</td>
-<td>Must  be either <code>SXN</code> or <code>SXR</code>.<br/><strong>If not passed, Default will be SXN</strong>. See <a href="#sx-rollup-migration-guide">migration docs</a></td>
 </tr>
 </tbody></table>
 <h3 id='response-format-3'>Response format</h3>
@@ -4766,7 +4778,7 @@ Note that <code>totalBetSize</code> is from *the perspective of the market maker
     "maker": "0xe087299AE9Acd0133d6D1544A97Bb0EEe24a2671",
     "timestamp": 1643898624
 }'</span>
-</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">import</span> <span class="nx">ethSigUtil</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">eth-sig-util</span><span class="dl">"</span><span class="p">;</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">signTypedData</span><span class="p">,</span> <span class="nx">SignTypedDataVersion</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">@metamask/eth-sig-util</span><span class="dl">"</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">randomBytes</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">@ethersproject/random</span><span class="dl">"</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">Wallet</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">@ethersproject/wallet</span><span class="dl">"</span><span class="p">;</span>
 
@@ -4817,8 +4829,10 @@ Note that <code>totalBetSize</code> is from *the perspective of the market maker
   <span class="nx">chainId</span>
 <span class="p">);</span>
 
-<span class="kd">const</span> <span class="nx">signature</span> <span class="o">=</span> <span class="nx">ethSigUtil</span><span class="p">.</span><span class="nx">signTypedData_v4</span><span class="p">(</span><span class="nx">bufferPrivateKey</span><span class="p">,</span> <span class="p">{</span>
+<span class="kd">const</span> <span class="nx">signature</span> <span class="o">=</span> <span class="nx">signTypedData</span><span class="p">({</span>
+  <span class="na">privateKey</span><span class="p">:</span> <span class="nx">bufferPrivateKey</span><span class="p">,</span>
   <span class="na">data</span><span class="p">:</span> <span class="nx">payload</span><span class="p">,</span>
+  <span class="na">version</span><span class="p">:</span> <span class="nx">SignTypedDataVersion</span><span class="p">.</span><span class="nx">V4</span><span class="p">,</span>
 <span class="p">});</span>
 
 <span class="kd">const</span> <span class="nx">apiPayload</span> <span class="o">=</span> <span class="p">{</span>
@@ -4848,6 +4862,22 @@ Note that <code>totalBetSize</code> is from *the perspective of the market maker
 <p>This endpoint cancels existing orders on the exchange for a particular event that you placed as a market maker.</p>
 <h3 id='http-request-4'>HTTP Request</h3>
 <p><code>POST https://api.sx.bet/orders/cancel/event</code></p>
+<h3 id='query-parameters-3'>Query parameters</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>chainVersion</td>
+<td>false</td>
+<td>string</td>
+<td>Must  be either <code>SXN</code> or <code>SXR</code>.<br/><strong>If not passed, Default will be SXN</strong>. See <a href="#sx-rollup-migration-guide">migration docs</a></td>
+</tr>
+</tbody></table>
 <h3 id='request-payload-parameters-3'>Request payload parameters</h3>
 <table><thead>
 <tr>
@@ -4886,12 +4916,6 @@ Note that <code>totalBetSize</code> is from *the perspective of the market maker
 <td>required</td>
 <td>true</td>
 <td>The current timestamp in UNIX seconds to protect against replay</td>
-</tr>
-<tr>
-<td>chainVersion</td>
-<td>false</td>
-<td>string</td>
-<td>Must  be either <code>SXN</code> or <code>SXR</code>.<br/><strong>If not passed, Default will be SXN</strong>. See <a href="#sx-rollup-migration-guide">migration docs</a></td>
 </tr>
 </tbody></table>
 <h3 id='response-format-4'>Response format</h3>
@@ -4938,7 +4962,7 @@ Note that <code>totalBetSize</code> is from *the perspective of the market maker
     "maker": "0xe087299AE9Acd0133d6D1544A97Bb0EEe24a2671",
     "timestamp": 1643898624
 }'</span>
-</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">import</span> <span class="nx">ethSigUtil</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">eth-sig-util</span><span class="dl">"</span><span class="p">;</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">signTypedData</span><span class="p">,</span> <span class="nx">SignTypedDataVersion</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">@metamask/eth-sig-util</span><span class="dl">"</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">randomBytes</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">@ethersproject/random</span><span class="dl">"</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">Wallet</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">@ethersproject/wallet</span><span class="dl">"</span><span class="p">;</span>
 
@@ -4975,8 +4999,10 @@ Note that <code>totalBetSize</code> is from *the perspective of the market maker
 
 <span class="kd">const</span> <span class="nx">payload</span> <span class="o">=</span> <span class="nx">getCancelOrderEventsEIP712Payload</span><span class="p">(</span><span class="nx">salt</span><span class="p">,</span> <span class="nx">timestamp</span><span class="p">,</span> <span class="nx">chainId</span><span class="p">);</span>
 
-<span class="kd">const</span> <span class="nx">signature</span> <span class="o">=</span> <span class="nx">ethSigUtil</span><span class="p">.</span><span class="nx">signTypedData_v4</span><span class="p">(</span><span class="nx">bufferPrivateKey</span><span class="p">,</span> <span class="p">{</span>
+<span class="kd">const</span> <span class="nx">signature</span> <span class="o">=</span> <span class="nx">signTypedData</span><span class="p">({</span>
+  <span class="na">privateKey</span><span class="p">:</span> <span class="nx">bufferPrivateKey</span><span class="p">,</span>
   <span class="na">data</span><span class="p">:</span> <span class="nx">payload</span><span class="p">,</span>
+  <span class="na">version</span><span class="p">:</span> <span class="nx">SignTypedDataVersion</span><span class="p">.</span><span class="nx">V4</span><span class="p">,</span>
 <span class="p">});</span>
 
 <span class="kd">const</span> <span class="nx">apiPayload</span> <span class="o">=</span> <span class="p">{</span>
@@ -5006,6 +5032,22 @@ Note that <code>totalBetSize</code> is from *the perspective of the market maker
 <p>This endpoint cancels ALL existing orders on the exchange that you placed as a market maker.</p>
 <h3 id='http-request-5'>HTTP Request</h3>
 <p><code>POST https://api.sx.bet/orders/cancel/all</code></p>
+<h3 id='query-parameters-4'>Query parameters</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>chainVersion</td>
+<td>false</td>
+<td>string</td>
+<td>Must  be either <code>SXN</code> or <code>SXR</code>.<br/><strong>If not passed, Default will be SXN</strong>. See <a href="#sx-rollup-migration-guide">migration docs</a></td>
+</tr>
+</tbody></table>
 <h3 id='request-payload-parameters-4'>Request payload parameters</h3>
 <table><thead>
 <tr>
@@ -5038,12 +5080,6 @@ Note that <code>totalBetSize</code> is from *the perspective of the market maker
 <td>required</td>
 <td>true</td>
 <td>The current timestamp in UNIX seconds to protect against replay.</td>
-</tr>
-<tr>
-<td>chainVersion</td>
-<td>false</td>
-<td>string</td>
-<td>Must  be either <code>SXN</code> or <code>SXR</code>.<br/><strong>If not passed, Default will be SXN</strong>. See <a href="#sx-rollup-migration-guide">migration docs</a></td>
 </tr>
 </tbody></table>
 <h3 id='response-format-5'>Response format</h3>
@@ -5085,7 +5121,7 @@ Note that <code>totalBetSize</code> is from *the perspective of the market maker
 <h2 id='filling-orders'>Filling orders</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://api.sx.bet/orders/fill'</span> <span class="se">\</span>
 <span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
 <span class="nt">--data-raw</span> <span class="s1">'{"orderHashes":["0x863a2288a640e1bb722da2ee7a6f323ea28caee8ac681d320534d0e7f2e849de","0x001f676d68baf85310145f85bc5aeba64108b234607b4fae25c704069ca8464a"],"takerAmounts":["10000000000000000000","10000000000000000000"],"taker":"0xa3bBFaB3645B2Dd4296cADc451d74574CD47Ba1a","takerSig":"0x09d2603a8c8646221d6972b04a5cdd8b13d6326a267329825567a25a5e63606b07b97c84640bfb3ee4a5053083ce178d9e0c9cbdf1b1dfd519fda0594fae30dc1c","fillSalt":"69231297238279245345865414293427982207908612843136003245427437324972455931243","action":"N/A","market":"N/A","betting":"N/A","stake":"N/A","odds":"N/A","returning":"N/A"}'</span>
-</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">import</span> <span class="nx">ethSigUtil</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">eth-sig-util</span><span class="dl">"</span><span class="p">;</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">signTypedData</span><span class="p">,</span> <span class="nx">SignTypedDataVersion</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">@metamask/eth-sig-util</span><span class="dl">"</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span>
   <span class="nx">BigNumber</span><span class="p">,</span>
   <span class="nx">constants</span><span class="p">,</span>
@@ -5095,6 +5131,7 @@ Note that <code>totalBetSize</code> is from *the perspective of the market maker
   <span class="nx">Wallet</span><span class="p">,</span>
 <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">ethers</span><span class="dl">"</span><span class="p">;</span>
 <span class="k">import</span> <span class="p">{</span> <span class="nx">randomBytes</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">ethers/lib/utils</span><span class="dl">"</span><span class="p">;</span>
+<span class="k">import</span> <span class="nx">dayjs</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">dayjs</span><span class="dl">"</span><span class="p">;</span>
 
 <span class="k">async</span> <span class="kd">function</span> <span class="nx">fillOrder</span><span class="p">()</span> <span class="p">{</span>
   <span class="kd">const</span> <span class="nx">privateKey</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PRIVATE_KEY</span><span class="p">;</span>
@@ -5296,35 +5333,43 @@ Note that <code>totalBetSize</code> is from *the perspective of the market maker
       <span class="na">EIP712Domain</span><span class="p">:</span> <span class="p">[</span>
         <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">name</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span> <span class="p">},</span>
         <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">version</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">chainId</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span> <span class="p">},</span>
         <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">verifyingContract</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span> <span class="p">},</span>
-        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">salt</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">bytes32</span><span class="dl">"</span> <span class="p">},</span>
       <span class="p">],</span>
-      <span class="na">MetaTransaction</span><span class="p">:</span> <span class="p">[</span>
+      <span class="na">Permit</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">owner</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">spender</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">value</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span> <span class="p">},</span>
         <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">nonce</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span> <span class="p">},</span>
-        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">from</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span> <span class="p">},</span>
-        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">functionSignature</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">bytes</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">deadline</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span> <span class="p">},</span>
       <span class="p">],</span>
     <span class="p">},</span>
     <span class="na">domain</span><span class="p">:</span> <span class="p">{</span>
       <span class="na">name</span><span class="p">:</span> <span class="nx">tokenName</span><span class="p">,</span>
       <span class="na">version</span><span class="p">:</span> <span class="dl">"</span><span class="s2">1</span><span class="dl">"</span><span class="p">,</span>
-      <span class="na">salt</span><span class="p">:</span> <span class="nx">utils</span><span class="p">.</span><span class="nx">hexZeroPad</span><span class="p">(</span><span class="nx">utils</span><span class="p">.</span><span class="nx">hexlify</span><span class="p">(</span><span class="nx">chainId</span><span class="p">),</span> <span class="mi">32</span><span class="p">),</span>
+      <span class="na">chainId</span><span class="p">:</span> <span class="nx">chainId</span><span class="p">,</span>
       <span class="na">verifyingContract</span><span class="p">:</span> <span class="nx">tokenAddress</span><span class="p">,</span>
     <span class="p">},</span>
     <span class="na">message</span><span class="p">:</span> <span class="p">{</span>
+      <span class="na">owner</span><span class="p">:</span> <span class="nx">takerAddress</span><span class="p">,</span>
+      <span class="na">spender</span><span class="p">:</span> <span class="nx">tokenTransferProxyAddress</span><span class="p">,</span>
+      <span class="na">value</span><span class="p">:</span> <span class="nx">approvalAmount</span><span class="p">,</span>
       <span class="na">nonce</span><span class="p">:</span> <span class="nx">nonce</span><span class="p">.</span><span class="nx">toNumber</span><span class="p">(),</span>
-      <span class="na">from</span><span class="p">:</span> <span class="nx">takerAddress</span><span class="p">,</span>
-      <span class="na">functionSignature</span><span class="p">:</span> <span class="nx">abiEncodedFunctionSig</span><span class="p">,</span>
+      <span class="na">deadline</span><span class="p">:</span> <span class="nx">dayjs</span><span class="p">().</span><span class="nx">add</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="dl">"</span><span class="s2">hour</span><span class="dl">"</span><span class="p">).</span><span class="nx">unix</span><span class="p">(),</span>
     <span class="p">},</span>
-    <span class="na">primaryType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">MetaTransaction</span><span class="dl">"</span><span class="p">,</span>
+    <span class="na">primaryType</span><span class="p">:</span> <span class="dl">"</span><span class="s2">Permit</span><span class="dl">"</span><span class="p">,</span>
   <span class="p">};</span>
 
-  <span class="kd">const</span> <span class="nx">approveProxySignature</span> <span class="o">=</span> <span class="nx">ethSigUtil</span><span class="p">.</span><span class="nx">signTypedData_v4</span><span class="p">(</span><span class="nx">bufferPrivateKey</span><span class="p">,</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">approveProxySignature</span> <span class="o">=</span> <span class="nx">signTypedData</span><span class="p">({</span>
+    <span class="na">privateKey</span><span class="p">:</span> <span class="nx">bufferPrivateKey</span><span class="p">,</span>
     <span class="na">data</span><span class="p">:</span> <span class="nx">approveProxySigningPayload</span><span class="p">,</span>
+    <span class="na">version</span><span class="p">:</span> <span class="nx">SignTypedDataVersion</span><span class="p">.</span><span class="nx">V4</span><span class="p">,</span>
   <span class="p">});</span>
 
-  <span class="kd">const</span> <span class="nx">signature</span> <span class="o">=</span> <span class="nx">ethSigUtil</span><span class="p">.</span><span class="nx">signTypedData_v4</span><span class="p">(</span><span class="nx">bufferPrivateKey</span><span class="p">,</span> <span class="p">{</span>
+  <span class="kd">const</span> <span class="nx">signature</span> <span class="o">=</span> <span class="nx">signTypedData</span><span class="p">({</span>
+    <span class="na">privateKey</span><span class="p">:</span> <span class="nx">bufferPrivateKey</span><span class="p">,</span>
     <span class="na">data</span><span class="p">:</span> <span class="nx">signingPayload</span><span class="p">,</span>
+    <span class="na">version</span><span class="p">:</span> <span class="nx">SignTypedDataVersion</span><span class="p">.</span><span class="nx">V4</span><span class="p">,</span>
   <span class="p">});</span>
 
   <span class="kd">const</span> <span class="nx">apiPayload</span> <span class="o">=</span> <span class="p">{</span>
@@ -5661,7 +5706,7 @@ To convert a <code>fillAmount</code> (what the market maker pays) to what the ta
 <p>For certain operations with the API, we require you to sign data using the <a href="https://eips.ethereum.org/EIPS/eip-712">EIP712 specification</a>. We provide two examples to sign data in the EIP712 fashion in JavaScript if you&#39;re using an injected provider (such as MetaMask or another wallet) or a private key.</p>
 
 <p>As of now we have not tested other libraries in other languages that support EIP712.</p>
-<h2 id='private-key-signing-example'>Private key signing example</h2><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">import</span> <span class="nx">ethSigUtil</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">eth-sig-util</span><span class="dl">"</span><span class="p">;</span>
+<h2 id='private-key-signing-example'>Private key signing example</h2><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">signTypedData</span><span class="p">,</span> <span class="nx">SignTypedDataVersion</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">@metamask/eth-sig-util</span><span class="dl">"</span><span class="p">;</span>
 
 <span class="kd">const</span> <span class="nx">privateKey</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PRIVATE_KEY</span>
 <span class="c1">// Assuming process.env.PRIVATE_KEY is "0x"-prefixed</span>
@@ -5689,10 +5734,11 @@ To convert a <code>fillAmount</code> (what the market maker pays) to what the ta
         <span class="na">orders</span><span class="p">:</span> <span class="p">[</span><span class="dl">"</span><span class="s2">0x550128e997978495eeae503c13e2e30243d747e969c65e1a0b565c609e097506</span><span class="dl">"</span><span class="p">]</span>
     <span class="p">}</span>
 <span class="p">};</span>
-<span class="kd">const</span> <span class="nx">signature</span> <span class="o">=</span> <span class="nx">ethSigUtil</span><span class="p">.</span><span class="nx">signTypedData_v4</span><span class="p">(</span>
-    <span class="nx">bufferPrivateKey</span><span class="p">,</span>
-    <span class="p">{</span> <span class="na">data</span><span class="p">:</span> <span class="nx">payload</span> <span class="p">}</span>
-<span class="p">);</span>
+<span class="kd">const</span> <span class="nx">signature</span> <span class="o">=</span> <span class="nx">signTypedData</span><span class="p">({</span>
+    <span class="na">privateKey</span><span class="p">:</span> <span class="nx">bufferPrivateKey</span><span class="p">,</span>
+    <span class="na">data</span><span class="p">:</span> <span class="nx">payload</span><span class="p">,</span>
+    <span class="na">version</span><span class="p">:</span> <span class="nx">SignTypedDataVersion</span><span class="p">.</span><span class="nx">V4</span><span class="p">,</span>
+<span class="p">});</span>
 </code></pre></div>
 <p>Here we use a private key directly which is the most straightforward way to sign data and does not require access to an authenticated node. It&#39;s also the fastest.</p>
 <h2 id='injected-provider-signing-example'>Injected provider signing example</h2><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="k">import</span> <span class="p">{</span> <span class="nx">providers</span> <span class="p">}</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">ethers</span><span class="dl">"</span><span class="p">;</span>
