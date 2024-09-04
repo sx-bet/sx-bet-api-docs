@@ -96,7 +96,7 @@ This endpoint retrieves active markets on the exchange. It does not return marke
 | sportIds      | false    | number[] | If set, it will only include markets for particular sport IDs (comma separated)                                  |
 | liveOnly      | false    | boolean  | If set, it will only include markets that are currently available for in-play betting                            |
 | betGroup      | false    | string   | If set, it will only include markets for a particular bet group                                                  |
-| type          | false    | number   | If set, it will only include markets for a particular market type. See below for the options                     |
+| type          | false    | number[] | If set, it will only include markets for those particular market types. See below for the options                |
 | paginationKey | false    | string   | Used for pagination. Pass the `nextKey` returned from the previous request to retrieve the next set of records.  |
 | pageSize      | false    | number   | Used for pagination. Requested page size. Each call will only return up to this amount of records. Maximum of 50 |
 | chainVersion  | false    | string   | Must  be either `SXN` or `SXR`.  <br/>**If not passed, data from both chains are returned**. See [migration docs](#sx-rollup-migration-guide) |

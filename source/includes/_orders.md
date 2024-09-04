@@ -390,7 +390,7 @@ curl --location --request POST 'https://api.sx.bet/orders/cancel/v2' \
 ```
 
 ```javascript
-import ethSigUtil from "eth-sig-util";
+import { signTypedData, SignTypedDataVersion } from "@metamask/eth-sig-util";
 import { randomBytes } from "@ethersproject/random";
 
 // Example is shown using a private key
@@ -432,8 +432,10 @@ function getCancelOrderEIP712Payload(orderHashes, salt, timestamp, chainId) {
 
 const payload = getCancelOrderEIP712Payload(orderHashes, salt, timestamp, chainId);
 
-const signature = ethSigUtil.signTypedData_v4(bufferPrivateKey, {
+const signature = signTypedData({
+  privateKey: bufferPrivateKey, 
   data: payload,
+  version: SignTypedDataVersion.V4,
 });
 
 const apiPayload = {
@@ -468,6 +470,12 @@ This endpoint cancels existing orders on the exchange that you placed as a marke
 
 `POST https://api.sx.bet/orders/cancel/v2`
 
+### Query parameters
+
+| Name          | Required | Type   | Description                                                                                                                  |
+| ------------- | -------- | ------ | ---------------------------------------------------------------------------------------------------------------------------- |
+| chainVersion  | false    | string | Must  be either `SXN` or `SXR`.<br/>**If not passed, Default will be SXN**. See [migration docs](#sx-rollup-migration-guide) |
+
 ### Request payload parameters
 
 | Name        | Required | Type     | Description                                                                                                                                            |
@@ -477,7 +485,6 @@ This endpoint cancels existing orders on the exchange that you placed as a marke
 | salt        | required | string   | A random 32 bytes hex string to protect against replay                                                                                                 |
 | maker       | required | true     | The account from which you are cancelling orders                                                                                                       |
 | timestamp   | required | true     | The current timestamp in UNIX seconds to protect against replay                                                                                        |
-| chainVersion  | false    | string   | Must  be either `SXN` or `SXR`.<br/>**If not passed, Default will be SXN**. See [migration docs](#sx-rollup-migration-guide) |
 
 ### Response format
 
@@ -508,7 +515,7 @@ curl --location --request POST 'https://api.sx.bet/orders/cancel/event' \
 ```
 
 ```javascript
-import ethSigUtil from "eth-sig-util";
+import { signTypedData, SignTypedDataVersion } from "@metamask/eth-sig-util";
 import { randomBytes } from "@ethersproject/random";
 import { Wallet } from "@ethersproject/wallet";
 
@@ -559,8 +566,10 @@ const payload = getCancelOrderEventsEIP712Payload(
   chainId
 );
 
-const signature = ethSigUtil.signTypedData_v4(bufferPrivateKey, {
+const signature = signTypedData({
+  privateKey: bufferPrivateKey,
   data: payload,
+  version: SignTypedDataVersion.V4,
 });
 
 const apiPayload = {
@@ -595,6 +604,12 @@ This endpoint cancels existing orders on the exchange for a particular event tha
 
 `POST https://api.sx.bet/orders/cancel/event`
 
+### Query parameters
+
+| Name          | Required | Type   | Description                                                                                                                  |
+| ------------- | -------- | ------ | ---------------------------------------------------------------------------------------------------------------------------- |
+| chainVersion  | false    | string | Must  be either `SXN` or `SXR`.<br/>**If not passed, Default will be SXN**. See [migration docs](#sx-rollup-migration-guide) |
+
 ### Request payload parameters
 
 | Name          | Required | Type   | Description                                                                                                                                            |
@@ -604,7 +619,6 @@ This endpoint cancels existing orders on the exchange for a particular event tha
 | salt          | required | string | A random 32 bytes hex string to protect against replay                                                                                                 |
 | maker         | required | true   | The account from which you are cancelling orders                                                                                                       |
 | timestamp     | required | true   | The current timestamp in UNIX seconds to protect against replay                                                                                        |
-| chainVersion  | false    | string   | Must  be either `SXN` or `SXR`.<br/>**If not passed, Default will be SXN**. See [migration docs](#sx-rollup-migration-guide) |
 
 ### Response format
 
@@ -634,7 +648,7 @@ curl --location --request POST 'https://api.sx.bet/orders/cancel/all' \
 ```
 
 ```javascript
-import ethSigUtil from "eth-sig-util";
+import { signTypedData, SignTypedDataVersion } from "@metamask/eth-sig-util";
 import { randomBytes } from "@ethersproject/random";
 import { Wallet } from "@ethersproject/wallet";
 
@@ -671,8 +685,10 @@ function getCancelAllOrdersEIP712Payload(salt, timestamp, chainId) {
 
 const payload = getCancelOrderEventsEIP712Payload(salt, timestamp, chainId);
 
-const signature = ethSigUtil.signTypedData_v4(bufferPrivateKey, {
+const signature = signTypedData({
+  privateKey: bufferPrivateKey,
   data: payload,
+  version: SignTypedDataVersion.V4,
 });
 
 const apiPayload = {
@@ -707,6 +723,12 @@ This endpoint cancels ALL existing orders on the exchange that you placed as a m
 
 `POST https://api.sx.bet/orders/cancel/all`
 
+### Query parameters
+
+| Name          | Required | Type   | Description                                                                                                                  |
+| ------------- | -------- | ------ | ---------------------------------------------------------------------------------------------------------------------------- |
+| chainVersion  | false    | string | Must  be either `SXN` or `SXR`.<br/>**If not passed, Default will be SXN**. See [migration docs](#sx-rollup-migration-guide) |
+
 ### Request payload parameters
 
 | Name      | Required | Type   | Description                                                                                                                                            |
@@ -715,7 +737,6 @@ This endpoint cancels ALL existing orders on the exchange that you placed as a m
 | salt      | required | string | A random 32 bytes hex string to protect against replay                                                                                                 |
 | maker     | required | true   | The account from which you are cancelling orders                                                                                                       |
 | timestamp | required | true   | The current timestamp in UNIX seconds to protect against replay.                                                                                       |
-| chainVersion  | false    | string   | Must  be either `SXN` or `SXR`.<br/>**If not passed, Default will be SXN**. See [migration docs](#sx-rollup-migration-guide) |
 
 ### Response format
 
@@ -740,7 +761,7 @@ curl --location --request POST 'https://api.sx.bet/orders/fill' \
 ```
 
 ```javascript
-import ethSigUtil from "eth-sig-util";
+import { signTypedData, SignTypedDataVersion } from "@metamask/eth-sig-util";
 import {
   BigNumber,
   constants,
@@ -750,6 +771,7 @@ import {
   Wallet,
 } from "ethers";
 import { randomBytes } from "ethers/lib/utils";
+import dayjs from "dayjs";
 
 async function fillOrder() {
   const privateKey = process.env.PRIVATE_KEY;
@@ -951,35 +973,43 @@ async function fillOrder() {
       EIP712Domain: [
         { name: "name", type: "string" },
         { name: "version", type: "string" },
+        { name: "chainId", type: "uint256" },
         { name: "verifyingContract", type: "address" },
-        { name: "salt", type: "bytes32" },
       ],
-      MetaTransaction: [
+      Permit: [
+        { name: "owner", type: "address" },
+        { name: "spender", type: "address" },
+        { name: "value", type: "uint256" },
         { name: "nonce", type: "uint256" },
-        { name: "from", type: "address" },
-        { name: "functionSignature", type: "bytes" },
+        { name: "deadline", type: "uint256" },
       ],
     },
     domain: {
       name: tokenName,
       version: "1",
-      salt: utils.hexZeroPad(utils.hexlify(chainId), 32),
+      chainId: chainId,
       verifyingContract: tokenAddress,
     },
     message: {
+      owner: takerAddress,
+      spender: tokenTransferProxyAddress,
+      value: approvalAmount,
       nonce: nonce.toNumber(),
-      from: takerAddress,
-      functionSignature: abiEncodedFunctionSig,
+      deadline: dayjs().add(2, "hour").unix(),
     },
-    primaryType: "MetaTransaction",
+    primaryType: "Permit",
   };
 
-  const approveProxySignature = ethSigUtil.signTypedData_v4(bufferPrivateKey, {
+  const approveProxySignature = signTypedData({
+    privateKey: bufferPrivateKey,
     data: approveProxySigningPayload,
+    version: SignTypedDataVersion.V4,
   });
 
-  const signature = ethSigUtil.signTypedData_v4(bufferPrivateKey, {
+  const signature = signTypedData({
+    privateKey: bufferPrivateKey,
     data: signingPayload,
+    version: SignTypedDataVersion.V4,
   });
 
   const apiPayload = {

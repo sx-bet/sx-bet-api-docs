@@ -59,5 +59,5 @@
 
 These are the latest versions of js dependencies that are referenced in documentation:
 
-- `eth-sig-util`: 2.5.4
+- `@metamask/eth-sig-util`: 7.0.3
 - `ethers`: 5.7.2
