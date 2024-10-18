@@ -5439,7 +5439,23 @@ Note that <code>totalBetSize</code> is from *the perspective of the market maker
 </span></code></pre></div>
 <p>This endpoint fills orders on the exchange. Multiple orders can be filled at once and no gas is paid as this is a meta transaction submitted by the API itself.</p>
 
-<p>Note that pre-game has a built-in betting delay of 0.5s and in-game betting has a built-in betting delay based on the below chart. This is added to guard against toxic flow and high spikes in latency from the bookmaker&#39;s side. It is effectively protection for the bookmaker. If the odds change within that delay time, the order will be cancelled and an error will be thrown.</p>
+<p>Note that there are built in betting delays based on the below chart. This is added to guard against toxic flow and high spikes in latency from the bookmaker&#39;s side. It is effectively protection for the bookmaker. If the odds change within that delay time, the order will be cancelled and an error will be thrown.</p>
+
+<p><strong>PREGAME</strong></p>
+
+<table><thead>
+<tr>
+<th>Sport</th>
+<th>Delay ( in seconds )</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Default (all sports)</td>
+<td>0.5</td>
+</tr>
+</tbody></table>
+
+<p><strong>LIVE</strong></p>
 
 <table><thead>
 <tr>
