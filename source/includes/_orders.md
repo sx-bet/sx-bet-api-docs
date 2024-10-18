@@ -1055,7 +1055,15 @@ async function fillOrder() {
 
 This endpoint fills orders on the exchange. Multiple orders can be filled at once and no gas is paid as this is a meta transaction submitted by the API itself.
 
-Note that pre-game has a built-in betting delay of 0.5s and in-game betting has a built-in betting delay based on the below chart. This is added to guard against toxic flow and high spikes in latency from the bookmaker's side. It is effectively protection for the bookmaker. If the odds change within that delay time, the order will be cancelled and an error will be thrown.
+Note that there are built in betting delays based on the below chart. This is added to guard against toxic flow and high spikes in latency from the bookmaker's side. It is effectively protection for the bookmaker. If the odds change within that delay time, the order will be cancelled and an error will be thrown.
+
+**PREGAME**
+
+| Sport                | Delay ( in seconds ) |
+| -------------------- | -------------------- |
+| Default (all sports) | 0.5                  |
+
+**LIVE**
 
 | Sport               | Delay ( in seconds ) |
 | ------------------- | -------------------- |
