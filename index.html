@@ -1409,7 +1409,8 @@ Note that the `requestSize` is only indicating what the user is requesting, but 
     </span><span class="kc">false</span><span class="p">,</span><span class="w">
     </span><span class="s2">"0xbf099ab02255d5e2a9e063dc43a7afe96e65f5e8fc2ed3d2ba60b0a3fcadb3441bf32271293e85b7a795c9d86a2304035a0da3285113e746547e236bc58885e01c"</span><span class="p">,</span><span class="w">
     </span><span class="s2">"6982204685293715457"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"SXR"</span><span class="w">
+    </span><span class="s2">"SXR"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"L13772588"</span><span class="p">,</span><span class="w">
   </span><span class="p">]</span><span class="w">
 </span><span class="p">]</span><span class="w">
 </span></code></pre></div>
@@ -1510,6 +1511,11 @@ Note that the `requestSize` is only indicating what the user is requesting, but 
 <td>string</td>
 <td><code>SXN</code> or <code>SXR</code></td>
 </tr>
+<tr>
+<td>sportXeventId</td>
+<td>string</td>
+<td>The event related to this order</td>
+</tr>
 </tbody></table>
 
 <p>Note that the messages are sent in batches in an array. If you receive two updates for the same <code>orderHash</code> within an update, you can order them by <code>updateTime</code> after converting the <code>updateTime</code> to a BigInt or BigNumber.</p>
@@ -1538,7 +1544,8 @@ Note that the `requestSize` is only indicating what the user is requesting, but 
     </span><span class="kc">false</span><span class="p">,</span><span class="w">
     </span><span class="s2">"0xbf099ab02255d5e2a9e063dc43a7afe96e65f5e8fc2ed3d2ba60b0a3fcadb3441bf32271293e85b7a795c9d86a2304035a0da3285113e746547e236bc58885e01c"</span><span class="p">,</span><span class="w">
     </span><span class="s2">"6982204685293715457"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"SXR"</span><span class="w">
+    </span><span class="s2">"SXR"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"L13772588"</span><span class="p">,</span><span class="w">
   </span><span class="p">]</span><span class="w">
 </span><span class="p">]</span><span class="w">
 </span></code></pre></div>
@@ -1638,6 +1645,11 @@ Note that the `requestSize` is only indicating what the user is requesting, but 
 <td>chainVersion</td>
 <td>string</td>
 <td><code>SXN</code> or <code>SXR</code></td>
+</tr>
+<tr>
+<td>sportXeventId</td>
+<td>string</td>
+<td>The event related to this order</td>
 </tr>
 </tbody></table>
 
@@ -3805,8 +3817,13 @@ Parlay Markets act as regular markets, but with additional fields to indicate th
 </tr>
 <tr>
 <td>chainVersion</td>
-<td>string?</td>
+<td>string</td>
 <td><code>SXN</code> or <code>SXR</code>. See <a href="#sx-rollup-migration-guide">migration docs</a>.</td>
+</tr>
+<tr>
+<td>sportXeventId</td>
+<td>string</td>
+<td>The event related to this trade</td>
 </tr>
 </tbody></table>
 <h2 id='get-consolidated-trades'>Get consolidated trades</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.sx.bet/trades/consolidated'</span>
@@ -4055,8 +4072,13 @@ Parlay Markets act as regular markets, but with additional fields to indicate th
 </tr>
 <tr>
 <td>chainVersion</td>
-<td>string?</td>
+<td>string</td>
 <td><code>SXN</code> or <code>SXR</code>. See <a href="#sx-rollup-migration-guide">migration docs</a>.</td>
+</tr>
+<tr>
+<td>sportXeventId</td>
+<td>string</td>
+<td>The event related to this trade</td>
 </tr>
 </tbody></table>
 <h1 id='orders'>Orders</h1><h2 id='get-active-orders'>Get active orders</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.sx.bet/orders'</span>
@@ -4241,6 +4263,11 @@ Only one of `marketHashes` and `sportXEventId` can be present.
 <td>signature</td>
 <td>string</td>
 <td>Signature of the maker on this order</td>
+</tr>
+<tr>
+<td>sportXeventId</td>
+<td>string</td>
+<td>The event related to this order</td>
 </tr>
 </tbody></table>
 <h3 id='error-responses'>Error Responses</h3>
@@ -5277,8 +5304,8 @@ Note that <code>totalBetSize</code> is from *the perspective of the market maker
         <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">takerAmounts</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256[]</span><span class="dl">"</span> <span class="p">},</span>
         <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">fillSalt</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span> <span class="p">},</span>
         <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">beneficiary</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">address</span><span class="dl">"</span> <span class="p">},</span>
-        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">beneficiaryType</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint8</span><span class="dl">"</span> <span class="p">}</span>
-        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">cashOutTarget</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">bytes32</span><span class="dl">"</span> <span class="p">}</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">beneficiaryType</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint8</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">cashOutTarget</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">bytes32</span><span class="dl">"</span> <span class="p">},</span>
       <span class="p">],</span>
       <span class="na">Order</span><span class="p">:</span> <span class="p">[</span>
         <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">marketHash</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">bytes32</span><span class="dl">"</span> <span class="p">},</span>
@@ -5412,7 +5439,43 @@ Note that <code>totalBetSize</code> is from *the perspective of the market maker
 </span></code></pre></div>
 <p>This endpoint fills orders on the exchange. Multiple orders can be filled at once and no gas is paid as this is a meta transaction submitted by the API itself.</p>
 
-<p>Note that pre-game has a built-in betting delay of 0.5s and in-game betting has a built-in betting delay of 8s. This is added to guard against toxic flow and high spikes in latency from the bookmaker&#39;s side. It is effectively protection for the bookmaker. If the odds change within that delay time, the order will be cancelled and an error will be thrown.</p>
+<p>Note that pre-game has a built-in betting delay of 0.5s and in-game betting has a built-in betting delay based on the below chart. This is added to guard against toxic flow and high spikes in latency from the bookmaker&#39;s side. It is effectively protection for the bookmaker. If the odds change within that delay time, the order will be cancelled and an error will be thrown.</p>
+
+<table><thead>
+<tr>
+<th>Sport</th>
+<th>Delay ( in seconds )</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>Baseball</td>
+<td>12</td>
+</tr>
+<tr>
+<td>Football</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Tennis</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Soccer</td>
+<td>10</td>
+</tr>
+<tr>
+<td>Basketball</td>
+<td>8</td>
+</tr>
+<tr>
+<td>Hockey</td>
+<td>8</td>
+</tr>
+<tr>
+<td>Default (all other)</td>
+<td>8</td>
+</tr>
+</tbody></table>
 
 <p>To fill orders on sx.bet via the API, make sure you first enable betting by following the steps <a href="#enabling-betting">here</a></p>
 
@@ -5501,12 +5564,6 @@ Your assets must be on SX Network to place bets.
 <td>true</td>
 <td>string</td>
 <td>A user-facing message for the eip712 signing. Can be anything.</td>
-</tr>
-<tr>
-<td>signature</td>
-<td>true</td>
-<td>string</td>
-<td>The EIP712 signature on the cancel order payload. See the <a href="#eip712-signing">EIP712 signing section</a> for general information on how to compute this signature. See the example for the specific parameters required.</td>
 </tr>
 <tr>
 <td>approveProxyPayload</td>
