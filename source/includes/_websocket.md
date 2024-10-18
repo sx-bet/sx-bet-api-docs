@@ -382,7 +382,8 @@ channel.subscribe((message) => {
     false,
     "0xbf099ab02255d5e2a9e063dc43a7afe96e65f5e8fc2ed3d2ba60b0a3fcadb3441bf32271293e85b7a795c9d86a2304035a0da3285113e746547e236bc58885e01c",
     "6982204685293715457",
-    "SXR"
+    "SXR",
+    "L13772588",
   ]
 ]
 ```
@@ -417,6 +418,7 @@ The order is packed into an array and the fields are sent in the below order, wi
 | signature                | string  | Signature of the maker on this order                                                                                                                                                                                                                                                                                                           |
 | updateTime               | string  | Server-side clock time for the last modification of this order.                                                                                                                                                                                                                                                                                |
 | chainVersion             | string  | `SXN` or `SXR`                                                                                                                                                                                                                                                                                                                                 |
+| sportXeventId            | string  | The event related to this order                                                                                                                                                                                                                                                                                                                |
 
 Note that the messages are sent in batches in an array. If you receive two updates for the same `orderHash` within an update, you can order them by `updateTime` after converting the `updateTime` to a BigInt or BigNumber.
 
@@ -449,7 +451,8 @@ channel.subscribe((message) => {
     false,
     "0xbf099ab02255d5e2a9e063dc43a7afe96e65f5e8fc2ed3d2ba60b0a3fcadb3441bf32271293e85b7a795c9d86a2304035a0da3285113e746547e236bc58885e01c",
     "6982204685293715457",
-    "SXR"
+    "SXR",
+    "L13772588",
   ]
 ]
 ```
@@ -484,6 +487,7 @@ The order is packed into an array and the fields are sent in the below order, wi
 | signature                | string  | Signature of the maker on this order                                                                                                                                                                                                                                                                                                           |
 | updateTime               | string  | Server-side clock time for the last modification of this order.                                                                                                                                                                                                                                                                                |
 | chainVersion             | string  | `SXN` or `SXR`                                                                                                                                                                                                                                                                                                                                 |
+| sportXeventId            | string  | The event related to this order                                                                                                                                                                                                                                                                                                                |
 
 Note that the messages are sent in batches in an array. If you receive two updates for the same `orderHash` within an update, you can order them by `updateTime` after converting the `updateTime` to a BigInt or BigNumber.
 

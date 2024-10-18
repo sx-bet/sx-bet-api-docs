@@ -143,7 +143,8 @@ A `Trade` object has the following format
 | valid             | boolean | `true` if the trade counts toward competitions or tournaments                                                                        |
 | outcome           | number  | with `settled=true`, this will be 0, 1, or 2 depending on the final outcome of the market                                            |
 | settleDate        | string  | ISO formatted date string of when the trade was settled                                                                              |
-| chainVersion      | string? | `SXN` or `SXR`. See [migration docs](#sx-rollup-migration-guide).                                                                     |
+| chainVersion      | string  | `SXN` or `SXR`. See [migration docs](#sx-rollup-migration-guide).                                                                    |
+| sportXeventId     | string  | The event related to this trade                                                                                                      |
 
 ## Get consolidated trades
 
@@ -251,4 +252,5 @@ A `ConsolidatedTrade` object has the following format
 | gameTime            | string  | ISO formatted date string of when the game is suppossed to occur                                                                            |
 | leagueLabel         | string  | The name of this league                                                                                                                     |
 | outcome             | number  | With `settled=true`, this will be 0, 1, or 2 depending on the final outcome of the market                                                   |
-| chainVersion        | string? | `SXN` or `SXR`. See [migration docs](#sx-rollup-migration-guide).                                                                            |
+| chainVersion        | string  | `SXN` or `SXR`. See [migration docs](#sx-rollup-migration-guide).                                                                           |
+| sportXeventId       | string  | The event related to this trade                                                                                                             |

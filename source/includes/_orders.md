@@ -105,6 +105,7 @@ Only one of `marketHashes` and `sportXEventId` can be present.
 | salt                     | string  | A random number to differentiate identical orders                                                                                                                                                                                                                                                                                              |
 | isMakerBettingOutcomeOne | boolean | `true` if the maker is betting outcome one (and hence taker is betting outcome two if filled)                                                                                                                                                                                                                                                  |
 | signature                | string  | Signature of the maker on this order                                                                                                                                                                                                                                                                                                           |
+| sportXeventId            | string  | The event related to this order                                                                                                                                                                                                                                                                                                                |
 
 ### Error Responses
 
@@ -917,8 +918,8 @@ async function fillOrder() {
         { name: "takerAmounts", type: "uint256[]" },
         { name: "fillSalt", type: "uint256" },
         { name: "beneficiary", type: "address" },
-        { name: "beneficiaryType", type: "uint8" }
-        { name: "cashOutTarget", type: "bytes32" }
+        { name: "beneficiaryType", type: "uint8" },
+        { name: "cashOutTarget", type: "bytes32" },
       ],
       Order: [
         { name: "marketHash", type: "bytes32" },
@@ -1054,7 +1055,17 @@ async function fillOrder() {
 
 This endpoint fills orders on the exchange. Multiple orders can be filled at once and no gas is paid as this is a meta transaction submitted by the API itself.
 
-Note that pre-game has a built-in betting delay of 0.5s and in-game betting has a built-in betting delay of 8s. This is added to guard against toxic flow and high spikes in latency from the bookmaker's side. It is effectively protection for the bookmaker. If the odds change within that delay time, the order will be cancelled and an error will be thrown.
+Note that pre-game has a built-in betting delay of 0.5s and in-game betting has a built-in betting delay based on the below chart. This is added to guard against toxic flow and high spikes in latency from the bookmaker's side. It is effectively protection for the bookmaker. If the odds change within that delay time, the order will be cancelled and an error will be thrown.
+
+| Sport               | Delay ( in seconds ) |
+| ------------------- | -------------------- |
+| Baseball            | 12                   |
+| Football            | 10                   |
+| Tennis              | 10                   |
+| Soccer              | 10                   |
+| Basketball          | 8                    |
+| Hockey              | 8                    |
+| Default (all other) | 8                    |
 
 To fill orders on sx.bet via the API, make sure you first enable betting by following the steps [here](#enabling-betting)
 
@@ -1082,7 +1093,6 @@ Your assets must be on SX Network to place bets.
 | takerAmounts        | true     | string[]                | How much each order is being filled, ordered by index. Must be in the same order as `orderHashes`, and the same length as `orderHashes`. It also must be the same and in the same order as the `takerAmounts` array used when computing the EIP712 payload. |
 | takerSig            | true     | string                  | The EIP712 signature of the `taker` on the payload. See the example of how to compute this.                                                                                                                                                                 |
 | message             | true     | string                  | A user-facing message for the eip712 signing. Can be anything.                                                                                                                                                                                              |
-| signature           | true     | string                  | The EIP712 signature on the cancel order payload. See the [EIP712 signing section](#eip712-signing) for general information on how to compute this signature. See the example for the specific parameters required.                                         |
 | approveProxyPayload | false    | `ApproveSpenderPayload` | Extra object required if you wish to atomically `ERC20.approve()` prior to the bet. This can be useful from a UX point of view if you don't want the user to have to wait until the approval is mined before the bet can be submitted                       |
 | affiliateAddress    | false    | string                  | Set the `taker` to a valid affiliate's address.                                                                                                                                                                                                             |
 
