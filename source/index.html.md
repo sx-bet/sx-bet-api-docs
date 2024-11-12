@@ -15,6 +15,7 @@ includes:
   - metadata
   - websocket
   - apiKey
+  - heartbeat
   - leagues
   - sports
   - fixtures
