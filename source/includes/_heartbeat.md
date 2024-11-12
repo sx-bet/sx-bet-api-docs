@@ -5,7 +5,7 @@ A user may register a `heartbeat` to SX Bet API using the Heartbeat service. An 
 This will ensure that when loss of connectivity occurs between your service and SX Bet API, there will be no exposure left on the orderbook.
 ## Register heartbeat
 
-To register and refresh your heartbeat with 0 > `timeoutSeconds` >= 3600. Ping this endpoint to maintain your heartbeat after initial registration.
+To register and refresh your heartbeat with 0 > `timeoutSeconds` <= 3600. Ping this endpoint to maintain your heartbeat after initial registration.
 
 ```shell
 curl --location --request POST 'https://api.sx.bet/heartbeat' \
