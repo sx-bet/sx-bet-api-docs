@@ -40,7 +40,7 @@ curl --location --request POST 'https://api.sx.bet/heartbeat' \
 | timeoutSeconds | true     | number | The number of seconds before heartbeat service times out and cancels your open orders |
 
 <aside class="notice">
-The range `timeoutSeconds` can be is betwteen 0 - 3600 seconds inclusive. 
+The <code>timeoutSeconds</code> value can be betwteen 0 - 3600 seconds inclusive. 
 </aside>
 
 ### Response format
