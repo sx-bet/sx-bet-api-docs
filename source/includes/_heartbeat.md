@@ -13,7 +13,6 @@ curl --location --request POST 'https://api.sx.bet/heartbeat' \
     "timeoutSeconds": 10
 }'
 ```
-
 > The above command returns JSON structured like this
 
 ```json
@@ -38,6 +37,18 @@ curl --location --request POST 'https://api.sx.bet/heartbeat' \
     "requestor": "<YOUR-ACCOUNT-ADDRESS>",
     "timeoutSeconds": 0
 }'
+```
+> The above command returns JSON structured like this
+
+```json
+{
+    "status": "success",
+    "data": {
+        "requestor": "<YOUR-ACCOUNT-ADDRESS>",
+        "timeoutSeconds": 10,
+        "expiresAt": "2024-11-12T14:35:06.614Z"
+    }
+}
 ```
 ### HTTP Request
 
