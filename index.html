@@ -984,7 +984,7 @@ When `chainVersion` is empty for POST requests, the default data is for SXN chai
 <span class="k">async</span> <span class="kd">function</span> <span class="nx">createTokenRequest</span><span class="p">()</span> <span class="p">{</span>
   <span class="kd">const</span> <span class="nx">response</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">axios</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="dl">"</span><span class="s2">https://api.sx.bet/user/token</span><span class="dl">"</span><span class="p">,</span> <span class="p">{</span>
     <span class="na">headers</span><span class="p">:</span> <span class="p">{</span>
-      <span class="dl">"</span><span class="s2">x-api-key</span><span class="dl">"</span><span class="p">:</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">SX_BET_API_KEY</span><span class="p">,</span>
+      <span class="dl">"</span><span class="s2">X-Api-Key</span><span class="dl">"</span><span class="p">:</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">SX_BET_API_KEY</span><span class="p">,</span>
     <span class="p">},</span>
   <span class="p">});</span>
   <span class="k">return</span> <span class="nx">response</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
@@ -996,7 +996,7 @@ When `chainVersion` is empty for POST requests, the default data is for SXN chai
       <span class="k">try</span> <span class="p">{</span>
         <span class="kd">const</span> <span class="nx">tokenRequest</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">createTokenRequest</span><span class="p">();</span>
         <span class="c1">// Make a network request to GET /user/token passing in</span>
-        <span class="c1">// `x-api-key: [YOUR_API_KEY]` as a header</span>
+        <span class="c1">// `X-Api-Key: [YOUR_API_KEY]` as a header</span>
         <span class="nx">callback</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">tokenRequest</span><span class="p">);</span>
       <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
         <span class="nx">callback</span><span class="p">(</span><span class="nx">error</span><span class="p">,</span> <span class="kc">null</span><span class="p">);</span>
@@ -1762,7 +1762,7 @@ If you lose your key, you can generate a new one by following the same steps. An
 <p>This will ensure that when loss of connectivity occurs between your service and SX Bet API, there will be no exposure left on the orderbook.</p>
 <h2 id='post-heartbeat'>POST heartbeat</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://api.sx.bet/heartbeat'</span> <span class="se">\</span>
 <span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
-<span class="nt">--header</span> <span class="s1">'x-api-key: &lt;YOUR-API-KEY&gt;'</span> <span class="se">\</span>
+<span class="nt">--header</span> <span class="s1">'X-Api-Key: &lt;YOUR-API-KEY&gt;'</span> <span class="se">\</span>
 <span class="nt">--data-raw</span> <span class="s1">'{
     "requestor": "&lt;YOUR-ACCOUNT-ADDRESS&gt;",
     "timeoutSeconds": 10
