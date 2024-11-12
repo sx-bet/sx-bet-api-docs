@@ -1763,7 +1763,9 @@ If you lose your key, you can generate a new one by following the same steps. An
 <p>A user may register a <code>heartbeat</code> to SX Bet API using the Heartbeat service. An <a href="#api-key">API Key</a> is necessary for this service. Once you register a heartbeat with the desired timeout value, all your open orders will be automatically cancelled if another heartbeat request is not sent within that timeout period.</p>
 
 <p>This will ensure that when loss of connectivity occurs between your service and SX Bet API, there will be no exposure left on the orderbook.</p>
-<h2 id='register-heartbeat'>Register heartbeat</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://api.sx.bet/heartbeat'</span> <span class="se">\</span>
+<h2 id='register-heartbeat'>Register heartbeat</h2>
+<p>To register and refresh your heartbeat with 0 &gt; <code>timeoutSeconds</code> &gt;= 3600. Ping this endpoint to maintain your heartbeat after initial registration.</p>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://api.sx.bet/heartbeat'</span> <span class="se">\</span>
 <span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
 <span class="nt">--header</span> <span class="s1">'X-Api-Key: &lt;YOUR-API-KEY&gt;'</span> <span class="se">\</span>
 <span class="nt">--data-raw</span> <span class="s1">'{
@@ -1799,7 +1801,7 @@ If you lose your key, you can generate a new one by following the same steps. An
     </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
         </span><span class="nl">"requestor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;YOUR-ACCOUNT-ADDRESS&gt;"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"timeoutSeconds"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"timeoutSeconds"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
         </span><span class="nl">"expiresAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2024-11-12T14:35:06.614Z"</span><span class="w">
     </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
