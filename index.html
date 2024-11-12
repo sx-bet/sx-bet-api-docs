@@ -1791,7 +1791,19 @@ If you lose your key, you can generate a new one by following the same steps. An
     "requestor": "&lt;YOUR-ACCOUNT-ADDRESS&gt;",
     "timeoutSeconds": 0
 }'</span>
-</code></pre></div><h3 id='http-request'>HTTP Request</h3>
+</code></pre></div>
+<blockquote>
+<p>The above command returns JSON structured like this</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"requestor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"&lt;YOUR-ACCOUNT-ADDRESS&gt;"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"timeoutSeconds"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"expiresAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2024-11-12T14:35:06.614Z"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div><h3 id='http-request'>HTTP Request</h3>
 <p><code>POST https://api.sx.bet/heartbeat</code></p>
 <h3 id='request-payload-parameters'>Request payload parameters</h3>
 <table><thead>
