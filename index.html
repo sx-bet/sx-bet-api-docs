@@ -1783,7 +1783,7 @@ If you lose your key, you can generate a new one by following the same steps. An
     </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div><h2 id='cancel-heartbeat'>Cancel heartbeat</h2>
-<p>To cancel a registered heartbeat, you may use the same request to register a heartbeat but use <code>timeoutSeconds=0</code>. This will deactivate the heartbeat and ** orders will not be cancelled automatically**.</p>
+<p>To cancel a registered heartbeat, you may use the same request to register a heartbeat but use <code>timeoutSeconds=0</code>. This will deactivate the heartbeat and <strong>orders will not be cancelled automatically</strong>.</p>
 <div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> POST <span class="s1">'https://api.sx.bet/heartbeat'</span> <span class="se">\</span>
 <span class="nt">--header</span> <span class="s1">'Content-Type: application/json'</span> <span class="se">\</span>
 <span class="nt">--header</span> <span class="s1">'X-Api-Key: &lt;YOUR-API-KEY&gt;'</span> <span class="se">\</span>
