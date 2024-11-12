@@ -3,8 +3,7 @@
 A user may register a `heartbeat` to SX Bet API using the Heartbeat service. An [API Key](#api-key) is necessary for this service. Once you register a heartbeat with the desired timeout value, all your open orders will be automatically cancelled if another heartbeat request is not sent within that timeout period.
 
 This will ensure that when loss of connectivity occurs between your service and SX Bet API, there will be no exposure left on the orderbook.
-## POST heartbeat
-
+## Register heartbeat
 ```shell
 curl --location --request POST 'https://api.sx.bet/heartbeat' \
 --header 'Content-Type: application/json' \
@@ -21,7 +20,7 @@ curl --location --request POST 'https://api.sx.bet/heartbeat' \
 {
     "status": "success",
     "data": {
-        "requestor": "<YOUR-ACCOUNT-ADDRESS",
+        "requestor": "<YOUR-ACCOUNT-ADDRESS>",
         "timeoutSeconds": 10,
         "expiresAt": "2024-11-12T14:35:06.614Z"
     }
