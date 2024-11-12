@@ -412,6 +412,9 @@
                   <li>
                     <a href="#register-heartbeat" class="toc-h2 toc-link" data-title="Register heartbeat">Register heartbeat</a>
                   </li>
+                  <li>
+                    <a href="#cancel-heartbeat" class="toc-h2 toc-link" data-title="Cancel heartbeat">Cancel heartbeat</a>
+                  </li>
               </ul>
           </li>
           <li>
@@ -1779,7 +1782,18 @@ If you lose your key, you can generate a new one by following the same steps. An
         </span><span class="nl">"expiresAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2024-11-12T14:35:06.614Z"</span><span class="w">
     </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre></div><h3 id='http-request'>HTTP Request</h3>
+</span></code></pre></div><h2 id='cancel-heartbeat'>Cancel heartbeat</h2>
+<p>To cancel a registered heartbeat, you may use the same request to register a heartbeat but use <code>timeoutSeconds=0</code>.
+<code>shell
+curl --location --request POST &#39;https://api.sx.bet/heartbeat&#39; \
+--header &#39;Content-Type: application/json&#39; \
+--header &#39;X-Api-Key: &lt;YOUR-API-KEY&gt;&#39; \
+--data-raw &#39;{
+    &quot;requestor&quot;: &quot;&lt;YOUR-ACCOUNT-ADDRESS&gt;&quot;,
+    &quot;timeoutSeconds&quot;: 0
+}&#39;
+</code></p>
+<h3 id='http-request'>HTTP Request</h3>
 <p><code>POST https://api.sx.bet/heartbeat</code></p>
 <h3 id='request-payload-parameters'>Request payload parameters</h3>
 <table><thead>
