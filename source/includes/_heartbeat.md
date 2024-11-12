@@ -28,7 +28,7 @@ curl --location --request POST 'https://api.sx.bet/heartbeat' \
 ```
 ## Cancel heartbeat
 
-To cancel a registered heartbeat, you may use the same request to register a heartbeat but use `timeoutSeconds=0`. This will deactivate the heartbeat and ** orders will not be cancelled automatically**.
+To cancel a registered heartbeat, you may use the same request to register a heartbeat but use `timeoutSeconds=0`. This will deactivate the heartbeat and **orders will not be cancelled automatically**.
 
 ```shell
 curl --location --request POST 'https://api.sx.bet/heartbeat' \
