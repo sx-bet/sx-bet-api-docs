@@ -8,7 +8,7 @@ This will ensure that when loss of connectivity occurs between your service and 
 ```shell
 curl --location --request POST 'https://api.sx.bet/heartbeat' \
 --header 'Content-Type: application/json' \
---header 'x-api-key: <YOUR-API-KEY>' \
+--header 'X-Api-Key: <YOUR-API-KEY>' \
 --data-raw '{
     "requestor": "<YOUR-ACCOUNT-ADDRESS>",
     "timeoutSeconds": 10

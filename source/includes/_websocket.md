@@ -13,7 +13,7 @@ import axios from "axios";
 async function createTokenRequest() {
   const response = await axios.get("https://api.sx.bet/user/token", {
     headers: {
-      "x-api-key": process.env.SX_BET_API_KEY,
+      "X-Api-Key": process.env.SX_BET_API_KEY,
     },
   });
   return response.data;
@@ -25,7 +25,7 @@ async function initialize() {
       try {
         const tokenRequest = await createTokenRequest();
         // Make a network request to GET /user/token passing in
-        // `x-api-key: [YOUR_API_KEY]` as a header
+        // `X-Api-Key: [YOUR_API_KEY]` as a header
         callback(null, tokenRequest);
       } catch (error) {
         callback(error, null);
