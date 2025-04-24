@@ -482,6 +482,9 @@
                     <a href="#get-active-trades" class="toc-h2 toc-link" data-title="Get active trades">Get active trades</a>
                   </li>
                   <li>
+                    <a href="#get-trades-by-orderhash" class="toc-h2 toc-link" data-title="Get trades by orderHash">Get trades by orderHash</a>
+                  </li>
+                  <li>
                     <a href="#get-consolidated-trades" class="toc-h2 toc-link" data-title="Get consolidated trades">Get consolidated trades</a>
                   </li>
               </ul>
@@ -3875,6 +3878,11 @@ Parlay Markets act as regular markets, but with additional fields to indicate th
 <td>Exact token amount that was staked for the bet. To convert into a readable token amount, see <a href="#tokens">the token conversion section</a></td>
 </tr>
 <tr>
+<td>normalizedStake</td>
+<td>string</td>
+<td>The <code>stake</code> value in the correct decimal format for the <code>baseToken</code></td>
+</tr>
+<tr>
 <td>odds</td>
 <td>string</td>
 <td>Implied odds that the bettor received for this bet. Divide by 10^20 to get the odds in decimal format.</td>
@@ -3944,6 +3952,132 @@ Parlay Markets act as regular markets, but with additional fields to indicate th
 <td>string</td>
 <td>The event related to this trade</td>
 </tr>
+<tr>
+<td>netReturn</td>
+<td>string</td>
+<td>The net return amount in the <code>baseToken</code> value</td>
+</tr>
+<tr>
+<td>settleNetReturnValue</td>
+<td>string</td>
+<td>The net return amount in USD (at the time of settlement)</td>
+</tr>
+</tbody></table>
+<h2 id='get-trades-by-orderhash'>Get trades by orderHash</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.sx.bet/trades/orders'</span>
+</code></pre></div>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"trades"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"baseToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x6629Ce1Cf35Cc1329ebB4F63202F3f197b3F050B"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"tradeStatus"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SUCCESS"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"bettor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x5B3498Cb20C3107B5B267fabd3601B6425BDeb42"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"stake"</span><span class="p">:</span><span class="w"> </span><span class="s2">"907458563"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"odds"</span><span class="p">:</span><span class="w"> </span><span class="s2">"54750000000000000000"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"orderHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xb338c7d03b09d6cefdf2cd7e79f72ea601cfd0fa10c35b351c7a59d5c8125675"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x526e24b9eca9bcbd51e4a19135a998e6a8d8fff06bd6668bfb8f35528837a1c2"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"maker"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"betTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-04-24T06:39:37.078Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"betType"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"betTimeValue"</span><span class="p">:</span><span class="w"> </span><span class="mf">907.458563</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"settled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"settleValue"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"bettingOutcomeOne"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"fillHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xb6b15fe7d4d337ff0ae0e2a233203385e619c5e1edf23f04135efbf12128def8"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"affiliate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x0000000000000000000000000000000000000000"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"valid"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"providerEventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"15468276"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"settleDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-04-24T17:38:24.885Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"outcome"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"contractsVersion"</span><span class="p">:</span><span class="w"> </span><span class="s2">"6.0"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"settleTxHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x0b33bf455a90469bdbc30ebea3a9930fe1f1525c03895c45c8e4feb98d6ac365"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"fillOrderHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xe6f4410a4fbd649e8fc72d764056fbd01c27d8b9d2749bd2cf78f2a161dde963"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"chainVersion"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SXR"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"sportXeventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"L15468276"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"netReturn"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1657.458563"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"settleNetReturnValue"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1657.458563"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"normalizedStake"</span><span class="p">:</span><span class="w"> </span><span class="s2">"907.458563"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"baseToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x6629Ce1Cf35Cc1329ebB4F63202F3f197b3F050B"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"tradeStatus"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SUCCESS"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"bettor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xA3C9202458BBE5EBa0b962835487d817f3955d01"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"stake"</span><span class="p">:</span><span class="w"> </span><span class="s2">"750000000"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"odds"</span><span class="p">:</span><span class="w"> </span><span class="s2">"45250000000000000000"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"orderHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xb338c7d03b09d6cefdf2cd7e79f72ea601cfd0fa10c35b351c7a59d5c8125675"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x526e24b9eca9bcbd51e4a19135a998e6a8d8fff06bd6668bfb8f35528837a1c2"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"maker"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"betTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-04-24T06:39:37.078Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"betType"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"betTimeValue"</span><span class="p">:</span><span class="w"> </span><span class="mi">750</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"settled"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"settleValue"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"bettingOutcomeOne"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"fillHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xb6b15fe7d4d337ff0ae0e2a233203385e619c5e1edf23f04135efbf12128def8"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"affiliate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x0000000000000000000000000000000000000000"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"valid"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"providerEventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"15468276"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"settleDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-04-24T17:38:24.885Z"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"outcome"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"contractsVersion"</span><span class="p">:</span><span class="w"> </span><span class="s2">"6.0"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"settleTxHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x0b33bf455a90469bdbc30ebea3a9930fe1f1525c03895c45c8e4feb98d6ac365"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"fillOrderHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xe6f4410a4fbd649e8fc72d764056fbd01c27d8b9d2749bd2cf78f2a161dde963"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"chainVersion"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SXR"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"sportXeventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"L15468276"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"netReturn"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1657.458564"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"settleNetReturnValue"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"normalizedStake"</span><span class="p">:</span><span class="w"> </span><span class="s2">"750.0"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>This endpoint retrieves trades on the exchange for the given orderHashes.</p>
+<h3 id='http-request-2'>HTTP Request</h3>
+<p><code>GET https://api.sx.bet/trades/orders</code></p>
+<h3 id='query-parameters-2'>Query parameters</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>orderHashes</td>
+<td>true</td>
+<td>string[]</td>
+<td>The unique identifiers of the orders being searched</td>
+</tr>
+</tbody></table>
+<h3 id='response-format-2'>Response format</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>status</td>
+<td>string</td>
+<td><code>success</code> or <code>failure</code> if the request succeeded or not</td>
+</tr>
+<tr>
+<td>data</td>
+<td>object</td>
+<td>The response data</td>
+</tr>
+<tr>
+<td>&gt; trades</td>
+<td>Trade[]</td>
+<td>The trades for the request</td>
+</tr>
 </tbody></table>
 <h2 id='get-consolidated-trades'>Get consolidated trades</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.sx.bet/trades/consolidated'</span>
 </code></pre></div>
@@ -3998,9 +4132,9 @@ Parlay Markets act as regular markets, but with additional fields to indicate th
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
 <p>This endpoint retrieves past consolidated trades on the exchange via pagination. If a trade fills multiple orders, it will show up as one entry here per bettor.</p>
-<h3 id='http-request-2'>HTTP Request</h3>
+<h3 id='http-request-3'>HTTP Request</h3>
 <p><code>GET https://api.sx.bet/trades/consolidated</code></p>
-<h3 id='query-parameters-2'>Query parameters</h3>
+<h3 id='query-parameters-3'>Query parameters</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -4070,7 +4204,7 @@ Parlay Markets act as regular markets, but with additional fields to indicate th
 <td>Must  be either <code>SXN</code> or <code>SXR</code>.<br/><strong>If not passed, data from both chains are returned</strong>. See <a href="#sx-rollup-migration-guide">migration docs</a></td>
 </tr>
 </tbody></table>
-<h3 id='response-format-2'>Response format</h3>
+<h3 id='response-format-3'>Response format</h3>
 <table><thead>
 <tr>
 <th>Name</th>
