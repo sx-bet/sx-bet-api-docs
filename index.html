@@ -313,36 +313,13 @@
             <a href="#introduction" class="toc-h1 toc-link" data-title="Introduction">Introduction</a>
           </li>
           <li>
-            <a href="#sx-rollup-migration-guide" class="toc-h1 toc-link" data-title="SX Rollup Migration Guide">SX Rollup Migration Guide</a>
-              <ul class="toc-list-h2">
-                  <li>
-                    <a href="#what-is-this-migration" class="toc-h2 toc-link" data-title="What is this migration?">What is this migration?</a>
-                  </li>
-                  <li>
-                    <a href="#what-do-i-have-to-do" class="toc-h2 toc-link" data-title="What do I have to do?">What do I have to do?</a>
-                  </li>
-                  <li>
-                    <a href="#endpoint-changes" class="toc-h2 toc-link" data-title="Endpoint Changes">Endpoint Changes</a>
-                  </li>
-                  <li>
-                    <a href="#sport-migration-schedule" class="toc-h2 toc-link" data-title="Sport Migration Schedule">Sport Migration Schedule</a>
-                  </li>
-              </ul>
-          </li>
-          <li>
             <a href="#references" class="toc-h1 toc-link" data-title="References">References</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#sxr-mainnet" class="toc-h2 toc-link" data-title="SXR Mainnet">SXR Mainnet</a>
+                    <a href="#mainnet" class="toc-h2 toc-link" data-title="Mainnet">Mainnet</a>
                   </li>
                   <li>
-                    <a href="#sxr-testnet" class="toc-h2 toc-link" data-title="SXR Testnet">SXR Testnet</a>
-                  </li>
-                  <li>
-                    <a href="#sxn-mainnet" class="toc-h2 toc-link" data-title="SXN Mainnet">SXN Mainnet</a>
-                  </li>
-                  <li>
-                    <a href="#sxn-testnet" class="toc-h2 toc-link" data-title="SXN Testnet">SXN Testnet</a>
+                    <a href="#testnet" class="toc-h2 toc-link" data-title="Testnet">Testnet</a>
                   </li>
                   <li>
                     <a href="#versions-of-dependencies" class="toc-h2 toc-link" data-title="Versions of dependencies">Versions of dependencies</a>
@@ -559,118 +536,14 @@
         <h1 id='introduction'>Introduction</h1>
 <p>Be your own bookmaker or fill orders programmatically with the SX.bet API!</p>
 
-<p>Technical questions or need support? <a href="mailto:api-support@sx.bet">Send us an e-mail</a>. </p>
+<p>Technical questions or need support? <a href="https://discord.gg/Ry8yjAD5YG">Join our discord</a>. </p>
 
 <p><strong>All documentation is provided in JavaScript.</strong></p>
 
 <aside class="notice">
 All ETH addresses used in this API are in check-summed format. If you pass in lowercase-only addresses, you won't get results.
 </aside>
-<h1 id='sx-rollup-migration-guide'>SX Rollup Migration Guide</h1><h2 id='what-is-this-migration'>What is this migration?</h2>
-<p>The current version of SX Network was built on the Polygon Edge SDK. This project has since been discontinued, and so there is no support or improvements coming for the chain. For a number of reasons including improving block times, making use of a canonical bridge, better stability and developer support, we have decided to migrate our chain to an Arbitrum Orbit Rollup chain.</p>
-
-<p>You can read more about the rationale <a href="https://medium.com/sportx-bet/sx-rollup-ca33079d1b8b">here</a>.</p>
-
-<aside class="notice">
-For the purposes of this migration, we will refer to current (legacy) chain as SXN and the new chain as SXR.
-</aside>
-<h2 id='what-do-i-have-to-do'>What do I have to do?</h2>
-<p>When the sport you&#39;re interested in has moved over to <strong>SXR</strong>, you&#39;ll have to:</p>
-
-<ul>
-<li>Update token addresses for <code>USDC</code> and <code>WSX</code> with the new token addresses</li>
-<li>Update rest API calls as shown <a href="#endpoint-changes">here</a></li>
-<li>Update websocket streams handlers for orders, trades, and markets <em>(they will now include <code>chainVersion</code>)</em></li>
-<li>Migrate funds from <strong>SXN</strong> to <strong>SXR</strong> using our bridge</li>
-<li>Configure the payloads with the new <code>chainId</code>, <code>domainVersion</code> and other configs found <a href="#references">here</a> and/or <a href="#metadata">here</a></li>
-<li>If you are <a href="#filling-orders">filling orders programattically </a>, you must change the contract ABI (two new fields under FillObject type)</li>
-<li>Reenable betting for each token as described <a href="#enabling-betting">here</a></li>
-<li>Start using API as normal for <strong>SXR</strong> Markets</li>
-</ul>
-<h2 id='endpoint-changes'>Endpoint Changes</h2>
-<p>The following endpoints allow a new query parameter: <code>chainVersion</code>. This will filter the API response to only the specific chain you are looking for. If no parameter is passed, there is a non-intrusive default used.</p>
-
-<aside class="warning">
-When `chainVersion` is empty for GET requests, the result will show data for both chains.
-</aside>
-
-<aside class="warning">
-When `chainVersion` is empty for POST requests, the default data is for SXN chain.
-</aside>
-
-<p>This ensures the changes are least disruptive, and changes are only required when handling games on the new chain.</p>
-
-<p><strong>Allowed values for <code>chainVersion</code> are:</strong></p>
-
-<table><thead>
-<tr>
-<th><code>chainVersion</code></th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>SXN</td>
-<td>Legacy SX Network</td>
-</tr>
-<tr>
-<td>SXR</td>
-<td>SX Rollup</td>
-</tr>
-</tbody></table>
-<h3 id='sxr-metadata'>SXR Metadata</h3><h4 id='get-sxr-metadata'>Get SXR Metadata</h4>
-<p><code>GET https://api.sx.bet/metadata?chainVersion=SXR</code></p>
-<h3 id='sxr-leagues'>SXR Leagues</h3><h4 id='get-active-sxr-leagues'>Get Active SXR Leagues</h4>
-<p><code>GET https://api.sx.bet/leagues/active?chainVersion=SXR</code></p>
-<h3 id='sxr-markets'>SXR Markets</h3><h4 id='get-active-sxr-markets'>Get Active SXR Markets</h4>
-<p><code>GET https://api.sx.bet/markets/active?chainVersion=SXR</code></p>
-<h4 id='get-popular-sxr-markets'>Get Popular SXR Markets</h4>
-<p><code>GET https://api.sx.bet/markets/popular?chainVersion=SXR</code></p>
-<h3 id='sxr-trades'>SXR Trades</h3><h4 id='get-sxr-trades'>Get SXR Trades</h4>
-<p><code>GET https://api.sx.bet/trades?chainVersion=SXR</code></p>
-<h3 id='sxr-consolidated-trades'>SXR Consolidated Trades</h3><h4 id='get-sxr-consolidated-trades'>Get SXR Consolidated Trades</h4>
-<p><code>GET https://api.sx.bet/trades/consolidated?chainVersion=SXR</code></p>
-<h3 id='sxr-orders'>SXR Orders</h3><h4 id='get-sxr-orders'>Get SXR Orders</h4>
-<p><code>GET https://api.sx.bet/orders?chainVersion=SXR</code></p>
-<h4 id='cancel-sxr-orders'>Cancel SXR Orders</h4>
-<p><code>POST https://api.sx.bet/orders/cancel/v2?chainVersion=SXR</code></p>
-<h4 id='cancel-sxr-orders-by-event'>Cancel SXR Orders by Event</h4>
-<p><code>POST https://api.sx.bet/orders/cancel/event?chainVersion=SXR</code></p>
-<h4 id='cancel-all-sxr-orders'>Cancel all SXR Orders</h4>
-<p><code>POST https://api.sx.bet/orders/cancel/all?chainVersion=SXR</code></p>
-<h2 id='sport-migration-schedule'>Sport Migration Schedule</h2>
-<p>Our plan is to migrate by sport to reduce impact as much as possible. Our migration by sport schedule is as follows:</p>
-
-<table><thead>
-<tr>
-<th>Sport(s)</th>
-<th>Date</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>E Sports, Novelty Markets, Rugby, Politics, Entertainment, NFTs, Daily Parlays</td>
-<td>July 29, 2024</td>
-</tr>
-<tr>
-<td>Boxing, Olympics, Racing, Cricket</td>
-<td>July 30, 2024</td>
-</tr>
-<tr>
-<td>Football, Hockey, Basketball</td>
-<td>July 31, 2024</td>
-</tr>
-<tr>
-<td>Baseball, Golf, Soccer, Tennis, Mixed Martial Arts</td>
-<td>August 5, 2024</td>
-</tr>
-<tr>
-<td>Crypto, Degen Crypto</td>
-<td>August 6, 2024</td>
-</tr>
-</tbody></table>
-<h1 id='references'>References</h1>
-<p><strong>SXN</strong> = Legacy SX Network<br>
-<strong>SXR</strong> =  New SX Network</p>
-<h2 id='sxr-mainnet'>SXR Mainnet</h2>
+<h1 id='references'>References</h1><h2 id='mainnet'>Mainnet</h2>
 <table><thead>
 <tr>
 <th>Reference Type</th>
@@ -707,10 +580,10 @@ When `chainVersion` is empty for POST requests, the default data is for SXN chai
 </tr>
 <tr>
 <td>METADATA</td>
-<td><code>https://api.sx.bet/metadata?chainVersion=SXR</code></td>
+<td><code>https://api.sx.bet/metadata</code></td>
 </tr>
 </tbody></table>
-<h2 id='sxr-testnet'>SXR Testnet</h2>
+<h2 id='testnet'>Testnet</h2>
 <table><thead>
 <tr>
 <th>Reference Type</th>
@@ -747,87 +620,7 @@ When `chainVersion` is empty for POST requests, the default data is for SXN chai
 </tr>
 <tr>
 <td>METADATA</td>
-<td><code>https://api.toronto.sx.bet/metadata?chainVersion=SXR</code></td>
-</tr>
-</tbody></table>
-<h2 id='sxn-mainnet'>SXN Mainnet</h2>
-<table><thead>
-<tr>
-<th>Reference Type</th>
-<th>Data</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>Chain ID</td>
-<td><code>416</code></td>
-</tr>
-<tr>
-<td>USDC Token Address</td>
-<td><code>0xe2aa35C2039Bd0Ff196A6Ef99523CC0D3972ae3e</code></td>
-</tr>
-<tr>
-<td>WSX Token Address</td>
-<td><code>0xaa99bE3356a11eE92c3f099BD7a038399633566f</code></td>
-</tr>
-<tr>
-<td>SX Application</td>
-<td><code>https://sx.bet</code></td>
-</tr>
-<tr>
-<td>SX API URL</td>
-<td><code>https://api.sx.bet</code></td>
-</tr>
-<tr>
-<td>RPC URL</td>
-<td><code>https://rpc.sx.technology</code></td>
-</tr>
-<tr>
-<td>Explorer Page</td>
-<td><code>https://explorer.sx.technology</code></td>
-</tr>
-<tr>
-<td>METADATA</td>
-<td><code>https://api.sx.bet/metadata?chainVersion=SXN</code></td>
-</tr>
-</tbody></table>
-<h2 id='sxn-testnet'>SXN Testnet</h2>
-<table><thead>
-<tr>
-<th>Reference Type</th>
-<th>Data</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>Chain ID</td>
-<td><code>647</code></td>
-</tr>
-<tr>
-<td>USDC Token Address</td>
-<td><code>0x5147891461a7C81075950f8eE6384e019e39ab98</code></td>
-</tr>
-<tr>
-<td>WSX Token Address</td>
-<td><code>0x2D4e10Ee64CCF407C7F765B363348f7F62D2E06e</code></td>
-</tr>
-<tr>
-<td>SX Application</td>
-<td><code>https://toronto.sx.bet</code></td>
-</tr>
-<tr>
-<td>SX API URL</td>
-<td><code>https://api.toronto.sx.bet</code></td>
-</tr>
-<tr>
-<td>RPC URL</td>
-<td><code>https://rpc.toronto.sx.technology</code></td>
-</tr>
-<tr>
-<td>Explorer Page</td>
-<td><code>https://explorer.toronto.sx.technology</code></td>
-</tr>
-<tr>
-<td>METADATA</td>
-<td><code>https://api.toronto.sx.bet/metadata?chainVersion=SXN</code></td>
+<td><code>https://api.toronto.sx.bet/metadata</code></td>
 </tr>
 </tbody></table>
 <h2 id='versions-of-dependencies'>Versions of dependencies</h2>
@@ -842,7 +635,7 @@ When `chainVersion` is empty for POST requests, the default data is for SXN chai
 
 <p>See configuration for testnet <a href="#references">here</a>.</p>
 
-<p>Contact the team at <a href="mailto:api-support@sx.bet">api-support@sx.bet</a> to receive testnet funds.</p>
+<p>Contact the team on our <a href="https://discord.gg/Ry8yjAD5YG">discord</a> to receive testnet funds.</p>
 <h1 id='metadata'>Metadata</h1><h2 id='get-metadata'>Get metadata</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.sx.bet/metadata'</span>
 </code></pre></div>
 <blockquote>
@@ -890,22 +683,6 @@ When `chainVersion` is empty for POST requests, the default data is for SXN chai
 <p>This endpoint retrieves metadata on the exchange itself and useful parameters to interact with the exchange.</p>
 <h3 id='http-request'>HTTP Request</h3>
 <p><code>GET https://api.sx.bet/metadata</code></p>
-<h3 id='query-parameters'>Query parameters</h3>
-<table><thead>
-<tr>
-<th>Name</th>
-<th>Required</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>chainVersion</td>
-<td>false</td>
-<td>string</td>
-<td>Must  be either <code>SXN</code> or <code>SXR</code>.<br/><strong>Default is <code>SXN</code></strong>. See <a href="#sx-rollup-migration-guide">migration docs</a></td>
-</tr>
-</tbody></table>
 <h3 id='response-format'>Response format</h3>
 <table><thead>
 <tr>
@@ -2120,12 +1897,6 @@ Note that this endpoint is only updated every 10m.
 <td>number</td>
 <td>Only return active leagues under this sport</td>
 </tr>
-<tr>
-<td>chainVersion</td>
-<td>false</td>
-<td>string</td>
-<td>Must  be either <code>SXN</code> or <code>SXR</code>.<br/><strong>If not passed, data from both chains are returned</strong>. See <a href="#sx-rollup-migration-guide">migration docs</a></td>
-</tr>
 </tbody></table>
 <h3 id='response-format-2'>Response format</h3>
 <p>See <a href="#get-leagues">get leagues section</a> for how the response object is formatted. There is an additional field <code>eventsByType</code> which maps the number of unique events within a particular bet group (for example, <code>game-lines</code> or <code>outright-winner</code>).</p>
@@ -3009,12 +2780,6 @@ Up to 50 event IDs can be supplied at a time.
 <td>number</td>
 <td>Used for pagination. Requested page size. Each call will only return up to this amount of records. Maximum of 50</td>
 </tr>
-<tr>
-<td>chainVersion</td>
-<td>false</td>
-<td>string</td>
-<td>Must  be either <code>SXN</code> or <code>SXR</code>.  <br/><strong>If not passed, data from both chains are returned</strong>. See <a href="#sx-rollup-migration-guide">migration docs</a></td>
-</tr>
 </tbody></table>
 
 <aside class="notice">
@@ -3173,11 +2938,6 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
 <td>legs</td>
 <td>Market[]?</td>
 <td>If this is a Parlay Market, this field will contain an array of the underlying Legs as a Market object</td>
-</tr>
-<tr>
-<td>chainVersion</td>
-<td>string?</td>
-<td><code>SXN</code> or <code>SXR</code>. See <a href="#sx-rollup-migration-guide">migration docs</a>.</td>
 </tr>
 </tbody></table>
 
@@ -3589,22 +3349,6 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
 <p>This endpoint retrieves the top 10 popular markets by volume.</p>
 <h3 id='http-request-3'>HTTP Request</h3>
 <p><code>GET https://api.sx.bet/markets/popular</code></p>
-<h3 id='query-parameters-3'>Query parameters</h3>
-<table><thead>
-<tr>
-<th>Name</th>
-<th>Required</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>chainVersion</td>
-<td>false</td>
-<td>string</td>
-<td>Must  be either <code>SXN</code> or <code>SXR</code>.<br/><strong>If not passed, data from both chains are returned</strong>. See <a href="#sx-rollup-migration-guide">migration docs</a></td>
-</tr>
-</tbody></table>
 <h3 id='response-format-3'>Response format</h3>
 <table><thead>
 <tr>
@@ -3810,12 +3554,6 @@ Parlay Markets act as regular markets, but with additional fields to indicate th
 <td>false</td>
 <td>string</td>
 <td>Filter trades to see only those with <code>SUCCESS</code> or <code>FAILED</code> status&#39;</td>
-</tr>
-<tr>
-<td>chainVersion</td>
-<td>false</td>
-<td>string</td>
-<td>Must  be either <code>SXN</code> or <code>SXR</code>.<br/><strong>If not passed, data from both chains are returned</strong>. See <a href="#sx-rollup-migration-guide">migration docs</a></td>
 </tr>
 </tbody></table>
 <h3 id='response-format'>Response format</h3>
@@ -4197,12 +3935,6 @@ Parlay Markets act as regular markets, but with additional fields to indicate th
 <td>string</td>
 <td>Filter trades to see only those with <code>SUCCESS</code> or <code>FAILED</code> status&#39;</td>
 </tr>
-<tr>
-<td>chainVersion</td>
-<td>false</td>
-<td>string</td>
-<td>Must  be either <code>SXN</code> or <code>SXR</code>.<br/><strong>If not passed, data from both chains are returned</strong>. See <a href="#sx-rollup-migration-guide">migration docs</a></td>
-</tr>
 </tbody></table>
 <h3 id='response-format-3'>Response format</h3>
 <table><thead>
@@ -4428,12 +4160,6 @@ Parlay Markets act as regular markets, but with additional fields to indicate th
 <td>false</td>
 <td>string</td>
 <td>Only get orders for this event ID</td>
-</tr>
-<tr>
-<td>chainVersion</td>
-<td>false</td>
-<td>string</td>
-<td>Must  be either <code>SXN</code> or <code>SXR</code>.<br/><strong>If not passed, data from both chains are returned</strong>. See <a href="#sx-rollup-migration-guide">migration docs</a></td>
 </tr>
 </tbody></table>
 
@@ -4957,22 +4683,6 @@ Note that <code>totalBetSize</code> is from *the perspective of the market maker
 <p>This endpoint cancels existing orders on the exchange that you placed as a market maker. If passed orders that do not exist, they simply fail silently while the others will succeed.</p>
 <h3 id='http-request-3'>HTTP Request</h3>
 <p><code>POST https://api.sx.bet/orders/cancel/v2</code></p>
-<h3 id='query-parameters-2'>Query parameters</h3>
-<table><thead>
-<tr>
-<th>Name</th>
-<th>Required</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>chainVersion</td>
-<td>false</td>
-<td>string</td>
-<td>Must  be either <code>SXN</code> or <code>SXR</code>.<br/><strong>If not passed, Default will be SXN</strong>. See <a href="#sx-rollup-migration-guide">migration docs</a></td>
-</tr>
-</tbody></table>
 <h3 id='request-payload-parameters-2'>Request payload parameters</h3>
 <table><thead>
 <tr>
@@ -5142,22 +4852,6 @@ Note that <code>totalBetSize</code> is from *the perspective of the market maker
 <p>This endpoint cancels existing orders on the exchange for a particular event that you placed as a market maker.</p>
 <h3 id='http-request-4'>HTTP Request</h3>
 <p><code>POST https://api.sx.bet/orders/cancel/event</code></p>
-<h3 id='query-parameters-3'>Query parameters</h3>
-<table><thead>
-<tr>
-<th>Name</th>
-<th>Required</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>chainVersion</td>
-<td>false</td>
-<td>string</td>
-<td>Must  be either <code>SXN</code> or <code>SXR</code>.<br/><strong>If not passed, Default will be SXN</strong>. See <a href="#sx-rollup-migration-guide">migration docs</a></td>
-</tr>
-</tbody></table>
 <h3 id='request-payload-parameters-3'>Request payload parameters</h3>
 <table><thead>
 <tr>
@@ -5312,22 +5006,6 @@ Note that <code>totalBetSize</code> is from *the perspective of the market maker
 <p>This endpoint cancels ALL existing orders on the exchange that you placed as a market maker.</p>
 <h3 id='http-request-5'>HTTP Request</h3>
 <p><code>POST https://api.sx.bet/orders/cancel/all</code></p>
-<h3 id='query-parameters-4'>Query parameters</h3>
-<table><thead>
-<tr>
-<th>Name</th>
-<th>Required</th>
-<th>Type</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>chainVersion</td>
-<td>false</td>
-<td>string</td>
-<td>Must  be either <code>SXN</code> or <code>SXR</code>.<br/><strong>If not passed, Default will be SXN</strong>. See <a href="#sx-rollup-migration-guide">migration docs</a></td>
-</tr>
-</tbody></table>
 <h3 id='request-payload-parameters-4'>Request payload parameters</h3>
 <table><thead>
 <tr>
