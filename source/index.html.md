@@ -41,7 +41,7 @@ meta:
 
 Be your own bookmaker or fill orders programmatically with the SX.bet API!
 
-Technical questions or need support? [Send us an e-mail](mailto:api-support@sx.bet). 
+Technical questions or need support? [Join our discord](https://discord.gg/Ry8yjAD5YG). 
 
 **All documentation is provided in JavaScript.**
 

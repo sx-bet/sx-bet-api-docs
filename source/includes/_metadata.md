@@ -56,12 +56,6 @@ This endpoint retrieves metadata on the exchange itself and useful parameters to
 
 `GET https://api.sx.bet/metadata`
 
-### Query parameters
-
-| Name         | Required | Type   | Description                                                                                       |
-| ------------ | -------- | ------ | ------------------------------------------------------------------------------------------------- |
-| chainVersion | false    | string | Must  be either `SXN` or `SXR`.<br/>**Default is `SXN`**. See [migration docs](#sx-rollup-migration-guide) |
-
 ### Response format
 
 | Name               | Type    | Description                                                                                                                                                                 |

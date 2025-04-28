@@ -78,7 +78,6 @@ This endpoint returns active orders on the exchange based on a few parameters
 | baseToken     | false    | string   | Only get orders denominated in this base token            |
 | maker         | false    | string   | Only get orders for this market maker                     |
 | sportXEventId | false    | string   | Only get orders for this event ID                         |
-| chainVersion  | false    | string   | Must  be either `SXN` or `SXR`.<br/>**If not passed, data from both chains are returned**. See [migration docs](#sx-rollup-migration-guide) |
 
 <aside class="notice">
 One of `marketHashes` or `maker` is required.
@@ -471,12 +470,6 @@ This endpoint cancels existing orders on the exchange that you placed as a marke
 
 `POST https://api.sx.bet/orders/cancel/v2`
 
-### Query parameters
-
-| Name          | Required | Type   | Description                                                                                                                  |
-| ------------- | -------- | ------ | ---------------------------------------------------------------------------------------------------------------------------- |
-| chainVersion  | false    | string | Must  be either `SXN` or `SXR`.<br/>**If not passed, Default will be SXN**. See [migration docs](#sx-rollup-migration-guide) |
-
 ### Request payload parameters
 
 | Name        | Required | Type     | Description                                                                                                                                            |
@@ -605,12 +598,6 @@ This endpoint cancels existing orders on the exchange for a particular event tha
 
 `POST https://api.sx.bet/orders/cancel/event`
 
-### Query parameters
-
-| Name          | Required | Type   | Description                                                                                                                  |
-| ------------- | -------- | ------ | ---------------------------------------------------------------------------------------------------------------------------- |
-| chainVersion  | false    | string | Must  be either `SXN` or `SXR`.<br/>**If not passed, Default will be SXN**. See [migration docs](#sx-rollup-migration-guide) |
-
 ### Request payload parameters
 
 | Name          | Required | Type   | Description                                                                                                                                            |
@@ -723,12 +710,6 @@ This endpoint cancels ALL existing orders on the exchange that you placed as a m
 ### HTTP Request
 
 `POST https://api.sx.bet/orders/cancel/all`
-
-### Query parameters
-
-| Name          | Required | Type   | Description                                                                                                                  |
-| ------------- | -------- | ------ | ---------------------------------------------------------------------------------------------------------------------------- |
-| chainVersion  | false    | string | Must  be either `SXN` or `SXR`.<br/>**If not passed, Default will be SXN**. See [migration docs](#sx-rollup-migration-guide) |
 
 ### Request payload parameters
 

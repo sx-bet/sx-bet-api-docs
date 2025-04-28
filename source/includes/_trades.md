@@ -113,7 +113,6 @@ This endpoint retrieves past trades on the exchange split up by order. This is a
 | pageSize      | false    | number   | Requested page size. Each call will only return up to this amount of records. Default is 100.                   |
 | paginationKey | false    | string   | Used for pagination. Pass the `nextKey` returned from the previous request to retrieve the next set of records. |
 | tradeStatus   | false    | string   | Filter trades to see only those with `SUCCESS` or `FAILED` status'                                              |
-| chainVersion  | false    | string   | Must  be either `SXN` or `SXR`.<br/>**If not passed, data from both chains are returned**. See [migration docs](#sx-rollup-migration-guide) |
 ### Response format
 
 | Name       | Type    | Description                                                                       |
@@ -323,7 +322,7 @@ This endpoint retrieves past consolidated trades on the exchange via pagination.
 | maker         | false    | boolean | If `true`, only gets trades where the bettor was a market maker    |
 | sportXEventId | false    | string  | Only gets trades for this event ID                                 |
 | tradeStatus   | false    | string  | Filter trades to see only those with `SUCCESS` or `FAILED` status' |
-| chainVersion  | false    | string  | Must  be either `SXN` or `SXR`.<br/>**If not passed, data from both chains are returned**. See [migration docs](#sx-rollup-migration-guide) |
+
 ### Response format
 
 | Name     | Type                | Description                                            |

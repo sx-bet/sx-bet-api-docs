@@ -99,7 +99,6 @@ This endpoint retrieves active markets on the exchange. It does not return marke
 | type          | false    | number[] | If set, it will only include markets for those particular market types. See below for the options                |
 | paginationKey | false    | string   | Used for pagination. Pass the `nextKey` returned from the previous request to retrieve the next set of records.  |
 | pageSize      | false    | number   | Used for pagination. Requested page size. Each call will only return up to this amount of records. Maximum of 50 |
-| chainVersion  | false    | string   | Must  be either `SXN` or `SXR`.  <br/>**If not passed, data from both chains are returned**. See [migration docs](#sx-rollup-migration-guide) |
 
 <aside class="notice">
 Only one of <code>type</code> and <code>betGroup</code> can be present. Not both.
@@ -141,7 +140,6 @@ A `market` object looks like this
 | teamTwoMeta     | string?    | Extra metadata for team two                                                                                                         |
 | marketMeta      | string?    | Extra metadata for the market overall                                                                                               |
 | legs            | Market[]?  | If this is a Parlay Market, this field will contain an array of the underlying Legs as a Market object                              |
-| chainVersion    | string?    | `SXN` or `SXR`. See [migration docs](#sx-rollup-migration-guide).                                                                    |
 
 A `MarketType` can currently be one of the following
 
@@ -317,12 +315,6 @@ This endpoint retrieves the top 10 popular markets by volume.
 ### HTTP Request
 
 `GET https://api.sx.bet/markets/popular`
-
-### Query parameters
-
-| Name          | Required | Type     | Description                                                                                                      |
-| ------------- | -------- | -------- | ---------------------------------------------------------------------------------------------------------------- |
-| chainVersion  | false    | string   | Must  be either `SXN` or `SXR`.<br/>**If not passed, data from both chains are returned**. See [migration docs](#sx-rollup-migration-guide) |
 
 ### Response format
 

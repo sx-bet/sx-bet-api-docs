@@ -1,9 +1,6 @@
 # References
 
-**SXN** = Legacy SX Network  
-**SXR** =  New SX Network
-
-## SXR Mainnet
+## Mainnet
 
 | Reference Type | Data |
 | ----- | -------------------------------------------- |
@@ -14,9 +11,9 @@
 | SX API URL | `https://api.sx.bet` |
 | RPC URL | `https://rpc.sx-rollup.gelato.digital` |
 | Explorer Page | `https://explorerl2.sx.technology` (this will be replaced by the current explorer domain once migration is fully complete) |
-| METADATA | `https://api.sx.bet/metadata?chainVersion=SXR` |
+| METADATA | `https://api.sx.bet/metadata` |
 
-## SXR Testnet
+## Testnet
 
 | Reference Type | Data |
 | ----- | -------------------------------------------- |
@@ -27,33 +24,7 @@
 | SX API URL | `https://api.toronto.sx.bet` |
 | RPC URL | `https://rpc.sx-rollup-testnet.t.raas.gelato.cloud` |
 | Explorer Page | `https://explorerl2.toronto.sx.technology` (this will be replaced by the current explorer domain once migration is fully complete) |
-| METADATA | `https://api.toronto.sx.bet/metadata?chainVersion=SXR` |
-
-## SXN Mainnet
-
-| Reference Type | Data |
-| ----- | -------------------------------------------- |
-| Chain ID | `416` |
-| USDC Token Address  | `0xe2aa35C2039Bd0Ff196A6Ef99523CC0D3972ae3e` |
-| WSX Token Address  | `0xaa99bE3356a11eE92c3f099BD7a038399633566f` |
-| SX Application | `https://sx.bet` |
-| SX API URL | `https://api.sx.bet` |
-| RPC URL | `https://rpc.sx.technology` |
-| Explorer Page | `https://explorer.sx.technology` |
-| METADATA | `https://api.sx.bet/metadata?chainVersion=SXN` |
-
-## SXN Testnet
-
-| Reference Type | Data |
-| ----- | -------------------------------------------- |
-| Chain ID | `647` |
-| USDC Token Address  | `0x5147891461a7C81075950f8eE6384e019e39ab98` |
-| WSX Token Address  | `0x2D4e10Ee64CCF407C7F765B363348f7F62D2E06e` |
-| SX Application | `https://toronto.sx.bet` |
-| SX API URL | `https://api.toronto.sx.bet` |
-| RPC URL | `https://rpc.toronto.sx.technology` |
-| Explorer Page | `https://explorer.toronto.sx.technology` |
-| METADATA | `https://api.toronto.sx.bet/metadata?chainVersion=SXN` |
+| METADATA | `https://api.toronto.sx.bet/metadata` |
 
 ## Versions of dependencies
 
