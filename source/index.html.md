@@ -9,6 +9,7 @@ language_tabs: # must be one of https://git.io/vQNgJ
   # - javascript
 
 includes:
+  - orderbookv2upgrades
   - references
   - testnet
   - metadata

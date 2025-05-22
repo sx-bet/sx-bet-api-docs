@@ -354,7 +354,12 @@ Subscribe to all consolidated trade updates on the exchange. You will receive up
 
 See [the trades section](#get-consolidated-trades) for the format of the message
 
-## Active order updates
+## Active order updates v1
+
+<aside class="notice">
+Deprecating soon! See <a href="#active-order-updates-v2">Active order updates v2</a> for improved channel.
+</aside>
+
 
 ```javascript
 const user = "0x082605F78dD83A8423113ecbEB794Fb3FFE470a2";
@@ -422,7 +427,84 @@ The order is packed into an array and the fields are sent in the below order, wi
 
 Note that the messages are sent in batches in an array. If you receive two updates for the same `orderHash` within an update, you can order them by `updateTime` after converting the `updateTime` to a BigInt or BigNumber.
 
-## Order book updates
+## Active order updates v2
+
+<aside class="notice">
+Coming soon! This channel will be available for use soon, please follow our Discord #api-changes channel to stay up to date.
+</aside>
+
+```javascript
+const user = "0x082605F78dD83A8423113ecbEB794Fb3FFE470a2";
+const token = process.env.USDC_TOKEN_ADDRESS; // get from https://api.sx.bet/metadata
+const channel = realtime.channels.get(`active_orders_v2:${token}:${user}`);
+channel.subscribe((message) => {
+  console.log(message.data);
+});
+```
+
+> The above command returns JSON structured like this
+
+```json
+[
+  {
+    "orderHash": "0xabcdef1234567890abcdef1234567890abcdef1234567890abcdef1234567890",
+    "marketHash": "0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcd",
+    "status": "INACTIVE",
+    "fillAmount": "1000000000000000000",
+    "pendingFillAmount": "500000000000000000",
+    "totalBetSize": "2000000000000000000",
+    "percentageOdds": "75000000000000000000",
+    "expiry": 1747500000000,
+    "apiExpiry": 1747500300000,
+    "salt": "1234567890123456789012345678901234567890",
+    "isMakerBettingOutcomeOne": false,
+    "signature": "0xbf099ab02255d5e2a9e063dc43a7afe96e65f5e8fc2ed3d2ba60b0a3fcadb3441bf32271293e85b7a795c9d86a2304035a0da3285113e746547e236bc58885e0",
+    "updateTime": 1747490000000,
+    "sportXeventId": "L13772588"
+  }
+]
+```
+
+Subscribe to changes in a particular user's orders. You will receive updates when orders are filled, cancelled, or posted. Note that for performance reasons, updates are delayed by at most 100ms.
+
+### Channel name format
+
+`active_orders_v2:{token}:{user}`
+
+| Name  | Type   | Description                                               |
+| ----- | ------ | --------------------------------------------------------- |
+| token | string | Restrict updates to only orders denominated in this token |
+| user  | string | The user to subscribe to                                  |
+
+### Message payload format
+
+The message payload is an array of JSON objects representing each object with the fields below. Note that these are the same fields as mentioned in the [the orders section](#get-active-orders), with an additional `status` and `updateTime` field.
+
+| Name                     | Type    | Description                                                                                                                                                                                                                                                                                                                                    |
+| ------------------------ | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| orderHash                | string  | A unique identifier for this order                                                                                                                                                                                                                                                                                                             |
+| marketHash               | string  | The market for this order                                                                                                                                                                                                                                                                                                                      |
+| status                   | string  | "ACTIVE" if this order is still valid, "INACTIVE" otherwise                                                                                                                                                                                                                                                                                    |
+| fillAmount               | string  | How much this order has been filled in Ethereum units up to a max of `totalBetSize`. See [the token section](#tokens) of how to convert this into nominal amounts                                                                                                                                                                              |
+| pendingFillAmount               | string  | What amount is pending fill in Ethereum units up to a max of `totalBetSize`. See [the token section](#tokens) of how to convert this into nominal amounts                                                                                                                                                                              |
+| totalBetSize             | string  | The total size of this order in Ethereum units. See the [the token section](#tokens) section for how to convert this into nominal amounts.                                                                                                                                                                                                     |
+| percentageOdds           | string  | The odds that the `maker` receives in the sportx protocol format. To convert to an implied odds divide by 10^20. To convert to the odds that the taker would receive if this order would be filled in implied format, use the formula `takerOdds=1-percentageOdds/10^20`. See the [unit conversion section](#bookmaker-odds) for more details. |
+| expiry                   | number  | Depcreated field: the time in unix seconds after which this order is no longer valid. Always 2209006800                                                                                                                                                                                                                                        |
+| apiExpiry                | number  | The time in unix seconds after which this order is no longer valid                                                                                                                                                                                                                                                                             |
+| salt                     | string  | A random number to differentiate identical orders                                                                                                                                                                                                                                                                                              |
+| isMakerBettingOutcomeOne | boolean | `true` if the maker is betting outcome one (and hence taker is betting outcome two if filled)                                                                                                                                                                                                                                                  |
+| signature                | string  | Signature of the maker on this order                                                                                                                                                                                                                                                                                                           |
+| updateTime               | string  | Server-side clock time for the last modification of this order.                                                                                                                                                                                                                                                                                |
+| sportXeventId            | string  | The event related to this order                                                                                                                                                                                                                                                                                                                |
+
+Note that the messages are sent in batches in an array. If you receive two updates for the same `orderHash` within an update, you can order them by `updateTime` after converting the `updateTime` to a BigInt or BigNumber.
+
+
+## Order book updates v1
+
+<aside class="notice">
+Deprecating soon! See <a href="#order-book-updates-v2">Order book updates v2</a> for improved channel.
+</aside>
 
 ```javascript
 const marketHash =
@@ -490,6 +572,135 @@ The order is packed into an array and the fields are sent in the below order, wi
 | sportXeventId            | string  | The event related to this order                                                                                                                                                                                                                                                                                                                |
 
 Note that the messages are sent in batches in an array. If you receive two updates for the same `orderHash` within an update, you can order them by `updateTime` after converting the `updateTime` to a BigInt or BigNumber.
+
+## Order book updates v2
+
+<aside class="notice">
+Coming soon! This channel will be available for use soon, please follow our Discord #api-changes channel to stay up to date.
+</aside>
+
+```javascript
+const marketHash =
+  "0x04b9af76dfb92e71500975db77b1de0bb32a0b2413f1b3facbb25278987519a7";
+const token = "0xa25dA0331Cd053FD17C47c8c34BCCBAaF516C438";
+const channel = realtime.channels.get(`order_book_v2:${token}:${marketHash}`);
+channel.subscribe((message) => {
+  console.log(message.data);
+});
+```
+
+> The above command returns JSON structured like this
+
+```json
+[
+  {
+    "orderHash": "0x7bd766486f589f3e272d48294d8881fe68aae7704f7b2ef0a50bf6128be44271",
+    "status": "INACTIVE",
+    "fillAmount": "2000000000",
+    "pendingFillAmount": "1000000000",
+    "maker": "0x9883D5e7dC023A441A01Ef95aF406C69926a0AB6",
+    "totalBetSize": "5000000000",
+    "percentageOdds": "75000000000000000000",
+    "expiry": 1747500000000,
+    "apiExpiry": 1747500000000,
+    "salt": "123456789012345678901234567890",
+    "isMakerBettingOutcomeOne": false,
+    "signature": "0xbf099ab02255d5e2a9e063dc43a7afe96e65f5e8fc2ed3d2ba60b0a3fcadb3441bf32271293e85b7a795c9d86a2304035a0da3285113e746547e236bc58885e01",
+    "updateTime": 1747490000000,
+    "sportXeventId": "L13772588"
+  }
+]
+```
+
+Subscribe to changes in a particular order book. You will receive updates when orders are filled, cancelled, or posted. Note that for performance reasons, updates are delayed by at most 100ms.
+
+### Channel name format
+
+`order_book_v2:{token}:{marketHash}`
+
+| Name       | Type   | Description                                               |
+| ---------- | ------ | --------------------------------------------------------- |
+| token      | string | Restrict updates to only orders denominated in this token |
+| marketHash | string | The market to subscribe to                                |
+
+### Message payload format
+
+The message payload is an array of JSON objects representing each object with the fields below. Note that these are the same fields as mentioned in the [the orders section](#get-active-orders), with an additional `status` and `updateTime` field.
+
+| Name                     | Type    | Description                                                                                                                                                                                                                                                                                                                                    |
+| ------------------------ | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| orderHash                | string  | A unique identifier for this order                                                                                                                                                                                                                                                                                                             |
+| status                   | string  | "ACTIVE" if this order is still valid, "INACTIVE" if cancelled, "FILLED" if completely filled                                                                                                                                                                                                                                                                                    |
+| fillAmount               | string  | How much this order has been filled in Ethereum units up to a max of `totalBetSize`. See [the token section](#tokens) of how to convert this into nominal amounts                                                                                                                                                                              |
+| pendingFillAmount               | string  | What amount is pending fill in Ethereum units up to a max of `totalBetSize`. See [the token section](#tokens) of how to convert this into nominal amounts                                                                                                                                                                              |
+| maker                    | string  | The market maker for this order                                                                                                                                                                                                                                                                                                                |
+| totalBetSize             | string  | The total size of this order in Ethereum units. See the [the token section](#tokens) section for how to convert this into nominal amounts.                                                                                                                                                                                                     |
+| percentageOdds           | string  | The odds that the `maker` receives in the sportx protocol format. To convert to an implied odds divide by 10^20. To convert to the odds that the taker would receive if this order would be filled in implied format, use the formula `takerOdds=1-percentageOdds/10^20`. See the [unit conversion section](#bookmaker-odds) for more details. |
+| expiry                   | number  | Depcreated field: the time in unix seconds after which this order is no longer valid. Always 2209006800                                                                                                                                                                                                                                        |
+| apiExpiry                | number  | The time in unix seconds after which this order is no longer valid                                                                                                                                                                                                                                                                             |
+| salt                     | string  | A random number to differentiate identical orders                                                                                                                                                                                                                                                                                              |
+| isMakerBettingOutcomeOne | boolean | `true` if the maker is betting outcome one (and hence taker is betting outcome two if filled)                                                                                                                                                                                                                                                  |
+| signature                | string  | Signature of the maker on this order                                                                                                                                                                                                                                                                                                           |
+| updateTime               | string  | Server-side clock time for the last modification of this order.                                                                                                                                                                                                                                                                                |
+| sportXeventId            | string  | The event related to this order                                                                                                                                                                                                                                                                                                                |
+
+Note that the messages are sent in batches in an array. If you receive two updates for the same `orderHash` within an update, you can order them by `updateTime` after converting the `updateTime` to a BigInt or BigNumber.
+
+## Best odds
+
+<aside class="notice">
+Coming soon! This channel will be available for use soon, please follow our Discord #api-changes channel to stay up to date.
+</aside>
+
+```javascript
+const marketHash =
+  "0x04b9af76dfb92e71500975db77b1de0bb32a0b2413f1b3facbb25278987519a7";
+const token = "0xa25dA0331Cd053FD17C47c8c34BCCBAaF516C438";
+const channel = realtime.channels.get(`best-odds:${token}:${marketHash}`);
+channel.subscribe((message) => {
+  console.log(message.data);
+});
+```
+
+> The above command returns JSON structured like this
+
+```json
+[
+  {
+    "baseToken": "0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956",
+    "marketHash": "0xddaf2ef56d0db2317cf9a1e1dde3de2f2158e28bee55fe35a684389f4dce0cf6",
+    "isMakerBettingOutcomeOne": true,
+    "percentageOdds": "75000000000000000000",
+    "updatedAt": 1747500000000
+  }
+]
+```
+
+Subscribe to best odds changes in a particular order book for the given token and market. You will receive updates when orders are filled, cancelled, or posted. Note that for performance reasons, updates are delayed by at most 100ms.
+
+### Channel name format
+
+`best_odds:{token}:{marketHash}`
+
+| Name       | Type   | Description                                               |
+| ---------- | ------ | --------------------------------------------------------- |
+| token      | string | Restrict updates to only orders denominated in this token |
+| marketHash | string | The market to subscribe to                                |
+
+### Message payload format
+
+The message payload is an array of JSON objects representing each object with the fields below.
+
+| Name                     | Type    | Description                                                                                                                                                                                                                                                                                                                                    |
+| ------------------------ | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| baseToken                | string  | The token for the best odds result order                                                                                                                                                                                                                                                                                                             |
+| marketHash                | string  | The market for the best odds result                                                                                                                                                                                                                                                                                  |
+| isMakerBettingOutcomeOne                   | boolean  | Whether or not the maker is betting outcome one. If false, maker is betting outcome two.                                                                                                                                                                                                                                                                                    |                                                  |
+| percentageOdds           | string  | The odds that the `maker` receives in the sportx protocol format. To convert to an implied odds divide by 10^20. To convert to the odds that the taker would receive if this order would be filled in implied format, use the formula `takerOdds=1-percentageOdds/10^20`. See the [unit conversion section](#bookmaker-odds) for more details. |
+| updatedAt            | number  | The timestamp in milliseconds for when the odds became the best                                                                                                                                                                                                                                                                                                                                |
+
+Note that the messages are sent in batches in an array. If you receive two updates for the same `orderHash` within an update, you can order them by `updateTime` after converting the `updateTime` to a BigInt or BigNumber.
+
 
 ## Best Practices
 
