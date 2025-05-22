@@ -430,7 +430,7 @@ Note that the messages are sent in batches in an array. If you receive two updat
 ## Active order updates v2
 
 <aside class="notice">
-Coming soon! This channel will be available for use soon, please follow our Discord #api-help channel to stay up to date.
+Coming soon! This channel will be available for use soon, please follow our Discord #api-changes channel to stay up to date.
 </aside>
 
 ```javascript
@@ -576,7 +576,7 @@ Note that the messages are sent in batches in an array. If you receive two updat
 ## Order book updates v2
 
 <aside class="notice">
-Coming soon! This channel will be available for use soon, please follow our Discord #api-help channel to stay up to date.
+Coming soon! This channel will be available for use soon, please follow our Discord #api-changes channel to stay up to date.
 </aside>
 
 ```javascript
@@ -649,7 +649,7 @@ Note that the messages are sent in batches in an array. If you receive two updat
 ## Best odds
 
 <aside class="notice">
-Coming soon! This channel will be available for use soon, please follow our Discord #api-help channel to stay up to date.
+Coming soon! This channel will be available for use soon, please follow our Discord #api-changes channel to stay up to date.
 </aside>
 
 ```javascript

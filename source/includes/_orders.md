@@ -88,7 +88,6 @@ Parameters marked with an '*' are coming soon in future release.
 | sortBy*   | false    | string | Which field to sort by, possible values: ["fill_amount", "total_bet_size", "percentage_odds", "api_expiry", "created_at", "updated_at"], default: "created_at" |
 | sortAsc*   | false    | boolean | Sort direction, default: true |
 
-
 <aside class="notice">
 One of `marketHashes` or `maker` is required.
 </aside>
@@ -200,13 +199,6 @@ Only one of `marketHashes` and `leagueIds` can be present.
 | baseToken                    | string  | The baseToken for the given best odds query                                                                                                                                                                                                                                                                                                                |
 | outcomeOne             | object  | An object representing outcome one, including the best available percentage odds as `percentageOdds` (string) and the last update time as `updatedAt` (numerical timestamp in milliseconds)                                                                                                                                                                                                     |
 | outcomeTwo             | object  | An object representing outcome two, including the best available percentage odds as `percentageOdds` (string) and the last update time as `updatedAt` (numerical timestamp in milliseconds)                                                                                                                                                                                                     |
-
-
-### Error Responses
-
-| Error Code                              | Description                                            |
-| --------------------------------------- | ------------------------------------------------------ |
-| RETRIEVE_ORDERS_FAILED   | Internal error occured                  |
 
 ## Enabling betting
 
@@ -858,7 +850,7 @@ async function fillOrder() {
   // get the following from https://api.sx.bet/metadata
   const tokenTransferProxyAddress = process.env.TOKEN_TRANSFER_PROXY_ADDRESS;
   const EIP712FillHasherAddress = process.env.EIP712_FILL_HASHER_ADDRESS;
-  const chainId = process.env.CHAIN_ID; // 416 in production
+  const chainId = process.env.CHAIN_ID; // 4162 in production
   const domainVersion = process.env.DOMAIN_VERSION;
 
   const bufferPrivateKey = Buffer.from(privateKey!.substring(2), "hex");
@@ -923,10 +915,6 @@ async function fillOrder() {
 
   let nonce: BigNumber = await tokenContract.nonces(takerAddress);
   const tokenName: string = await tokenContract.name();
-  const abiEncodedFunctionSig = tokenContract.interface.encodeFunctionData(
-    "approve",
-    [tokenTransferProxyAddress, approvalAmount]
-  );
 
   const ordersToFill = [
     {
@@ -1221,16 +1209,181 @@ To convert a <code>fillAmount</code> (what the market maker pays) to what the ta
 | MATCH_STATE_INVALID        | The fixture for the order is in an invalid state and is not bettable anymore |
 | META_TX_RATE_LIMIT_REACHED | Cannot have more than 10 meta transactions at once                           |
 
+## Approve order fill
+
+<aside class="notice">
+Coming soon! This endpoint will be available for use soon, please follow our Discord #api-changes channel to stay up to date.
+</aside>
+
+```shell
+curl --location --request POST 'https://api.sx.bet/orders/approve' \
+--header 'Content-Type: application/json' \
+--data-raw '{"owner":"0xa3bBFaB3645B2Dd4296cADc451d74574CD47Ba1a","spender":"0x38aef22152BC8965bf0af7Cf53586e4b0C4E9936","tokenAddress":"0x6629Ce1Cf35Cc1329ebB4F63202F3f197b3F050B","value":"100000000000","deadline":"1789692000","signature":"0x09d2603a8c8646221d6972b04a5cdd8b13d6326a267329825567a25a5e63606b07b97c84640bfb3ee4a5053083ce178d9e0c9cbdf1b1dfd519fda0594fae30dc1c"}'
+```
+
+```javascript
+import { signTypedData, SignTypedDataVersion } from "@metamask/eth-sig-util";
+import {
+  BigNumber,
+  constants,
+  Contract,
+  providers,
+  utils,
+  Wallet,
+} from "ethers";
+import { randomBytes } from "ethers/lib/utils";
+import dayjs from "dayjs";
+
+async function approveOrderFill() {
+  const privateKey = process.env.PRIVATE_KEY;
+  const takerAddress = process.env.TAKER_ADDRESS;
+  const tokenAddress = process.env.TOKEN_ADDRESS;
+
+  // get the following from https://api.sx.bet/metadata
+  const tokenTransferProxyAddress = process.env.TOKEN_TRANSFER_PROXY_ADDRESS;
+  const EIP712FillHasherAddress = process.env.EIP712_FILL_HASHER_ADDRESS;
+  const chainId = process.env.CHAIN_ID; // 4162 in production
+  const domainVersion = process.env.DOMAIN_VERSION;
+
+  const bufferPrivateKey = Buffer.from(privateKey!.substring(2), "hex");
+  const wallet = new Wallet(privateKey).connect(
+    new providers.JsonRpcProvider(process.env.RPC_URL) // find this under the 'references' section
+  );
+  const approvalAmount = constants.MaxUint256;
+  const tokenContract = new Contract(
+    tokenAddress,
+    [
+      {
+        constant: false,
+        inputs: [
+          { internalType: "address", name: "usr", type: "address" },
+          { internalType: "uint256", name: "wad", type: "uint256" },
+        ],
+        name: "approve",
+        outputs: [{ internalType: "bool", name: "", type: "bool" }],
+        payable: false,
+        stateMutability: "nonpayable",
+        type: "function",
+      },
+      {
+        inputs: [
+          {
+            internalType: "address",
+            name: "owner",
+            type: "address",
+          },
+        ],
+        name: "nonces",
+        outputs: [
+          {
+            internalType: "uint256",
+            name: "",
+            type: "uint256",
+          },
+        ],
+        stateMutability: "view",
+        type: "function",
+        constant: true,
+      },
+      {
+        inputs: [],
+        name: "name",
+        outputs: [
+          {
+            internalType: "string",
+            name: "",
+            type: "string"
+          }
+        ],
+        stateMutability: "view",
+        type: "function",
+        constant: true
+      }
+    ],
+    wallet
+  );
+
+  const nonce: BigNumber = await tokenContract.nonces(takerAddress);
+  const tokenName: string = await tokenContract.name();
+
+  const eRC20PermitEip712SignaturePayload = {
+    types: {
+      EIP712Domain: [
+        { name: "name", type: "string" },
+        { name: "version", type: "string" },
+        { name: "chainId", type: "uint256" },
+        { name: "verifyingContract", type: "address" },
+      ],
+      Permit: [
+        { name: "owner", type: "address" },
+        { name: "spender", type: "address" },
+        { name: "value", type: "uint256" },
+        { name: "nonce", type: "uint256" },
+        { name: "deadline", type: "uint256" },
+      ],
+    },
+    domain: {
+      name: tokenName,
+      version: "1",
+      chainId: chainId,
+      verifyingContract: tokenAddress,
+    },
+    message: {
+      owner: takerAddress,
+      spender: tokenTransferProxyAddress,
+      value: approvalAmount,
+      nonce: nonce.toNumber(),
+      deadline: dayjs().add(2, "hour").unix(),
+    },
+    primaryType: "Permit",
+  };
+  
+
+  const approveProxySignature = signTypedData({
+    privateKey: bufferPrivateKey,
+    data: eRC20PermitEip712SignaturePayload,
+    version: SignTypedDataVersion.V4,
+  });
+
+  const apiPayload = {
+    owner: takerAddress,
+    spender: tokenTransferProxyAddress,
+    tokenAddress,
+    amount: approvalAmount.toString(),
+    signature: approveProxySignature,
+  };
+
+  const response = await fetch(`https://api.sx.bet/orders/approve`, {
+    method: "POST",
+    body: JSON.stringify(apiPayload),
+    headers: { "Content-Type": "application/json" },
+  });
+}
+```
+
+> The above command returns json structured like this where `hash` is the transaction hash of the approve transaction.
+
+```json
+{
+  "status": "success",
+  "data": {
+    "hash": "0x840763ae29b7a6adfa0e315afa47be30cdebd5b793d179dc07dc8fc4f0034965"
+  }
+}
+```
+
+This endpoint approves the specified `amount` to be spent by `spender` on behalf of `owner` for token transfers that occur as part of the [Filling orders v2](#filling-orders-v2) flow according to Ethereum's [EIP-2612](https://eips.ethereum.org/EIPS/eip-2612) Permit Extension.  Note that `deadline` field here is only used during signature verification and that the `amount` set will be the spender's allowance until revoked. 
+
 ## Filling orders v2
 
 <aside class="notice">
-Coming soon! This endpoint will be available for use soon, please follow our Discord #api-help channel to stay up to date.
+Coming soon! This endpoint will be available for use soon, please follow our Discord #api-changes channel to stay up to date.
 </aside>
 
 ```shell
 curl --location --request POST 'https://api.sx.bet/orders/fill/v2' \
 --header 'Content-Type: application/json' \
---data-raw '{"taker":"0xa3bBFaB3645B2Dd4296cADc451d74574CD47Ba1a","baseToken":"0x6629Ce1Cf35Cc1329ebB4F63202F3f197b3F050B","isTakerBettingOutcomeOne":true,"stakeWei":"50000","desiredOdds":"83000000000000000000","oddsSlippage":5,"takerSig":"0x09d2603a8c8646221d6972b04a5cdd8b13d6326a267329825567a25a5e63606b07b97c84640bfb3ee4a5053083ce178d9e0c9cbdf1b1dfd519fda0594fae30dc1c","fillSalt":"69231297238279245345865414293427982207908612843136003245427437324972455931243","action":"N/A","market":"N/A","betting":"N/A","stake":"N/A","worstOdds":"N/A","worstReturning":"N/A"}'
+--data-raw '{"taker":"0xa3bBFaB3645B2Dd4296cADc451d74574CD47Ba1a","baseToken":"0x6629Ce1Cf35Cc1329ebB4F63202F3f197b3F050B","isTakerBettingOutcomeOne":true,"stakeWei":"50000","desiredOdds":"83000000000000000000","oddsSlippage":5,"takerSig":"0x09d2603a8c8646221d6972b04a5cdd8b13d6326a267329825567a25a5e63606b07b97c84640bfb3ee4a5053083ce178d9e0c9cbdf1b1dfd519fda0594fae30dc1c","fillSalt":"69231297238279245345865414293427982207908612843136003245427437324972455931243"}'
 ```
 
 ```javascript
@@ -1368,11 +1521,11 @@ async function fillOrder() {
     },
     message: {
       action: "N/A",
-      market: "N/A",
       betting: "N/A",
       stake: "N/A",
       worstOdds: "N/A",
       worstReturning: "N/A",
+      market: marketHash
       fills: {
         stakeWei,
         marketHash,
@@ -1388,44 +1541,6 @@ async function fillOrder() {
     },
   };
 
-  const approveProxySigningPayload = {
-    types: {
-      EIP712Domain: [
-        { name: "name", type: "string" },
-        { name: "version", type: "string" },
-        { name: "chainId", type: "uint256" },
-        { name: "verifyingContract", type: "address" },
-      ],
-      Permit: [
-        { name: "owner", type: "address" },
-        { name: "spender", type: "address" },
-        { name: "value", type: "uint256" },
-        { name: "nonce", type: "uint256" },
-        { name: "deadline", type: "uint256" },
-      ],
-    },
-    domain: {
-      name: tokenName,
-      version: "1",
-      chainId: chainId,
-      verifyingContract: baseToken,
-    },
-    message: {
-      owner: takerAddress,
-      spender: tokenTransferProxyAddress,
-      value: approvalAmount,
-      nonce: nonce.toNumber(),
-      deadline: dayjs().add(2, "hour").unix(),
-    },
-    primaryType: "Permit",
-  };
-
-  const approveProxySignature = signTypedData({
-    privateKey: bufferPrivateKey,
-    data: approveProxySigningPayload,
-    version: SignTypedDataVersion.V4,
-  });
-
   const signature = signTypedData({
     privateKey: bufferPrivateKey,
     data: signingPayload,
@@ -1433,12 +1548,7 @@ async function fillOrder() {
   });
 
   const apiPayload = {
-    action: "N/A",
-    market: "N/A",
-    betting: "N/A",
-    stake: "N/A",
-    worstOdds: "N/A",
-    worstReturning: "N/A",
+    market: marketHash,
     baseToken,
     isTakerBettingOutcomeOne,
     stakeWei,
@@ -1447,13 +1557,6 @@ async function fillOrder() {
     taker: takerAddress,
     takerSig: signature,
     fillSalt,
-    approveProxyPayload: {
-      owner: takerAddress,
-      spender: tokenTransferProxyAddress,
-      tokenAddress,
-      amount: approvalAmount.toString(),
-      signature: approveProxySignature,
-    },
   };
 
   const response = await fetch(`https://api.sx.bet/orders/fill/v2`, {
@@ -1477,7 +1580,7 @@ async function fillOrder() {
 }
 ```
 
-This endpoint fills orders on the exchange based on the specified desiredOdds and oddsSlippage. Unlike the legacy [Filling orders v1](#filling-orders-v1) which considers orderHashes and takerAmounts based on an initial call to fetch orders, order matching is done internally <i>after</i> the built in betting delay, optimizing the taker experience particularly during in-play betting.
+This endpoint fills orders on the exchange based on the specified desiredOdds and oddsSlippage. Unlike the legacy [Filling orders v1](#filling-orders) which considers orderHashes and takerAmounts based on an initial call to fetch orders, order matching is done internally <i>after</i> the built-in betting delay, optimizing the taker experience particularly during in-play betting. Furthermore, if any new orders with better odds are added during the betting delay window, those orders will be filled. Lastly, if there isn't sufficient size to support the full stake amount, taker fills will be partially filled so they can carry out a subsequent fill.
 
 See below for the betting delays by sport which are added to guard against toxic flow and high spikes in latency from the bookmaker's side. It is effectively protection for the bookmaker. As order matching is done after the betting delay, errors observed in the past due to order cancellations within the betting delay will now be avoided.
 
@@ -1513,34 +1616,16 @@ Your assets must be on SX Network to place bets.
 
 | Name                | Required | Type                    | Description                                                                                                                                                                                                                                                 |
 | ------------------- | -------- | ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| action              | true     | string                  | User facing string for what action the user is taking. Can simply set to "N/A" when using the API                                                                                                                                                           |
-| betting             | true     | string                  | User facing string for what bet the user is making. Can simply set to "N/A" when using the API.                                                                                                                                                             |
-| fillSalt            | true     | string                  | Random 32 byte string to identify this fill. Must be the same `fillSalt` used when computing the EIP712 payload                                                                                                                                             |
 | market              | true     | string                  | User facing string for what market the user is betting on. Can simply set to "N/A" when using the API                                                                                                                                                       |
 | baseToken              | true     | string                 | The address of the ERC-20 token representing the currency of the fill  |
 | isTakerBettingOutcomeOne              | true     | boolean                 | Whether or not taker is betting outcome 1 (team 1 wins), if false then taker is betting outcome 2 (team 2 wins) |
 | stakeWei              | true     | string                  | The stake amount for this bet in wei units - see [Unit Conversion](#unit-conversion) |
 | desiredOdds                | true     | string                  | The best odds for filling, used as an anchor when applying oddsSlippage - note that any odds better than the desiredOdds can still fill if found at the time of order matching                 |
 | oddsSlippage                | true     | integer                  | An integer between 0-100 representing the percentage of tolerance that is acceptable based on desiredOdds |
-| worstOdds                | true     | string                  | User facing string for the worst possible odds the user can match with for their fill. Can simply set to "N/A" when using the API                                                                                                                                                           |
-| worstReturning           | true     | string                  | User facing string for what the bet will be returning assuming worst odds. Can simply set to "N/A" when using the API.                                                                                                                                                           |
+| fillSalt            | true     | string                  | Random 32 byte string to identify this fill. Must be the same `fillSalt` used when computing the EIP712 payload                                                                                                                                             |
 | taker               | true     | string                  | Address of the taker taking the bet                                                                                                                                                                                                                         |
-| stake               | true     | string                  | User facing string for how much the user is risking. Can simly set to "N/A" when using the API.                                                                                                                                                             |
 | takerSig            | true     | string                  | The EIP712 signature of the `taker` on the payload. See the example of how to compute this.                                                                                                                                                                 |
 | message             | true     | string                  | A user-facing message for the eip712 signing. Can be anything.                                                                                                                                                                                              |
-| approveProxyPayload | false    | `ApproveSpenderPayload` | Extra object required if you wish to atomically `ERC20.approve()` prior to the bet. This can be useful from a UX point of view if you don't want the user to have to wait until the approval is mined before the bet can be submitted                       |
-| affiliateAddress    | false    | string                  | Set the `taker` to a valid affiliate's address.                                                                                                                                                                                                             |
-
-where an `ApproveSpenderPayload` looks like
-
-| Name         | Required | Type   | Description                                                                                                                                                                                     |
-| ------------ | -------- | ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| owner        | true     | string | Address of the bettor/taker                                                                                                                                                                     |
-| spender      | true     | string | Address of the contract permitted to spend tokens on behalf of the bettor/taker to bet. See the `TokenTransferProxy` address in the available at `https://api.sx.bet/metadata` for this address |
-| tokenAddress | true     | string | Address of the token being used to bet. Must be the same as the token referenced in the orders being filled                                                                                     |
-| amount       | true     | string | Amount of tokens to approve. Must be greater than or equal to the total tokens bet from the bettors's perspective, i.e., how many tokens are leaving the bettor's wallet                        |
-| signature    | true     | string | The EIP712 signature of the this payload.                                                                                                                                                       |
-
 ### Response format
 
 | Name       | Type   | Description                                            |
@@ -1571,3 +1656,4 @@ where an `ApproveSpenderPayload` looks like
 | INSUFFICIENT_SPACE         | There is not enough space to fill the matched orders due to other pending fills  |
 | FILL_ALREADY_SUBMITTED     | The fill has already been submitted                                          |
 | ODDS_STALE                 | No orders could not be found for the desiredOdds and oddsSlippage, try again with greater oddsSlippage |
+
