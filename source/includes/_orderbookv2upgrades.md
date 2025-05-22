@@ -2,7 +2,7 @@
 
 ## How we currently fill orders
 
-Our current endpoint used for taker order filling (see [Filling orders](#filling-orders)) requires orderHashes and takerAmounts to be precomputed by upstream logic prior to calling the endpoint. Since this derivation of the orders and amounts are done prior to the built-in betting delay, users may have observed ODDS_STALE errors by the time the delay passed since those orders might no longer be active. This is particularly problematic during live games where the betting delay can be 8-12s long.
+Our current endpoint used for taker order filling (see [Filling orders v1](#filling-orders-v1)) requires orderHashes and takerAmounts to be precomputed by upstream logic prior to calling the endpoint. Since this derivation of the orders and amounts are done prior to the built-in betting delay, users may have observed ODDS_STALE errors by the time the delay passed since those orders might no longer be active. This is particularly problematic during live games where the betting delay can be 8-12s long.
 
 ## What's changing
 
@@ -17,7 +17,7 @@ In addition to the new way to fill orders, we've also bundled in several other c
 
 ## Breaking changes
 
-To reduce impact as much as possible, we plan to continue to serve the fill v1 endpoint, (Filling orders)[#filling-orders] for the foreseeable future however you can find the tentative deprecation dates for breaking changes below which will alos be announced on our Discord well ahead of time. 
+To reduce impact as much as possible, we plan to continue to serve the fill v1 endpoint, (Filling orders v1)[#filling-orders-v1] for the foreseeable future however you can find the tentative deprecation dates for breaking changes below which will alos be announced on our Discord well ahead of time. 
 
 | Change(s)                                                                        | Date           |
 | ------------------------------------------------------------------------------- | -------------- |

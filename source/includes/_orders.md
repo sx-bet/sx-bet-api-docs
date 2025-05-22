@@ -1419,68 +1419,7 @@ async function fillOrder() {
   const desiredOdds = "83000000000000000000"; // ~1.20 decimal odds
   const oddsSlippage = 5; // 5% slippage, so worst decimal odds ~1.14
   const isTakerBettingOutcomeOne = true // taker is betting that team 1 wins
-
   const fillSalt = BigNumber.from(randomBytes(32)).toString();
-  const approvalAmount = constants.MaxUint256;
-  const tokenContract = new Contract(
-    baseToken,
-    [
-      {
-        constant: false,
-        inputs: [
-          { internalType: "address", name: "usr", type: "address" },
-          { internalType: "uint256", name: "wad", type: "uint256" },
-        ],
-        name: "approve",
-        outputs: [{ internalType: "bool", name: "", type: "bool" }],
-        payable: false,
-        stateMutability: "nonpayable",
-        type: "function",
-      },
-      {
-        inputs: [
-          {
-            internalType: "address",
-            name: "owner",
-            type: "address",
-          },
-        ],
-        name: "nonces",
-        outputs: [
-          {
-            internalType: "uint256",
-            name: "",
-            type: "uint256",
-          },
-        ],
-        stateMutability: "view",
-        type: "function",
-        constant: true,
-      },
-      {
-        inputs: [],
-        name: "name",
-        outputs: [
-          {
-            internalType: "string",
-            name: "",
-            type: "string"
-          }
-        ],
-        stateMutability: "view",
-        type: "function",
-        constant: true
-      }
-    ],
-    wallet
-  );
-
-  let nonce: BigNumber = await tokenContract.nonces(takerAddress);
-  const tokenName: string = await tokenContract.name();
-  const abiEncodedFunctionSig = tokenContract.interface.encodeFunctionData(
-    "approve",
-    [tokenTransferProxyAddress, approvalAmount]
-  );
 
   const signingPayload = {
     types: {
@@ -1580,7 +1519,7 @@ async function fillOrder() {
 }
 ```
 
-This endpoint fills orders on the exchange based on the specified desiredOdds and oddsSlippage. Unlike the legacy [Filling orders v1](#filling-orders) which considers orderHashes and takerAmounts based on an initial call to fetch orders, order matching is done internally <i>after</i> the built-in betting delay, optimizing the taker experience particularly during in-play betting. Furthermore, if any new orders with better odds are added during the betting delay window, those orders will be filled. Lastly, if there isn't sufficient size to support the full stake amount, taker fills will be partially filled so they can carry out a subsequent fill.
+This endpoint fills orders on the exchange based on the specified desiredOdds and oddsSlippage. Unlike the legacy [Filling orders v1](#filling-orders-v1) which considers orderHashes and takerAmounts based on an initial call to fetch orders, order matching is done internally <i>after</i> the built-in betting delay, optimizing the taker experience particularly during in-play betting. Furthermore, if any new orders with better odds are added during the betting delay window, those orders will be filled. Lastly, if there isn't sufficient size to support the full stake amount, taker fills will be partially filled so they can carry out a subsequent fill.
 
 See below for the betting delays by sport which are added to guard against toxic flow and high spikes in latency from the bookmaker's side. It is effectively protection for the bookmaker. As order matching is done after the betting delay, errors observed in the past due to order cancellations within the betting delay will now be avoided.
 
