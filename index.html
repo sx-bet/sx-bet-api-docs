@@ -6240,17 +6240,15 @@ Coming soon! This endpoint will be available for use soon, please follow our Dis
 
 <span class="k">async</span> <span class="kd">function</span> <span class="nx">approveOrderFill</span><span class="p">()</span> <span class="p">{</span>
   <span class="kd">const</span> <span class="nx">privateKey</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PRIVATE_KEY</span><span class="p">;</span>
-  <span class="kd">const</span> <span class="nx">takerAddress</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">TAKER_ADDRESS</span><span class="p">;</span>
   <span class="kd">const</span> <span class="nx">tokenAddress</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">TOKEN_ADDRESS</span><span class="p">;</span>
 
   <span class="c1">// get the following from https://api.sx.bet/metadata</span>
   <span class="kd">const</span> <span class="nx">tokenTransferProxyAddress</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">TOKEN_TRANSFER_PROXY_ADDRESS</span><span class="p">;</span>
-  <span class="kd">const</span> <span class="nx">EIP712FillHasherAddress</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">EIP712_FILL_HASHER_ADDRESS</span><span class="p">;</span>
   <span class="kd">const</span> <span class="nx">chainId</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">CHAIN_ID</span><span class="p">;</span> <span class="c1">// 4162 in production</span>
   <span class="kd">const</span> <span class="nx">domainVersion</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">DOMAIN_VERSION</span><span class="p">;</span>
 
   <span class="kd">const</span> <span class="nx">bufferPrivateKey</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="nx">privateKey</span><span class="o">!</span><span class="p">.</span><span class="nx">substring</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="dl">"</span><span class="s2">hex</span><span class="dl">"</span><span class="p">);</span>
-  <span class="kd">const</span> <span class="nx">wallet</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Wallet</span><span class="p">(</span><span class="nx">privateKey</span><span class="p">).</span><span class="nx">connect</span><span class="p">(</span>
+  <span class="kd">const</span> <span class="nx">wallet</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Wallet</span><span class="p">(</span><span class="nx">takerPrivateKey</span><span class="p">).</span><span class="nx">connect</span><span class="p">(</span>
     <span class="k">new</span> <span class="nx">providers</span><span class="p">.</span><span class="nx">JsonRpcProvider</span><span class="p">(</span><span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">RPC_URL</span><span class="p">)</span> <span class="c1">// find this under the 'references' section</span>
   <span class="p">);</span>
   <span class="kd">const</span> <span class="nx">approvalAmount</span> <span class="o">=</span> <span class="nx">constants</span><span class="p">.</span><span class="nx">MaxUint256</span><span class="p">;</span>
@@ -6307,7 +6305,7 @@ Coming soon! This endpoint will be available for use soon, please follow our Dis
     <span class="nx">wallet</span>
   <span class="p">);</span>
 
-  <span class="kd">const</span> <span class="nx">nonce</span><span class="p">:</span> <span class="nx">BigNumber</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">tokenContract</span><span class="p">.</span><span class="nx">nonces</span><span class="p">(</span><span class="nx">takerAddress</span><span class="p">);</span>
+  <span class="kd">const</span> <span class="nx">nonce</span><span class="p">:</span> <span class="nx">BigNumber</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">tokenContract</span><span class="p">.</span><span class="nx">nonces</span><span class="p">(</span><span class="nx">wallet</span><span class="p">.</span><span class="nx">address</span><span class="p">);</span>
   <span class="kd">const</span> <span class="nx">tokenName</span><span class="p">:</span> <span class="nx">string</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">tokenContract</span><span class="p">.</span><span class="nx">name</span><span class="p">();</span>
 
   <span class="kd">const</span> <span class="nx">eRC20PermitEip712SignaturePayload</span> <span class="o">=</span> <span class="p">{</span>
@@ -6333,9 +6331,9 @@ Coming soon! This endpoint will be available for use soon, please follow our Dis
       <span class="na">verifyingContract</span><span class="p">:</span> <span class="nx">tokenAddress</span><span class="p">,</span>
     <span class="p">},</span>
     <span class="na">message</span><span class="p">:</span> <span class="p">{</span>
-      <span class="na">owner</span><span class="p">:</span> <span class="nx">takerAddress</span><span class="p">,</span>
+      <span class="na">owner</span><span class="p">:</span> <span class="nx">wallet</span><span class="p">.</span><span class="nx">address</span><span class="p">,</span>
       <span class="na">spender</span><span class="p">:</span> <span class="nx">tokenTransferProxyAddress</span><span class="p">,</span>
-      <span class="na">value</span><span class="p">:</span> <span class="nx">approvalAmount</span><span class="p">,</span>
+      <span class="na">value</span><span class="p">:</span> <span class="nx">approvalAmount</span><span class="p">.</span><span class="nx">toString</span><span class="p">(),</span>
       <span class="na">nonce</span><span class="p">:</span> <span class="nx">nonce</span><span class="p">.</span><span class="nx">toNumber</span><span class="p">(),</span>
       <span class="na">deadline</span><span class="p">:</span> <span class="nx">dayjs</span><span class="p">().</span><span class="nx">add</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="dl">"</span><span class="s2">hour</span><span class="dl">"</span><span class="p">).</span><span class="nx">unix</span><span class="p">(),</span>
     <span class="p">},</span>
@@ -6350,10 +6348,10 @@ Coming soon! This endpoint will be available for use soon, please follow our Dis
   <span class="p">});</span>
 
   <span class="kd">const</span> <span class="nx">apiPayload</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="na">owner</span><span class="p">:</span> <span class="nx">takerAddress</span><span class="p">,</span>
+    <span class="na">owner</span><span class="p">:</span> <span class="nx">wallet</span><span class="p">.</span><span class="nx">address</span><span class="p">,</span>
     <span class="na">spender</span><span class="p">:</span> <span class="nx">tokenTransferProxyAddress</span><span class="p">,</span>
     <span class="nx">tokenAddress</span><span class="p">,</span>
-    <span class="na">amount</span><span class="p">:</span> <span class="nx">approvalAmount</span><span class="p">.</span><span class="nx">toString</span><span class="p">(),</span>
+    <span class="na">value</span><span class="p">:</span> <span class="nx">approvalAmount</span><span class="p">.</span><span class="nx">toString</span><span class="p">(),</span>
     <span class="na">signature</span><span class="p">:</span> <span class="nx">approveProxySignature</span><span class="p">,</span>
   <span class="p">};</span>
 
@@ -6365,7 +6363,7 @@ Coming soon! This endpoint will be available for use soon, please follow our Dis
 <span class="p">}</span>
 </code></pre></div>
 <blockquote>
-<p>The above command returns json structured like this where <code>hash</code> is the transaction hash of the approve transaction.</p>
+<p>The above command returns json structured like this where <code>hash</code> is the transaction hash of the approve transaction. A null value of <code>hash</code> means the taker address already has an allowance set for the token of the amount specified in <code>value</code>.</p>
 </blockquote>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
   </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
@@ -6374,7 +6372,55 @@ Coming soon! This endpoint will be available for use soon, please follow our Dis
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
-<p>This endpoint approves the specified <code>amount</code> to be spent by <code>spender</code> on behalf of <code>owner</code> for token transfers that occur as part of the <a href="#filling-orders-v2">Filling orders v2</a> flow according to Ethereum&#39;s <a href="https://eips.ethereum.org/EIPS/eip-2612">EIP-2612</a> Permit Extension.  Note that <code>deadline</code> field here is only used during signature verification and that the <code>amount</code> set will be the spender&#39;s allowance until revoked. </p>
+<p>This endpoint approves the specified <code>value</code> to be spent by <code>spender</code> on behalf of <code>owner</code> for token transfers that occur as part of the <a href="#filling-orders-v2">Filling orders v2</a> flow according to Ethereum&#39;s <a href="https://eips.ethereum.org/EIPS/eip-2612">EIP-2612</a> Permit Extension.  Note that <code>deadline</code> field here is only used during signature verification and that the <code>value</code> set will be the spender&#39;s allowance until changed or revoked. </p>
+<h3 id='http-request-8'>HTTP Request</h3>
+<p><code>POST https://api.sx.bet/orders/approve</code></p>
+<h3 id='request-payload-parameters-6'>Request payload parameters</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>owner</td>
+<td>true</td>
+<td>string</td>
+<td>Address of the taker granting approval to TokenTransferProxy for filling orders on their behalf</td>
+</tr>
+<tr>
+<td>spender</td>
+<td>true</td>
+<td>string</td>
+<td>The address of the account which will be able to spend token amounts on behalf of the owner. In this case, the spender should be TokenTransferProxy address</td>
+</tr>
+<tr>
+<td>tokenAddress</td>
+<td>true</td>
+<td>string</td>
+<td>The token address to grant approval for</td>
+</tr>
+<tr>
+<td>value</td>
+<td>true</td>
+<td>string</td>
+<td>The token amount to grant approval for, in Ethereum units</td>
+</tr>
+<tr>
+<td>dealdine</td>
+<td>true</td>
+<td>string</td>
+<td>The deadline as a UNIX timestamp format used in signature verification</td>
+</tr>
+<tr>
+<td>signature</td>
+<td>true</td>
+<td>string</td>
+<td>The generated EIP712 signature on the payload. See the example of how to compute this.</td>
+</tr>
+</tbody></table>
 <h2 id='filling-orders-v2'>Filling orders v2</h2>
 <aside class="notice">
 Coming soon! This endpoint will be available for use soon, please follow our Discord #api-changes channel to stay up to date.
@@ -6573,9 +6619,9 @@ Coming soon! This endpoint will be available for use soon, please follow our Dis
 <aside class="notice">
 Your assets must be on SX Network to place bets.
 </aside>
-<h3 id='http-request-8'>HTTP Request</h3>
+<h3 id='http-request-9'>HTTP Request</h3>
 <p><code>POST https://api.sx.bet/orders/fill/v2</code></p>
-<h3 id='request-payload-parameters-6'>Request payload parameters</h3>
+<h3 id='request-payload-parameters-7'>Request payload parameters</h3>
 <table><thead>
 <tr>
 <th>Name</th>
