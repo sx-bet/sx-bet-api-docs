@@ -1236,17 +1236,15 @@ import dayjs from "dayjs";
 
 async function approveOrderFill() {
   const privateKey = process.env.PRIVATE_KEY;
-  const takerAddress = process.env.TAKER_ADDRESS;
   const tokenAddress = process.env.TOKEN_ADDRESS;
 
   // get the following from https://api.sx.bet/metadata
   const tokenTransferProxyAddress = process.env.TOKEN_TRANSFER_PROXY_ADDRESS;
-  const EIP712FillHasherAddress = process.env.EIP712_FILL_HASHER_ADDRESS;
   const chainId = process.env.CHAIN_ID; // 4162 in production
   const domainVersion = process.env.DOMAIN_VERSION;
 
   const bufferPrivateKey = Buffer.from(privateKey!.substring(2), "hex");
-  const wallet = new Wallet(privateKey).connect(
+  const wallet = new Wallet(takerPrivateKey).connect(
     new providers.JsonRpcProvider(process.env.RPC_URL) // find this under the 'references' section
   );
   const approvalAmount = constants.MaxUint256;
@@ -1303,7 +1301,7 @@ async function approveOrderFill() {
     wallet
   );
 
-  const nonce: BigNumber = await tokenContract.nonces(takerAddress);
+  const nonce: BigNumber = await tokenContract.nonces(wallet.address);
   const tokenName: string = await tokenContract.name();
 
   const eRC20PermitEip712SignaturePayload = {
@@ -1329,9 +1327,9 @@ async function approveOrderFill() {
       verifyingContract: tokenAddress,
     },
     message: {
-      owner: takerAddress,
+      owner: wallet.address,
       spender: tokenTransferProxyAddress,
-      value: approvalAmount,
+      value: approvalAmount.toString(),
       nonce: nonce.toNumber(),
       deadline: dayjs().add(2, "hour").unix(),
     },
@@ -1346,10 +1344,10 @@ async function approveOrderFill() {
   });
 
   const apiPayload = {
-    owner: takerAddress,
+    owner: wallet.address,
     spender: tokenTransferProxyAddress,
     tokenAddress,
-    amount: approvalAmount.toString(),
+    value: approvalAmount.toString(),
     signature: approveProxySignature,
   };
 
@@ -1361,7 +1359,7 @@ async function approveOrderFill() {
 }
 ```
 
-> The above command returns json structured like this where `hash` is the transaction hash of the approve transaction.
+> The above command returns json structured like this where `hash` is the transaction hash of the approve transaction. A null value of `hash` means the taker address already has an allowance set for the token of the amount specified in `value`.
 
 ```json
 {
@@ -1372,7 +1370,22 @@ async function approveOrderFill() {
 }
 ```
 
-This endpoint approves the specified `amount` to be spent by `spender` on behalf of `owner` for token transfers that occur as part of the [Filling orders v2](#filling-orders-v2) flow according to Ethereum's [EIP-2612](https://eips.ethereum.org/EIPS/eip-2612) Permit Extension.  Note that `deadline` field here is only used during signature verification and that the `amount` set will be the spender's allowance until revoked. 
+This endpoint approves the specified `value` to be spent by `spender` on behalf of `owner` for token transfers that occur as part of the [Filling orders v2](#filling-orders-v2) flow according to Ethereum's [EIP-2612](https://eips.ethereum.org/EIPS/eip-2612) Permit Extension.  Note that `deadline` field here is only used during signature verification and that the `value` set will be the spender's allowance until changed or revoked. 
+
+### HTTP Request
+
+`POST https://api.sx.bet/orders/approve`
+
+### Request payload parameters
+
+| Name                | Required | Type                    | Description                                                                                                                                                                                                                                                 |
+| ------------------- | -------- | ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| owner              | true     | string                  | Address of the taker granting approval to TokenTransferProxy for filling orders on their behalf                                                                                                                                                           |
+| spender             | true     | string                  | The address of the account which will be able to spend token amounts on behalf of the owner. In this case, the spender should be TokenTransferProxy address                                                                                                                                                             |
+| tokenAddress            | true     | string                  | The token address to grant approval for                                                                                                                                             |
+| value              | true     | string                  | The token amount to grant approval for, in Ethereum units                                                                                                                                                       |
+| dealdine                | true     | string                  | The deadline as a UNIX timestamp format used in signature verification                                                                                                                                                        |
+| signature            | true     | string                  | The generated EIP712 signature on the payload. See the example of how to compute this.                                                                                                                                                                 |
 
 ## Filling orders v2
 
