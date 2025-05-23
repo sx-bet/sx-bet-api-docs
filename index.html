@@ -3804,7 +3804,7 @@ Only one of <code>type</code> and <code>betGroup</code> can be present. Not both
 
 <p>See <a href="#get-active-markets">active markets section</a> for how the <code>Market</code> object is formatted</p>
 <h1 id='parlay-markets'>Parlay Markets</h1>
-<p>Bettors can request a custom parlay on <a href="https://sx.bet">SX.Bet</a> by selecting multiple markets. When they submit a parlay request, a message is sent via Websocket (See <a href="#parlay-market-requests">this link</a> for more details on the request). Once this message is sent, the web client will wait one second to allow market makers to submit orders for the parlay market.</p>
+<p>Bettors can request a custom parlay on <a href="https://sx.bet">SX.Bet</a> by selecting multiple markets. When they submit a parlay request, a message is sent via Websocket (See <a href="#parlay-market-requests">this link</a> for more details on the request). Once this message is sent, makers will be able to submit orders to this market for upto three seconds.</p>
 
 <p>Market makers can use the payload data from the Parlay Request to submit an <a href="#post-a-new-order">order</a>. Market makers have a three second window to post orders. After this point, bettors will be shown all available orders at the same time and no other orders will be viewable by the bettor.</p>
 
