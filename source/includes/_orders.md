@@ -542,7 +542,18 @@ const result = await fetch("https://api.sx.bet/orders/cancel/v2", {
 {
   "status": "success",
   "data": {
-    "cancelledCount": 1
+    "cancelledCount": 1,
+    "orders": [
+      {
+        "orderHash": "0xc4fad4101eac3d72a7d4166df05534edd5479ec705307624498d6ec60336ef45",
+        "pendingFills": [
+          {
+              "fillHash": "0xf691c9dfb100d125503c0b4dad944f15d711eaf22108c6dacc5077a274b35821",
+              "pendingFillAmount": "106995918"
+          }
+        ]
+      }
+    ]
   }
 }
 ```
@@ -565,11 +576,26 @@ This endpoint cancels existing orders on the exchange that you placed as a marke
 
 ### Response format
 
-| Name             | Type     | Description                                            |
-| ---------------- | -------- | ------------------------------------------------------ |
-| status           | string   | `success` or `failure` if the request succeeded or not |
-| data             | object   | The response data                                      |
-| > cancelledCount | string[] | How many orders were cancelled, of the orders passed   |
+| Name             | Type             | Description                                                        |
+| ---------------- | ---------------- | ------------------------------------------------------------------ |
+| status           | string           | `success` or `failure` if the request succeeded or not             |
+| data             | object           | The response data                                                  |
+| > cancelledCount | number           | How many orders were cancelled, of the orders passed               |
+| > orders?        | CancelledOrder[] | An array of Cancelled Order objects. Omitted if cancel count is 0. |
+
+A `CancelledOrder` object looks like this
+
+| Name             | Type           | Description                                                                          |
+| -------------| -------------- | ------------------------------------------------------------------------------------ |
+| orderHash    | string         | Cancelled order hash                                                                 |
+| pendingFills | PendingFill[]  | The pending fills awaiting confirmation on chain. Expected to succeed and fill order.|
+
+A `PendingFill` object looks like this
+
+| Name              | Type   | Description                                                   |
+| ----------------- | ------ | ------------------------------------------------------------- |
+| fillHash          | string | The fill hash which is pending                                |
+| pendingFillAmount | string | The amount of the order that this fill is attempting to fill. |
 
 ### Error Responses
 
@@ -693,11 +719,26 @@ This endpoint cancels existing orders on the exchange for a particular event tha
 
 ### Response format
 
-| Name             | Type     | Description                                            |
-| ---------------- | -------- | ------------------------------------------------------ |
-| status           | string   | `success` or `failure` if the request succeeded or not |
-| data             | object   | The response data                                      |
-| > cancelledCount | string[] | How many orders were cancelled, of the orders passed   |
+| Name             | Type             | Description                                                        |
+| ---------------- | ---------------- | ------------------------------------------------------------------ |
+| status           | string           | `success` or `failure` if the request succeeded or not             |
+| data             | object           | The response data                                                  |
+| > cancelledCount | number           | How many orders were cancelled, of the orders passed               |
+| > orders?        | CancelledOrder[] | An array of Cancelled Order objects. Omitted if cancel count is 0. |
+
+A `CancelledOrder` object looks like this
+
+| Name             | Type           | Description                                                                          |
+| -------------| -------------- | ------------------------------------------------------------------------------------ |
+| orderHash    | string         | Cancelled order hash                                                                 |
+| pendingFills | PendingFill[]  | The pending fills awaiting confirmation on chain. Expected to succeed and fill order.|
+
+A `PendingFill` object looks like this
+
+| Name              | Type   | Description                                                   |
+| ----------------- | ------ | ------------------------------------------------------------- |
+| fillHash          | string | The fill hash which is pending                                |
+| pendingFillAmount | string | The amount of the order that this fill is attempting to fill. |
 
 ### Error Responses
 
@@ -805,11 +846,26 @@ This endpoint cancels ALL existing orders on the exchange that you placed as a m
 
 ### Response format
 
-| Name             | Type     | Description                                            |
-| ---------------- | -------- | ------------------------------------------------------ |
-| status           | string   | `success` or `failure` if the request succeeded or not |
-| data             | object   | The response data                                      |
-| > cancelledCount | string[] | How many orders were cancelled, of the orders passed   |
+| Name             | Type             | Description                                                        |
+| ---------------- | ---------------- | ------------------------------------------------------------------ |
+| status           | string           | `success` or `failure` if the request succeeded or not             |
+| data             | object           | The response data                                                  |
+| > cancelledCount | number           | How many orders were cancelled, of the orders passed               |
+| > orders?        | CancelledOrder[] | An array of Cancelled Order objects. Omitted if cancel count is 0. |
+
+A `CancelledOrder` object looks like this
+
+| Name             | Type           | Description                                                                          |
+| -------------| -------------- | ------------------------------------------------------------------------------------ |
+| orderHash    | string         | Cancelled order hash                                                                 |
+| pendingFills | PendingFill[]  | The pending fills awaiting confirmation on chain. Expected to succeed and fill order.|
+
+A `PendingFill` object looks like this
+
+| Name              | Type   | Description                                                   |
+| ----------------- | ------ | ------------------------------------------------------------- |
+| fillHash          | string | The fill hash which is pending                                |
+| pendingFillAmount | string | The amount of the order that this fill is attempting to fill. |
 
 ### Error Responses
 
