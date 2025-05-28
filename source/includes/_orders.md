@@ -696,7 +696,18 @@ const result = await fetch("https://api.sx.bet/orders/cancel/v2", {
 {
   "status": "success",
   "data": {
-    "cancelledCount": 1
+    "cancelledCount": 1,
+    "orders": [
+      {
+        "orderHash": "0xc4fad4101eac3d72a7d4166df05534edd5479ec705307624498d6ec60336ef45",
+        "pendingFills": [
+          {
+              "fillHash": "0xf691c9dfb100d125503c0b4dad944f15d711eaf22108c6dacc5077a274b35821",
+              "pendingFillAmount": "106995918"
+          }
+        ]
+      }
+    ]
   }
 }
 ```
@@ -824,7 +835,18 @@ const result = await fetch("https://api.sx.bet/orders/cancel/all", {
 {
   "status": "success",
   "data": {
-    "cancelledCount": 10
+    "cancelledCount": 1,
+    "orders": [
+      {
+        "orderHash": "0xc4fad4101eac3d72a7d4166df05534edd5479ec705307624498d6ec60336ef45",
+        "pendingFills": [
+          {
+              "fillHash": "0xf691c9dfb100d125503c0b4dad944f15d711eaf22108c6dacc5077a274b35821",
+              "pendingFillAmount": "106995918"
+          }
+        ]
+      }
+    ]
   }
 }
 ```
