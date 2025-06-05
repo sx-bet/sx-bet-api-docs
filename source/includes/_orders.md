@@ -81,7 +81,7 @@ Parameters marked with an '*' are coming soon in future release.
 | marketHashes  | false    | string[] | Only get orders for these market hashes. Comma separated. |
 | baseToken     | false    | string   | Only get orders denominated in this base token            |
 | maker         | false    | string   | Only get orders for this market maker                     |
-| sportXEventId | false    | string   | Only get orders for this event ID                         |
+| sportXeventId | false    | string   | Only get orders for this event ID                         |
 | orderHashes*   | false    | string[] | Only get orders for these order hashes. Comma separated. |
 | page*   | false    | integer | Which page to query for paginated queries, min 0 |
 | perPage*   | false    | integer | How many per page for paginated queries, max 1000 |
@@ -626,7 +626,7 @@ import { Wallet } from "@ethersproject/wallet";
 
 const privateKey = process.env.PRIVATE_KEY;
 const bufferPrivateKey = Buffer.from(privateKey.substring(2), "hex");
-const sportXEventId = "L1231231";
+const sportXeventId = "L1231231";
 const salt = `0x${Buffer.from(randomBytes(32)).toString("hex")}`;
 const timestamp = Math.floor(new Date().getTime() / 1000);
 const wallet = new Wallet(privateKey);
@@ -646,7 +646,7 @@ function getCancelOrderEventsEIP712Payload(
         { name: "salt", type: "bytes32" },
       ],
       Details: [
-        { name: "sportXEventId", type: "string" },
+        { name: "sportXeventId", type: "string" },
         { name: "timestamp", type: "uint256" },
       ],
     },
@@ -663,7 +663,7 @@ function getCancelOrderEventsEIP712Payload(
 }
 
 const payload = getCancelOrderEventsEIP712Payload(
-  sportXEventId,
+  sportXeventId,
   salt,
   timestamp,
   chainId
@@ -677,13 +677,13 @@ const signature = signTypedData({
 
 const apiPayload = {
   signature,
-  sportXEventId,
+  sportXeventId,
   salt,
   maker: wallet.address,
   timestamp,
 };
 
-const result = await fetch("https://api.sx.bet/orders/cancel/v2", {
+const result = await fetch("https://api.sx.bet/orders/cancel/event", {
   method: "POST",
   body: JSON.stringify(apiPayload),
   headers: { "Content-Type": "application/json" },
@@ -722,7 +722,7 @@ This endpoint cancels existing orders on the exchange for a particular event tha
 
 | Name          | Required | Type   | Description                                                                                                                                            |
 | ------------- | -------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| sportXEventId | true     | string | The event for which orders should be cancelled                                                                                                         |
+| sportXeventId | true     | string | The event for which orders should be cancelled                                                                                                         |
 | signature     | true     | string | The EIP712 signature on the cancel order payload. See the [EIP712 signing section](#eip712-signing) for more details on how to compute this signature. |
 | salt          | required | string | A random 32 bytes hex string to protect against replay                                                                                                 |
 | maker         | required | true   | The account from which you are cancelling orders                                                                                                       |
@@ -816,7 +816,6 @@ const signature = signTypedData({
 
 const apiPayload = {
   signature,
-  sportXEventId,
   salt,
   maker: wallet.address,
   timestamp,
@@ -1265,7 +1264,7 @@ where an `ApproveSpenderPayload` looks like
 | fillHash | string | A unique identifier for this fill.                     |
 
 <aside class="warning">
-Note that <code>fillAmounts</code> are from *the perspective of the market maker*. <code>fillAmounts</code> can be thought of as how many tokens the maker(s) will be putting into the pot. Given an amount you as the taker want to bet, you can use the following formula to convert what value you have to use as <code>fillAmount</code> in this endpoint. <code>fillAmount = takerBetAmount * percentageOdds / (10^20 - percentageOdds)</code>
+Note that <code>takerAmounts</code> are from *the perspective of the market maker*. <code>takerAmounts</code> can be thought of as how many tokens the maker(s) will be putting into the pot. Given an amount you as the taker want to bet, you can use the following formula to convert what value you have to use as <code>takerAmount</code> in this endpoint. <code>takerAmount = takerBetAmount * percentageOdds / (10^20 - percentageOdds)</code>
 </aside>
 
 <aside class="notice">
