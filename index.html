@@ -286,7 +286,7 @@
   color: #859900;
 }
     </style>
-    <link href="stylesheets/screen-c9d8fa83.css" rel="stylesheet" media="screen" />
+    <link href="stylesheets/screen-525fe75b.css" rel="stylesheet" media="screen" />
     <link href="stylesheets/print-953e3353.css" rel="stylesheet" media="print" />
       <script src="javascripts/all-b12a2749.js"></script>
 
@@ -4593,7 +4593,7 @@ Parameters marked with an '*' are coming soon in future release.
 <td>Only get orders for this market maker</td>
 </tr>
 <tr>
-<td>sportXEventId</td>
+<td>sportXeventId</td>
 <td>false</td>
 <td>string</td>
 <td>Only get orders for this event ID</td>
@@ -5406,7 +5406,7 @@ Note that <code>totalBetSize</code> is from *the perspective of the market maker
 
 <span class="kd">const</span> <span class="nx">privateKey</span> <span class="o">=</span> <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">PRIVATE_KEY</span><span class="p">;</span>
 <span class="kd">const</span> <span class="nx">bufferPrivateKey</span> <span class="o">=</span> <span class="nx">Buffer</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="nx">privateKey</span><span class="p">.</span><span class="nx">substring</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="dl">"</span><span class="s2">hex</span><span class="dl">"</span><span class="p">);</span>
-<span class="kd">const</span> <span class="nx">sportXEventId</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">L1231231</span><span class="dl">"</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">sportXeventId</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">L1231231</span><span class="dl">"</span><span class="p">;</span>
 <span class="kd">const</span> <span class="nx">salt</span> <span class="o">=</span> <span class="s2">`0x</span><span class="p">${</span><span class="nx">Buffer</span><span class="p">.</span><span class="k">from</span><span class="p">(</span><span class="nx">randomBytes</span><span class="p">(</span><span class="mi">32</span><span class="p">)).</span><span class="nx">toString</span><span class="p">(</span><span class="dl">"</span><span class="s2">hex</span><span class="dl">"</span><span class="p">)}</span><span class="s2">`</span><span class="p">;</span>
 <span class="kd">const</span> <span class="nx">timestamp</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">()</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">);</span>
 <span class="kd">const</span> <span class="nx">wallet</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Wallet</span><span class="p">(</span><span class="nx">privateKey</span><span class="p">);</span>
@@ -5426,7 +5426,7 @@ Note that <code>totalBetSize</code> is from *the perspective of the market maker
         <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">salt</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">bytes32</span><span class="dl">"</span> <span class="p">},</span>
       <span class="p">],</span>
       <span class="na">Details</span><span class="p">:</span> <span class="p">[</span>
-        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">sportXEventId</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span> <span class="p">},</span>
+        <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">sportXeventId</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">string</span><span class="dl">"</span> <span class="p">},</span>
         <span class="p">{</span> <span class="na">name</span><span class="p">:</span> <span class="dl">"</span><span class="s2">timestamp</span><span class="dl">"</span><span class="p">,</span> <span class="na">type</span><span class="p">:</span> <span class="dl">"</span><span class="s2">uint256</span><span class="dl">"</span> <span class="p">},</span>
       <span class="p">],</span>
     <span class="p">},</span>
@@ -5443,7 +5443,7 @@ Note that <code>totalBetSize</code> is from *the perspective of the market maker
 <span class="p">}</span>
 
 <span class="kd">const</span> <span class="nx">payload</span> <span class="o">=</span> <span class="nx">getCancelOrderEventsEIP712Payload</span><span class="p">(</span>
-  <span class="nx">sportXEventId</span><span class="p">,</span>
+  <span class="nx">sportXeventId</span><span class="p">,</span>
   <span class="nx">salt</span><span class="p">,</span>
   <span class="nx">timestamp</span><span class="p">,</span>
   <span class="nx">chainId</span>
@@ -5457,13 +5457,13 @@ Note that <code>totalBetSize</code> is from *the perspective of the market maker
 
 <span class="kd">const</span> <span class="nx">apiPayload</span> <span class="o">=</span> <span class="p">{</span>
   <span class="nx">signature</span><span class="p">,</span>
-  <span class="nx">sportXEventId</span><span class="p">,</span>
+  <span class="nx">sportXeventId</span><span class="p">,</span>
   <span class="nx">salt</span><span class="p">,</span>
   <span class="na">maker</span><span class="p">:</span> <span class="nx">wallet</span><span class="p">.</span><span class="nx">address</span><span class="p">,</span>
   <span class="nx">timestamp</span><span class="p">,</span>
 <span class="p">};</span>
 
-<span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">fetch</span><span class="p">(</span><span class="dl">"</span><span class="s2">https://api.sx.bet/orders/cancel/v2</span><span class="dl">"</span><span class="p">,</span> <span class="p">{</span>
+<span class="kd">const</span> <span class="nx">result</span> <span class="o">=</span> <span class="k">await</span> <span class="nx">fetch</span><span class="p">(</span><span class="dl">"</span><span class="s2">https://api.sx.bet/orders/cancel/event</span><span class="dl">"</span><span class="p">,</span> <span class="p">{</span>
   <span class="na">method</span><span class="p">:</span> <span class="dl">"</span><span class="s2">POST</span><span class="dl">"</span><span class="p">,</span>
   <span class="na">body</span><span class="p">:</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">apiPayload</span><span class="p">),</span>
   <span class="na">headers</span><span class="p">:</span> <span class="p">{</span> <span class="dl">"</span><span class="s2">Content-Type</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">application/json</span><span class="dl">"</span> <span class="p">},</span>
@@ -5503,7 +5503,7 @@ Note that <code>totalBetSize</code> is from *the perspective of the market maker
 </tr>
 </thead><tbody>
 <tr>
-<td>sportXEventId</td>
+<td>sportXeventId</td>
 <td>true</td>
 <td>string</td>
 <td>The event for which orders should be cancelled</td>
@@ -5669,7 +5669,6 @@ Note that <code>totalBetSize</code> is from *the perspective of the market maker
 
 <span class="kd">const</span> <span class="nx">apiPayload</span> <span class="o">=</span> <span class="p">{</span>
   <span class="nx">signature</span><span class="p">,</span>
-  <span class="nx">sportXEventId</span><span class="p">,</span>
   <span class="nx">salt</span><span class="p">,</span>
   <span class="na">maker</span><span class="p">:</span> <span class="nx">wallet</span><span class="p">.</span><span class="nx">address</span><span class="p">,</span>
   <span class="nx">timestamp</span><span class="p">,</span>
@@ -6339,7 +6338,7 @@ Your assets must be on SX Network to place bets.
 </tbody></table>
 
 <aside class="warning">
-Note that <code>fillAmounts</code> are from *the perspective of the market maker*. <code>fillAmounts</code> can be thought of as how many tokens the maker(s) will be putting into the pot. Given an amount you as the taker want to bet, you can use the following formula to convert what value you have to use as <code>fillAmount</code> in this endpoint. <code>fillAmount = takerBetAmount * percentageOdds / (10^20 - percentageOdds)</code>
+Note that <code>takerAmounts</code> are from *the perspective of the market maker*. <code>takerAmounts</code> can be thought of as how many tokens the maker(s) will be putting into the pot. Given an amount you as the taker want to bet, you can use the following formula to convert what value you have to use as <code>takerAmount</code> in this endpoint. <code>takerAmount = takerBetAmount * percentageOdds / (10^20 - percentageOdds)</code>
 </aside>
 
 <aside class="notice">
