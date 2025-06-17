@@ -17,7 +17,7 @@ In addition to the new way to fill orders, we've also bundled in several other c
 
 ## Breaking changes
 
-To reduce impact as much as possible, we plan to continue to serve the fill v1 endpoint, (Filling orders v1)[#filling-orders-v1] for the foreseeable future however you can find the tentative deprecation dates for breaking changes below which will also be announced on our Discord well ahead of time. 
+To reduce impact as much as possible, we plan to continue to serve the fill v1 endpoint, [Filling orders v1](#filling-orders-v1) for the foreseeable future however you can find the tentative deprecation dates for breaking changes below which will also be announced on our Discord well ahead of time. 
 
 | Change(s)                                                                        | Date           |
 | ------------------------------------------------------------------------------- | -------------- |
