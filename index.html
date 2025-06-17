@@ -589,7 +589,7 @@ All ETH addresses used in this API are in check-summed format. If you pass in lo
 <li>New orderbook-related channels which are now sent as JSON and now include pendingFillAmounts (see <a href="#active-order-updates-v2">Active order updates v2</a> and <a href="#order-book-updates-v2">Order book updates v2</a>)</li>
 </ul>
 <h2 id='breaking-changes'>Breaking changes</h2>
-<p>To reduce impact as much as possible, we plan to continue to serve the fill v1 endpoint, (Filling orders v1)[#filling-orders-v1] for the foreseeable future however you can find the tentative deprecation dates for breaking changes below which will also be announced on our Discord well ahead of time. </p>
+<p>To reduce impact as much as possible, we plan to continue to serve the fill v1 endpoint, <a href="#filling-orders-v1">Filling orders v1</a> for the foreseeable future however you can find the tentative deprecation dates for breaking changes below which will also be announced on our Discord well ahead of time. </p>
 
 <table><thead>
 <tr>
@@ -1818,9 +1818,9 @@ Coming soon! This channel will be available for use soon, please follow our Disc
   </span><span class="p">}</span><span class="w">
 </span><span class="p">]</span><span class="w">
 </span></code></pre></div>
-<p>Subscribe to best odds changes in a particular order book for the given token and market. You will receive updates when orders are filled, cancelled, or posted. Note that for performance reasons, updates are delayed by at most 100ms.</p>
+<p>Subscribe to best odds changes in a particular order book for the given base token. You will receive updates when orders are filled, cancelled, or posted. Note that for performance reasons, updates are delayed by at most 100ms.</p>
 <h3 id='channel-name-format-10'>Channel name format</h3>
-<p><code>best_odds:{token}:{marketHash}</code></p>
+<p><code>best_odds:{baseToken}</code></p>
 
 <table><thead>
 <tr>
@@ -1830,14 +1830,9 @@ Coming soon! This channel will be available for use soon, please follow our Disc
 </tr>
 </thead><tbody>
 <tr>
-<td>token</td>
+<td>baseToken</td>
 <td>string</td>
 <td>Restrict updates to only orders denominated in this token</td>
-</tr>
-<tr>
-<td>marketHash</td>
-<td>string</td>
-<td>The market to subscribe to</td>
 </tr>
 </tbody></table>
 <h3 id='message-payload-format-10'>Message payload format</h3>
