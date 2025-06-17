@@ -676,7 +676,7 @@ channel.subscribe((message) => {
 ]
 ```
 
-Subscribe to best odds changes in a particular order book for the given token and base token. You will receive updates when orders are filled, cancelled, or posted. Note that for performance reasons, updates are delayed by at most 100ms.
+Subscribe to best odds changes in a particular order book for the given base token. You will receive updates when orders are filled, cancelled, or posted. Note that for performance reasons, updates are delayed by at most 100ms.
 
 ### Channel name format
 
