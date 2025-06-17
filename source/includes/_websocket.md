@@ -680,7 +680,7 @@ Subscribe to best odds changes in a particular order book for the given token an
 
 ### Channel name format
 
-`best_odds:{token}:{baseToken}`
+`best_odds:{baseToken}`
 
 | Name       | Type   | Description                                               |
 | ---------- | ------ | --------------------------------------------------------- |
