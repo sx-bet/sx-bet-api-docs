@@ -684,8 +684,7 @@ Subscribe to best odds changes in a particular order book for the given token an
 
 | Name       | Type   | Description                                               |
 | ---------- | ------ | --------------------------------------------------------- |
-| token      | string | Restrict updates to only orders denominated in this token |
-| baseToken | string | The base token address to subscribe to                            |
+| baseToken | string | Restrict updates to only orders denominated in this token                             |
 
 ### Message payload format
 
