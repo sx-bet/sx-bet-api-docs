@@ -676,16 +676,16 @@ channel.subscribe((message) => {
 ]
 ```
 
-Subscribe to best odds changes in a particular order book for the given token and market. You will receive updates when orders are filled, cancelled, or posted. Note that for performance reasons, updates are delayed by at most 100ms.
+Subscribe to best odds changes in a particular order book for the given token and base token. You will receive updates when orders are filled, cancelled, or posted. Note that for performance reasons, updates are delayed by at most 100ms.
 
 ### Channel name format
 
-`best_odds:{token}:{marketHash}`
+`best_odds:{token}:{baseToken}`
 
 | Name       | Type   | Description                                               |
 | ---------- | ------ | --------------------------------------------------------- |
 | token      | string | Restrict updates to only orders denominated in this token |
-| marketHash | string | The market to subscribe to                                |
+| baseToken | string | The base token address to subscribe to                            |
 
 ### Message payload format
 
