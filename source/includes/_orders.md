@@ -1604,7 +1604,8 @@ async function fillOrder() {
   "data": {
     "fillHash": "0x840763ae29b7a6adfa0e315afa47be30cdebd5b793d179dc07dc8fc4f0034965",
     "isPartialFill": false,
-    "totalFilled": "50000" 
+    "totalFilled": "50000",
+    "averageOdds": "73000000000000000000" 
   }
 }
 ```
@@ -1664,6 +1665,7 @@ Your assets must be on SX Network to place bets.
 | fillHash | string | A unique identifier for this fill.                     |
 | isPartialFill | boolean | Whether or not the entire stake was satisfied by this fill         |
 | totalFilled | string | The total amount filled (in wei), useful for determining how much to fill for subsequent bet |
+| averageOdds | string | The average odds of the total amount filled          |
 
 ### Error Responses
 
