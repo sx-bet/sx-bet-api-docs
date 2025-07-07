@@ -1503,7 +1503,7 @@ async function fillOrder() {
   const wallet = new Wallet(privateKey).connect(
     new providers.JsonRpcProvider(process.env.RPC_URL) // find this under the 'references' section
   );
-  const stakeWei = "50000"; // 50 USDC
+  const stakeWei = "50000000"; // 50 USDC
   const marketHash = "0x0246b760b06009ece42d08e706563de1967e7f1b4799d0f559244e3f80bbc496"; // Liverpool vs Arsenal
   const baseToken = "0x6629Ce1Cf35Cc1329ebB4F63202F3f197b3F050B"; // USDC
   const desiredOdds = "83000000000000000000"; // ~1.20 decimal odds
@@ -1604,7 +1604,8 @@ async function fillOrder() {
   "data": {
     "fillHash": "0x840763ae29b7a6adfa0e315afa47be30cdebd5b793d179dc07dc8fc4f0034965",
     "isPartialFill": false,
-    "totalFilled": "50000" 
+    "totalFilled": "50000000",
+    "averageOdds": "73000000000000000000" 
   }
 }
 ```
