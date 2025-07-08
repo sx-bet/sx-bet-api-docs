@@ -1665,6 +1665,7 @@ Your assets must be on SX Network to place bets.
 | fillHash | string | A unique identifier for this fill.                     |
 | isPartialFill | boolean | Whether or not the entire stake was satisfied by this fill         |
 | totalFilled | string | The total amount filled (in wei), useful for determining how much to fill for subsequent bet |
+| averageOdds | string | The average odds of the total amount filled          |
 
 ### Error Responses
 
