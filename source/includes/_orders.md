@@ -379,7 +379,11 @@ export function roundDownOddsToNearestStep(
   "data": {
     "orders": [
       "0x7a9d420551c4a635849013dd908f7894766e97aee25fe656d0c5ac857e166fac"
-    ]
+    ],
+    "statuses": [
+      "OK"
+    ],
+    "inserted": 1
   }
 }
 ```
@@ -443,6 +447,18 @@ The address in the <code>maker</code> field must match the account being used to
 | status   | string   | `success` or `failure` if the request succeeded or not |
 | data     | object   | The response data                                      |
 | > orders | string[] | The order hashes corresponding to the new orders       |
+| > statuses | string[] | An array of status strings corresponding to each new order |
+| > inserted | number | The number of new orders successfully inserted |
+
+The following status messages exist for each order 
+
+#### Status Messages
+| Message | Description |
+| -------- | -------- |
+| OK       | The order was created successfully |
+| INSUFFICIENT_BALANCE | The order could not be created due to insufficient maker token balance |
+| INVALID_MARKET | The order could not be created since the user specified non-unique marketHashes |
+| ORDERS_ALREADY_EXIST | The order already exists |
 
 <aside class="notice">
 Note that <code>totalBetSize</code> is from *the perspective of the market maker*. <code>totalBetSize</code> can be thought of as the maximum amount of tokens the maker (you) will be putting into the pot if the order was fully filled. This is the maximum amount you will risk.
