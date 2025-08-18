@@ -1214,6 +1214,8 @@ This endpoint fills orders on the exchange. Multiple orders can be filled at onc
 
 Note that there are built in betting delays based on the below chart. This is added to guard against toxic flow and high spikes in latency from the bookmaker's side. It is effectively protection for the bookmaker. If the odds change within that delay time, the order will be cancelled and an error will be thrown.
 
+Delays are set first at the league level. If there is no league level setting, delays are set at the sport level. If there is no sport level setting, we use a default of 8 seconds.
+
 **PREGAME**
 
 | Sport                | Delay ( in seconds ) |
@@ -1222,14 +1224,28 @@ Note that there are built in betting delays based on the below chart. This is ad
 
 **LIVE**
 
+| League           | Delay ( in seconds) |
+| NFL              | 3                   |
+| IPL              | 4                   |
+| NBA              | 4                   |
+| MLB              | 5                   |
+| NHL              | 5                   |
+| EPL              | 6                   |
+| La Liga          | 6                   |
+| Champions League | 6                   |
+| Serie A          | 6                   |
+| Ligue 1          | 6                   |
+
 | Sport               | Delay ( in seconds ) |
 | ------------------- | -------------------- |
-| Baseball            | 12                   |
-| Football            | 10                   |
-| Tennis              | 10                   |
-| Soccer              | 10                   |
+| Tennis              | 5                    |
+| MMA                 | 6                    |
+| Baseball            | 8                    |
 | Basketball          | 8                    |
+| Football            | 8                    |
 | Hockey              | 8                    |
+| Cricket             | 8                    |
+| Soccer              | 10                   |
 | Default (all other) | 8                    |
 
 To fill orders on sx.bet via the API, make sure you first enable betting by following the steps [here](#enabling-betting)
@@ -1630,6 +1646,9 @@ This endpoint fills orders on the exchange based on the specified desiredOdds an
 
 See below for the betting delays by sport which are added to guard against toxic flow and high spikes in latency from the bookmaker's side. It is effectively protection for the bookmaker. As order matching is done after the betting delay, errors observed in the past due to order cancellations within the betting delay will now be avoided.
 
+
+Delays are set first at the league level. If there is no league level setting, delays are set at the sport level. If there is no sport level setting, we use a default of 8 seconds.
+
 **PREGAME**
 
 | Sport                | Delay ( in seconds ) |
@@ -1638,14 +1657,28 @@ See below for the betting delays by sport which are added to guard against toxic
 
 **LIVE**
 
+| League           | Delay ( in seconds) |
+| NFL              | 3                   |
+| IPL              | 4                   |
+| NBA              | 4                   |
+| MLB              | 5                   |
+| NHL              | 5                   |
+| EPL              | 6                   |
+| La Liga          | 6                   |
+| Champions League | 6                   |
+| Serie A          | 6                   |
+| Ligue 1          | 6                   |
+
 | Sport               | Delay ( in seconds ) |
 | ------------------- | -------------------- |
-| Baseball            | 12                   |
-| Football            | 10                   |
-| Tennis              | 10                   |
-| Soccer              | 10                   |
+| Tennis              | 5                    |
+| MMA                 | 6                    |
+| Baseball            | 8                    |
 | Basketball          | 8                    |
+| Football            | 8                    |
 | Hockey              | 8                    |
+| Cricket             | 8                    |
+| Soccer              | 10                   |
 | Default (all other) | 8                    |
 
 To fill orders on sx.bet via the API, make sure you first enable betting by following the steps [here](#enabling-betting)
