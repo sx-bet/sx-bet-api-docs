@@ -1225,6 +1225,7 @@ Delays are set first at the league level. If there is no league level setting, d
 **LIVE**
 
 | League           | Delay ( in seconds) |
+| ---------------- | ------------------- |
 | NFL              | 3                   |
 | IPL              | 4                   |
 | NBA              | 4                   |
@@ -1658,6 +1659,7 @@ Delays are set first at the league level. If there is no league level setting, d
 **LIVE**
 
 | League           | Delay ( in seconds) |
+| ---------------- | ------------------- |
 | NFL              | 3                   |
 | IPL              | 4                   |
 | NBA              | 4                   |
