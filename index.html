@@ -5025,9 +5025,9 @@ If the API finds that your balance is consistently below your total exposure req
 
 <p>To offer bets on sx.bet via the API, make sure you first enable betting by following the steps <a href="#enabling-betting">here</a>.</p>
 
-<p>We enforce an odds ladder to prevent diming. Your offer, in implied odds, must fall on one of the steps on the ladder. Currently, that is set to intervals of 0.25%, meaning that your offer cannot fall between the steps. An offer of 50.25% would be valid, but an offer of 50.05% would not. You can check if your odds would fall on the ladder by taking the modulus of your odds and 2.5 * 10 ^ 17 and checking if it&#39;s equal to 0. See the bottom of the JavaScript tab for a sample on how to do this, and how to round your odds to the nearest step.</p>
+<p>We enforce an odds ladder to prevent diming. Your offer, in implied odds, must fall on one of the steps on the ladder. Currently, that is set to intervals of 0.125%, meaning that your offer cannot fall between the steps. An offer of 50.25% would be valid, but an offer of 50.20% would not. You can check if your odds would fall on the ladder by taking the modulus of your odds and 1.25 * 10 ^ 17 and checking if it&#39;s equal to 0. See the bottom of the JavaScript tab for a sample on how to do this, and how to round your odds to the nearest step.</p>
 
-<p>You can get the current interval from <code>GET /metadata</code>. It will spit out a number from 10 to 100, where 10 = 0.10%, and 25 = 0.25%</p>
+<p>You can get the current interval from <code>GET /metadata</code>. It will spit out a number from 0 to 1000, where 10 = 0.010%, and 125 = 0.125%</p>
 
 <aside class="warning">
 Odds not on the ladder will be rejected and your order(s) will not be posted. 
@@ -6152,6 +6152,8 @@ Deprecating soon! See <a href="#filling-orders-v2">Filling orders v2</a> for imp
 
 <p>Note that there are built in betting delays based on the below chart. This is added to guard against toxic flow and high spikes in latency from the bookmaker&#39;s side. It is effectively protection for the bookmaker. If the odds change within that delay time, the order will be cancelled and an error will be thrown.</p>
 
+<p>Delays are set first at the league level. If there is no league level setting, delays are set at the sport level. If there is no sport level setting, we use a default of 8 seconds.</p>
+
 <p><strong>PREGAME</strong></p>
 
 <table><thead>
@@ -6168,6 +6170,18 @@ Deprecating soon! See <a href="#filling-orders-v2">Filling orders v2</a> for imp
 
 <p><strong>LIVE</strong></p>
 
+<p>| League           | Delay ( in seconds) |
+| NFL              | 3                   |
+| IPL              | 4                   |
+| NBA              | 4                   |
+| MLB              | 5                   |
+| NHL              | 5                   |
+| EPL              | 6                   |
+| La Liga          | 6                   |
+| Champions League | 6                   |
+| Serie A          | 6                   |
+| Ligue 1          | 6                   |</p>
+
 <table><thead>
 <tr>
 <th>Sport</th>
@@ -6175,28 +6189,36 @@ Deprecating soon! See <a href="#filling-orders-v2">Filling orders v2</a> for imp
 </tr>
 </thead><tbody>
 <tr>
-<td>Baseball</td>
-<td>12</td>
-</tr>
-<tr>
-<td>Football</td>
-<td>10</td>
-</tr>
-<tr>
 <td>Tennis</td>
-<td>10</td>
+<td>5</td>
 </tr>
 <tr>
-<td>Soccer</td>
-<td>10</td>
+<td>MMA</td>
+<td>6</td>
+</tr>
+<tr>
+<td>Baseball</td>
+<td>8</td>
 </tr>
 <tr>
 <td>Basketball</td>
 <td>8</td>
 </tr>
 <tr>
+<td>Football</td>
+<td>8</td>
+</tr>
+<tr>
 <td>Hockey</td>
 <td>8</td>
+</tr>
+<tr>
+<td>Cricket</td>
+<td>8</td>
+</tr>
+<tr>
+<td>Soccer</td>
+<td>10</td>
 </tr>
 <tr>
 <td>Default (all other)</td>
@@ -6771,6 +6793,8 @@ Coming soon! This endpoint will be available for use soon, please follow our Dis
 
 <p>See below for the betting delays by sport which are added to guard against toxic flow and high spikes in latency from the bookmaker&#39;s side. It is effectively protection for the bookmaker. As order matching is done after the betting delay, errors observed in the past due to order cancellations within the betting delay will now be avoided.</p>
 
+<p>Delays are set first at the league level. If there is no league level setting, delays are set at the sport level. If there is no sport level setting, we use a default of 8 seconds.</p>
+
 <p><strong>PREGAME</strong></p>
 
 <table><thead>
@@ -6787,6 +6811,18 @@ Coming soon! This endpoint will be available for use soon, please follow our Dis
 
 <p><strong>LIVE</strong></p>
 
+<p>| League           | Delay ( in seconds) |
+| NFL              | 3                   |
+| IPL              | 4                   |
+| NBA              | 4                   |
+| MLB              | 5                   |
+| NHL              | 5                   |
+| EPL              | 6                   |
+| La Liga          | 6                   |
+| Champions League | 6                   |
+| Serie A          | 6                   |
+| Ligue 1          | 6                   |</p>
+
 <table><thead>
 <tr>
 <th>Sport</th>
@@ -6794,28 +6830,36 @@ Coming soon! This endpoint will be available for use soon, please follow our Dis
 </tr>
 </thead><tbody>
 <tr>
-<td>Baseball</td>
-<td>12</td>
-</tr>
-<tr>
-<td>Football</td>
-<td>10</td>
-</tr>
-<tr>
 <td>Tennis</td>
-<td>10</td>
+<td>5</td>
 </tr>
 <tr>
-<td>Soccer</td>
-<td>10</td>
+<td>MMA</td>
+<td>6</td>
+</tr>
+<tr>
+<td>Baseball</td>
+<td>8</td>
 </tr>
 <tr>
 <td>Basketball</td>
 <td>8</td>
 </tr>
 <tr>
+<td>Football</td>
+<td>8</td>
+</tr>
+<tr>
 <td>Hockey</td>
 <td>8</td>
+</tr>
+<tr>
+<td>Cricket</td>
+<td>8</td>
+</tr>
+<tr>
+<td>Soccer</td>
+<td>10</td>
 </tr>
 <tr>
 <td>Default (all other)</td>
