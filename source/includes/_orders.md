@@ -402,9 +402,9 @@ If the API finds that your balance is consistently below your total exposure req
 
 To offer bets on sx.bet via the API, make sure you first enable betting by following the steps [here](#enabling-betting).
 
-We enforce an odds ladder to prevent diming. Your offer, in implied odds, must fall on one of the steps on the ladder. Currently, that is set to intervals of 0.25%, meaning that your offer cannot fall between the steps. An offer of 50.25% would be valid, but an offer of 50.05% would not. You can check if your odds would fall on the ladder by taking the modulus of your odds and 2.5 \* 10 ^ 17 and checking if it's equal to 0. See the bottom of the JavaScript tab for a sample on how to do this, and how to round your odds to the nearest step.
+We enforce an odds ladder to prevent diming. Your offer, in implied odds, must fall on one of the steps on the ladder. Currently, that is set to intervals of 0.125%, meaning that your offer cannot fall between the steps. An offer of 50.25% would be valid, but an offer of 50.20% would not. You can check if your odds would fall on the ladder by taking the modulus of your odds and 1.25 \* 10 ^ 17 and checking if it's equal to 0. See the bottom of the JavaScript tab for a sample on how to do this, and how to round your odds to the nearest step.
 
-You can get the current interval from `GET /metadata`. It will spit out a number from 10 to 100, where 10 = 0.10%, and 25 = 0.25%
+You can get the current interval from `GET /metadata`. It will spit out a number from 0 to 1000, where 10 = 0.010%, and 125 = 0.125%
 
 <aside class="warning">
 Odds not on the ladder will be rejected and your order(s) will not be posted. 
