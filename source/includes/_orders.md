@@ -1064,7 +1064,7 @@ async function approveOrderFill() {
 }
 ```
 
-This endpoint approves the specified `value` to be spent by `spender` on behalf of `owner` for token transfers that occur as part of the [Filling orders v2](#filling-orders) flow according to Ethereum's [EIP-2612](https://eips.ethereum.org/EIPS/eip-2612) Permit Extension.  Note that `deadline` field here is only used during signature verification and that the `value` set will be the spender's allowance until changed or revoked. 
+This endpoint approves the specified `value` to be spent by `spender` on behalf of `owner` for token transfers that occur as part of the [Filling orders](#filling-orders) flow according to Ethereum's [EIP-2612](https://eips.ethereum.org/EIPS/eip-2612) Permit Extension.  Note that `deadline` field here is only used during signature verification and that the `value` set will be the spender's allowance until changed or revoked. 
 
 ### HTTP Request
 
