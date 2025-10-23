@@ -28,6 +28,7 @@ curl --location --request GET 'https://api.sx.bet/trades'
         "fillHash": "0xbe846c92bec584c4d2215df76ac7d53ebab25f81a30cca5811fb93f35e8b5321",
         "tradeStatus": "SUCCESS",
         "valid": true,
+        "marketHasRefunds": false,
         "outcome": 1,
         "settleDate": "2020-12-11T20:17:45.990Z"
       },
@@ -46,6 +47,7 @@ curl --location --request GET 'https://api.sx.bet/trades'
         "fillHash": "0xbe846c92bec584c4d2215df76ac7d53ebab25f81a30cca5811fb93f35e8b5321",
         "tradeStatus": "SUCCESS",
         "valid": true,
+        "marketHasRefunds": false,
         "outcome": 1,
         "settleDate": "2020-12-11T20:17:45.990Z"
       },
@@ -64,6 +66,7 @@ curl --location --request GET 'https://api.sx.bet/trades'
         "fillHash": "0xc0240cf27c111d843bc4cf2de0521ab097223de933125857343e7a6fba469172",
         "tradeStatus": "SUCCESS",
         "valid": true,
+        "marketHasRefunds": false,
         "outcome": 1,
         "settleDate": "2020-12-11T22:02:19.484Z"
       },
@@ -82,6 +85,7 @@ curl --location --request GET 'https://api.sx.bet/trades'
         "fillHash": "0xc0240cf27c111d843bc4cf2de0521ab097223de933125857343e7a6fba469172",
         "tradeStatus": "SUCCESS",
         "valid": true,
+        "marketHasRefunds": false,
         "outcome": 1,
         "settleDate": "2020-12-11T22:02:19.484Z"
       }
@@ -123,6 +127,10 @@ This endpoint retrieves past trades on the exchange split up by order. This is a
 | > nextKey  | string  | Use this key as the `paginationKey` to retrieve the next set of records, if any   |
 | > pageSize | number  | Maximum amount of records on this page. Will be equal to the `pageSize` passed in |
 
+<aside class="notice">
+Fields marked with an '*' are coming soon in future release.
+</aside>
+
 A `Trade` object has the following format
 
 | Name                     | Type    | Description                                                                                                                          |
@@ -141,6 +149,7 @@ A `Trade` object has the following format
 | fillHash                 | string  | The unique identifier for this trade                                                                                                 |
 | tradeStatus              | string  | `SUCCESS` or `FAILED` depending on if this trade succeeded or not                                                                    |
 | valid                    | boolean | `true` if the trade counts toward competitions or tournaments                                                                        |
+| marketHasRefunds*        | boolean | `true` if capital‑efficient refunds exist for this trade's market group; if `true`, query [Get portoflio refunds](#get-portfolio-refunds) for details            |
 | outcome                  | number  | with `settled=true`, this will be 0, 1, or 2 depending on the final outcome of the market                                            |
 | settleDate               | string  | ISO formatted date string of when the trade was settled                                                                              |
 | chainVersion             | string  | `SXN` or `SXR`. See [migration docs](#sx-rollup-migration-guide).                                                                    |
@@ -180,6 +189,7 @@ curl --location --request GET 'https://api.sx.bet/trades/orders'
         "fillHash": "0xb6b15fe7d4d337ff0ae0e2a233203385e619c5e1edf23f04135efbf12128def8",
         "affiliate": "0x0000000000000000000000000000000000000000",
         "valid": true,
+        "marketHasRefunds": false,
         "providerEventId": "15468276",
         "settleDate": "2025-04-24T17:38:24.885Z",
         "outcome": 2,
@@ -210,6 +220,7 @@ curl --location --request GET 'https://api.sx.bet/trades/orders'
         "fillHash": "0xb6b15fe7d4d337ff0ae0e2a233203385e619c5e1edf23f04135efbf12128def8",
         "affiliate": "0x0000000000000000000000000000000000000000",
         "valid": true,
+        "marketHasRefunds": false,
         "providerEventId": "15468276",
         "settleDate": "2025-04-24T17:38:24.885Z",
         "outcome": 2,
@@ -276,6 +287,7 @@ curl --location --request GET 'https://api.sx.bet/trades/consolidated'
         "gameTime": "2021-01-06T23:30:00.000Z",
         "leagueLabel": "International Test",
         "outcome": 0,
+        "marketHasRefunds": false,
         "netReturn": "4.999999999999999999"
       },
       {
@@ -295,6 +307,7 @@ curl --location --request GET 'https://api.sx.bet/trades/consolidated'
         "gameTime": "2021-01-06T23:30:00.000Z",
         "leagueLabel": "International Test",
         "outcome": 0,
+        "marketHasRefunds": false,
         "netReturn": "4.999999999999999999"
       }
     ],
@@ -354,3 +367,281 @@ A `ConsolidatedTrade` object has the following format
 | outcome             | number  | With `settled=true`, this will be 0, 1, or 2 depending on the final outcome of the market                                                   |
 | chainVersion        | string  | `SXN` or `SXR`. See [migration docs](#sx-rollup-migration-guide).                                                                           |
 | sportXeventId       | string  | The event related to this trade                                                                                                             |
+| marketHasRefunds*   | boolean | `true` if capital efficient refunds exist for this market group; if `true`, query [Get portoflio refunds](#get-portfolio-refunds) for details                          |
+
+## Get portfolio refunds
+
+<aside class="notice">
+Coming soon! This endpoint will be available for use soon, please follow our Discord #api-changes channel to stay up to date.
+</aside>
+
+```shell
+curl --location --request GET 'https://api.sx.bet/trades/portfolio/refunds?bettor=0xaD6A65315Cb20dD0b9D0Af56213516727a20C66F&sortAsc=false&page=0&perPage=500'
+```
+
+> The above command returns JSON structured like this:
+
+```json
+{
+  "status": "success",
+  "data": {
+    "results": [
+      {
+        "marketHash": "0x3e012cc2842849b96768547d4c92720d7ee8946e7706323f5114b6451708cf5e",
+        "baseToken": "0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956",
+        "totalRefunded": 2.346033,
+        "events": [
+          {
+            "maker": false,
+            "amount": "2.346033",
+            "bettor": "0xaD6A65315Cb20dD0b9D0Af56213516727a20C66F",
+            "baseToken": "0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956",
+            "createdAt": "2025-10-21T14:29:26.805266+00:00",
+            "marketHash": "0x3e012cc2842849b96768547d4c92720d7ee8946e7706323f5114b6451708cf5e",
+            "fillOrderHash": "0x7efa8ee211c5cbccebda722318252ee09cfadaa9c910bf4c433086d853784b02"
+          }
+        ]
+      },
+      {
+        "marketHash": "0x14081d3be87bcdc2cb81c616e9eb5a487506af4abad1b7495a66d9768d6352c2",
+        "baseToken": "0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956",
+        "totalRefunded": 2.698125,
+        "events": [
+          {
+            "maker": false,
+            "amount": "2.698125",
+            "bettor": "0xaD6A65315Cb20dD0b9D0Af56213516727a20C66F",
+            "baseToken": "0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956",
+            "createdAt": "2025-10-21T14:27:37.892992+00:00",
+            "marketHash": "0x14081d3be87bcdc2cb81c616e9eb5a487506af4abad1b7495a66d9768d6352c2",
+            "fillOrderHash": "0x5a5f7ff232699f73db7c29af3631f47b1f338e3b5279bcf851ff05b63292e71c"
+          }
+        ]
+      },
+      {
+        "marketHash": "0x30bb58ae1c28d04ab9e94c313eb6d9656c0854248bd0273cb13edcd8e337155a",
+        "baseToken": "0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956",
+        "totalRefunded": 3.695149,
+        "events": [
+          {
+            "maker": false,
+            "amount": "3.695149",
+            "bettor": "0xaD6A65315Cb20dD0b9D0Af56213516727a20C66F",
+            "baseToken": "0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956",
+            "createdAt": "2025-10-21T14:26:39.85327+00:00",
+            "marketHash": "0x30bb58ae1c28d04ab9e94c313eb6d9656c0854248bd0273cb13edcd8e337155a",
+            "fillOrderHash": "0x179e4d8cfad8dcc16f8188dc7714a54b2bfb60335e3aba305120919c2419be9a"
+          }
+        ]
+      },
+      {
+        "marketHash": "0x0760c1c1fe427ff04bec6488702637918f7daa8cae7b2411017e692caaa28e6c",
+        "baseToken": "0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956",
+        "totalRefunded": 19.559896,
+        "events": [
+          {
+            "maker": false,
+            "amount": "9.779948",
+            "bettor": "0xaD6A65315Cb20dD0b9D0Af56213516727a20C66F",
+            "baseToken": "0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956",
+            "createdAt": "2025-10-20T15:25:15.899042+00:00",
+            "marketHash": "0x0760c1c1fe427ff04bec6488702637918f7daa8cae7b2411017e692caaa28e6c",
+            "fillOrderHash": "0xea2423b823246d7d12833e1834123a86ddb208f7f1eb63e06dd2d31303f37f32"
+          },
+          {
+            "maker": false,
+            "amount": "9.779948",
+            "bettor": "0xaD6A65315Cb20dD0b9D0Af56213516727a20C66F",
+            "baseToken": "0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956",
+            "createdAt": "2025-10-20T15:25:15.730559+00:00",
+            "marketHash": "0x0760c1c1fe427ff04bec6488702637918f7daa8cae7b2411017e692caaa28e6c",
+            "fillOrderHash": "0xea2423b823246d7d12833e1834123a86ddb208f7f1eb63e06dd2d31303f37f32"
+          }
+        ]
+      },
+      {
+        "marketHash": "0x381fba172f94f121026047e4944edcf895550dffd90627f2e76843705f1a633a",
+        "baseToken": "0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956",
+        "totalRefunded": 18.561474,
+        "events": [
+          {
+            "maker": false,
+            "amount": "9.280737",
+            "bettor": "0xaD6A65315Cb20dD0b9D0Af56213516727a20C66F",
+            "baseToken": "0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956",
+            "createdAt": "2025-10-20T15:03:48.323011+00:00",
+            "marketHash": "0x381fba172f94f121026047e4944edcf895550dffd90627f2e76843705f1a633a",
+            "fillOrderHash": "0x4faa50c4e6aa5074b8305db34050e7aaf675bd6d4c32c18ac159a8122587ae61"
+          },
+          {
+            "maker": false,
+            "amount": "9.280737",
+            "bettor": "0xaD6A65315Cb20dD0b9D0Af56213516727a20C66F",
+            "baseToken": "0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956",
+            "createdAt": "2025-10-20T15:03:48.214994+00:00",
+            "marketHash": "0x381fba172f94f121026047e4944edcf895550dffd90627f2e76843705f1a633a",
+            "fillOrderHash": "0x4faa50c4e6aa5074b8305db34050e7aaf675bd6d4c32c18ac159a8122587ae61"
+          }
+        ]
+      },
+      {
+        "marketHash": "0xf84c30678aecadab705cd492b3b4c1b58c2589c9e8bac070b17860affa63c17f",
+        "baseToken": "0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956",
+        "totalRefunded": 13.289026,
+        "events": [
+          {
+            "maker": false,
+            "amount": "5.881642",
+            "bettor": "0xaD6A65315Cb20dD0b9D0Af56213516727a20C66F",
+            "baseToken": "0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956",
+            "createdAt": "2025-10-17T23:22:45.667688+00:00",
+            "marketHash": "0xf84c30678aecadab705cd492b3b4c1b58c2589c9e8bac070b17860affa63c17f",
+            "fillOrderHash": "0x1fa325f322649c9d21086c6702bd4ce3210e32781d12ea7e54fc301796cb39bb"
+          },
+          {
+            "maker": false,
+            "amount": "7.407384",
+            "bettor": "0xaD6A65315Cb20dD0b9D0Af56213516727a20C66F",
+            "baseToken": "0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956",
+            "createdAt": "2025-10-17T18:52:00.185707+00:00",
+            "marketHash": "0xf84c30678aecadab705cd492b3b4c1b58c2589c9e8bac070b17860affa63c17f",
+            "fillOrderHash": "0xa0bfe79dcf7c4488aa685cc91d02381143a5f4b505e1ccb18b33b5f4cbf8fe7f"
+          }
+        ]
+      },
+      {
+        "marketHash": "0xed9963a520580046eed9675cef34d38050854a3734494e7b37ea265f548bbe37",
+        "baseToken": "0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956",
+        "totalRefunded": 6.153813,
+        "events": [
+          {
+            "maker": false,
+            "amount": "6.153813",
+            "bettor": "0xaD6A65315Cb20dD0b9D0Af56213516727a20C66F",
+            "baseToken": "0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956",
+            "createdAt": "2025-10-16T21:26:16.143613+00:00",
+            "marketHash": "0xed9963a520580046eed9675cef34d38050854a3734494e7b37ea265f548bbe37",
+            "fillOrderHash": "0x8e1faaa91c6164b72de3b3a42c516e4947c111e8e05d5f59655a7ba58f7dc788"
+          }
+        ]
+      },
+      {
+        "marketHash": "0x319d42ff612a1b0cbd5865690e067877f509aa943a89d3a819abba8b412d8f35",
+        "baseToken": "0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956",
+        "totalRefunded": 7.889529,
+        "events": [
+          {
+            "maker": false,
+            "amount": "7.889529",
+            "bettor": "0xaD6A65315Cb20dD0b9D0Af56213516727a20C66F",
+            "baseToken": "0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956",
+            "createdAt": "2025-10-16T21:24:50.05795+00:00",
+            "marketHash": "0x319d42ff612a1b0cbd5865690e067877f509aa943a89d3a819abba8b412d8f35",
+            "fillOrderHash": "0x2403cbb53f0223ad9dec5213ab251960c6b7af427ae0b438e4c2504245eafd28"
+          }
+        ]
+      },
+      {
+        "marketHash": "0x5bf33fb43e24a16ea507defabebce86f9cd481cb3d5e057aebba4f63b265a75a",
+        "baseToken": "0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956",
+        "totalRefunded": 9.367678,
+        "events": [
+          {
+            "maker": false,
+            "amount": "9.367678",
+            "bettor": "0xaD6A65315Cb20dD0b9D0Af56213516727a20C66F",
+            "baseToken": "0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956",
+            "createdAt": "2025-10-15T19:54:46.63248+00:00",
+            "marketHash": "0x5bf33fb43e24a16ea507defabebce86f9cd481cb3d5e057aebba4f63b265a75a",
+            "fillOrderHash": "0xd22c09f4a888d283cb495ac1a428063a57e5182c338408aca6c563643e183077"
+          }
+        ]
+      },
+      {
+        "marketHash": "0x1a5521437acd388bf31da31b655e7f38c2b5df9f72686bb0e2252a435bf57305",
+        "baseToken": "0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956",
+        "totalRefunded": 7.393698,
+        "events": [
+          {
+            "maker": false,
+            "amount": "7.393698",
+            "bettor": "0xaD6A65315Cb20dD0b9D0Af56213516727a20C66F",
+            "baseToken": "0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956",
+            "createdAt": "2025-10-02T21:12:00.458343+00:00",
+            "marketHash": "0x1a5521437acd388bf31da31b655e7f38c2b5df9f72686bb0e2252a435bf57305",
+            "fillOrderHash": "0xcca366280794ef6e5a84275780cc7fd5dc9345613464510ee7178a08a4f1daff"
+          }
+        ]
+      },
+      {
+        "marketHash": "0x3b9d3fab07560742bf8ecf7e50ef28ccbbcfb0288bead1ac599898939c1958e7",
+        "baseToken": "0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956",
+        "totalRefunded": 17.977509,
+        "events": [
+          {
+            "maker": false,
+            "amount": "17.977509",
+            "bettor": "0xaD6A65315Cb20dD0b9D0Af56213516727a20C66F",
+            "baseToken": "0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956",
+            "createdAt": "2025-09-19T14:16:44.283611+00:00",
+            "marketHash": "0x3b9d3fab07560742bf8ecf7e50ef28ccbbcfb0288bead1ac599898939c1958e7",
+            "fillOrderHash": "0x98795dacfcb0023420e1dcb40ffba19bbc84e0df7feb6b8f1f50b423bfd57633"
+          }
+        ]
+      }
+    ],
+    "count": 11
+  }
+}
+```
+
+This endpoint retrieves capital‑efficient refund events for a bettor, aggregated by market. It supports reconciling cases where `settledNetReturn` may differ from `netReturn` when `marketHasRefunds` is `true` (see Capital Efficiency Upgrades). Refunds reflect decreases in worst‑case exposure (MXL) from offsetting positions and are only generated for market groups without prior cash outs; conversely, cash outs cannot occur after capital‑efficient refunds.
+
+See [Capital Efficiency Upgrade](#capital-efficiency-upgrade) for a high-level overview of the Capital Efficiency Upgrade.
+
+### HTTP Request
+
+`GET https://api.sx.bet/trades/portfolio/refunds`
+
+### Query parameters
+
+| Name          | Required | Type    | Description                                                                 |
+| ------------- | -------- | ------- | --------------------------------------------------------------------------- |
+| bettor        | true     | string  | Bettor address (checksummed).                                               |
+| marketHash    | false    | string  | Filter by market hash.                                                      |
+| baseToken     | false    | string  | Filter by base token.                                                       |
+| fillOrderHash | false    | string  | Filter by the associated trade fill hash.                                   |
+| maker         | false    | boolean | If `true`, only refunds where bettor was a maker; otherwise taker refunds.  |
+| sortAsc       | true     | boolean | Sort ascending when `true`, descending when `false`.                        |
+| page          | true     | number  | Page number for pagination (min 0).                                         |
+| perPage       | true     | number  | Page size (max 500).                                                        |
+
+### Response format
+
+| Name         | Type              | Description                                             |
+| ------------ | ----------------- | ------------------------------------------------------- |
+| status       | string            | `success` or `failure`                                  |
+| data         | object            | The response payload                                    |
+| > results    | PortfolioRefund[] | Aggregated refunds by market                            |
+| > count      | number            | Total count of aggregated market results                |
+
+A `PortfolioRefund` object has the following format
+
+| Name          | Type          | Description                                            |
+| ------------- | ------------- | ------------------------------------------------------ |
+| marketHash    | string        | Market hash for this refund aggregation                |
+| baseToken     | string        | Base token of the refunds                              |
+| totalRefunded | number        | Sum of refund amounts for this market in base token    |
+| events        | RefundEvent[] | Individual refund events that make up the aggregation  |
+
+A `RefundEvent` object has the following format
+
+| Name         | Type    | Description                                   |
+| ------------ | ------- | --------------------------------------------- |
+| maker        | boolean | `true` if bettor was maker for this refund    |
+| amount       | string  | Refund amount in base token (string‑encoded)  |
+| bettor       | string  | Bettor address                                |
+| baseToken    | string  | Token address                                 |
+| createdAt    | string  | ISO date string of event creation             |
+| marketHash   | string  | Market hash                                   |
+| fillOrderHash| string  | Fill hash associated with the refund          |
