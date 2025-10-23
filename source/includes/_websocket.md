@@ -543,6 +543,62 @@ The message payload is an array of JSON objects representing each object with th
 Note that the messages are sent in batches in an array. If you receive two updates for the same `orderHash` within an update, you can order them by `updateTime` after converting the `updateTime` to a BigInt or BigNumber.
 
 
+## CE refund events
+
+<aside class="notice">
+Coming soon! This channel will be available for use soon, please follow our Discord #api-changes channel to stay up to date.
+</aside>
+
+```javascript
+const user = "0xaD6A65315Cb20dD0b9D0Af56213516727a20C66F";
+const channel = realtime.channels.get(`ce_refunds:${user}`);
+channel.subscribe((message) => {
+  console.log(message.data);
+});
+```
+
+> The above command returns JSON structured like this
+
+```json
+[
+  {
+    "marketHash": "0x3e012cc2842849b96768547d4c92720d7ee8946e7706323f5114b6451708cf5e",
+    "baseToken": "0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956",
+    "totalRefunded": 2.346033,
+    "events": [
+      {
+        "maker": false,
+        "amount": "2.346033",
+        "bettor": "0xaD6A65315Cb20dD0b9D0Af56213516727a20C66F",
+        "baseToken": "0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956",
+        "createdAt": "2025-10-21T14:29:26.805266+00:00",
+        "marketHash": "0x3e012cc2842849b96768547d4c92720d7ee8946e7706323f5114b6451708cf5e",
+        "fillOrderHash": "0x7efa8ee211c5cbccebda722318252ee09cfadaa9c910bf4c433086d853784b02"
+      }
+    ]
+  }
+]
+```
+
+Subscribe to changes in a particular user's capital‑efficient refund events. You receive updates when refunds are generated from reductions in maximum loss (MXL) for the user’s market groups. 
+
+For field definitions, see [Get portfolio refunds](#get-portfolio-refunds). 
+
+See [Capital Efficiency Upgrade](#capital-efficiency-upgrade) for a high-level overview of the Capital Efficiency Upgrade.
+
+### Channel name format
+
+`ce_refunds:{user}`
+
+| Name | Type   | Description                  |
+| ---- | ------ | ---------------------------- |
+| user | string | The user to subscribe to     |
+
+### Message payload format
+
+The message payload matches a single element within the `GET /trades/portfolio/refunds` JSON results. See [Get portfolio refunds](#get-portfolio-refunds) for schema details.
+
+
 ## Best Practices
 
 ```javascript
