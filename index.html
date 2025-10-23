@@ -313,6 +313,23 @@
             <a href="#introduction" class="toc-h1 toc-link" data-title="Introduction">Introduction</a>
           </li>
           <li>
+            <a href="#capital-efficiency-upgrade" class="toc-h1 toc-link" data-title="Capital Efficiency Upgrade">Capital Efficiency Upgrade</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#current-escrow-behaviour" class="toc-h2 toc-link" data-title="Current escrow behaviour">Current escrow behaviour</a>
+                  </li>
+                  <li>
+                    <a href="#what-39-s-changing" class="toc-h2 toc-link" data-title="What's changing">What's changing</a>
+                  </li>
+                  <li>
+                    <a href="#ce-refunds-vs-taker-cash-out" class="toc-h2 toc-link" data-title="CE Refunds vs. Taker Cash Out">CE Refunds vs. Taker Cash Out</a>
+                  </li>
+                  <li>
+                    <a href="#breaking-changes" class="toc-h2 toc-link" data-title="Breaking changes">Breaking changes</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
             <a href="#references" class="toc-h1 toc-link" data-title="References">References</a>
               <ul class="toc-list-h2">
                   <li>
@@ -369,6 +386,9 @@
                   </li>
                   <li>
                     <a href="#best-odds" class="toc-h2 toc-link" data-title="Best odds">Best odds</a>
+                  </li>
+                  <li>
+                    <a href="#ce-refund-events" class="toc-h2 toc-link" data-title="CE refund events">CE refund events</a>
                   </li>
                   <li>
                     <a href="#best-practices" class="toc-h2 toc-link" data-title="Best Practices">Best Practices</a>
@@ -467,6 +487,9 @@
                   <li>
                     <a href="#get-consolidated-trades" class="toc-h2 toc-link" data-title="Get consolidated trades">Get consolidated trades</a>
                   </li>
+                  <li>
+                    <a href="#get-portfolio-refunds" class="toc-h2 toc-link" data-title="Get portfolio refunds">Get portfolio refunds</a>
+                  </li>
               </ul>
           </li>
           <li>
@@ -552,6 +575,49 @@
 <aside class="notice">
 All ETH addresses used in this API are in check-summed format. If you pass in lowercase-only addresses, you won't get results.
 </aside>
+<h1 id='capital-efficiency-upgrade'>Capital Efficiency Upgrade</h1><h2 id='current-escrow-behaviour'>Current escrow behaviour</h2>
+<p>Currently, our escrow smart contract does not account for hedged exposure across opposing outcomes within the same market group. As a result, if a taker or maker bets $100 at +100 on Team A to win and later $100 at +100 on Team B to win, a total of $200 would be locked up in escrow until settlement, even though these positions offset. At settlement, a portion of these funds is guaranteed to be returned. </p>
+
+<p>SX&#39;s Capital Efficiency (CE) upgrade introduces logic to recognize such scenarios earlier on (during the order filling phase as opposed to upon settlement) and release appropriate amounts from escrow while keeping the orderbook fully collateralized.</p>
+<h2 id='what-39-s-changing'>What&#39;s changing</h2>
+<p>We are introducing capital‑efficient (CE) refunds driven by a maximum‑loss (MXL) algorithm computed at the market‑group level:</p>
+
+<ul>
+<li>When a new trade reduces your portfolio’s worst‑case (maximum) loss for a market group, the system will issue a refund for the decrease, releasing some of the previously locked escrow. This applies to both takers and makers. Although refund transfer events are triggered by the action of a taker placing a bet, the refund computations apply to both taker and maker(s) at the time that bet is placed. </li>
+<li>MXL logic calculates the worst‑case net loss across all open positions within a market group. Our Escrow contract tracks this worst‑case. Whenever MXL decreases due to offsetting exposure (e.g. hedges on opposing outcomes), refunds are generated to return the difference.</li>
+</ul>
+<h3 id='upcoming-changes'>Upcoming changes</h3>
+<ul>
+<li>New API endpoint: <a href="#get-portfolio-refunds">Get portoflio refunds</a>
+
+<ul>
+<li>Query by <code>bettor</code>, <code>marketHash</code>, <code>baseToken</code>, and <code>fillOrderHash</code> to retrieve capital-efficient refunds associated with a specific trade or market.</li>
+<li>Use this endpoint to reconcile why realized or settled net return values may differ from expected values as a result of CE refunds that may have occurred.</li>
+</ul></li>
+<li>New <code>marketHasRefunds</code> boolean on Trade and ConsolidatedTrade API reponse objects
+
+<ul>
+<li>Present on <a href="#get-active-trades">Get active trades</a>, <a href="#get-trades-by-orderhash">Get trades by orderHash</a> and <a href="#get-consolidated-trades">Get consolidated trades</a> responses. </li>
+<li>If <code>true</code>, users can query <a href="#get-portfolio-refunds">Get portoflio refunds</a> to reference the refund records for the associated <code>marketHash</code>/<code>baseToken</code>/<code>fillOrderHash</code>. This helps explain cases where <code>settledNetReturn</code> does not match the expected <code>netReturn</code>, as the <code>settledNetReturn</code> takes any prior refund amounts into consideration.</li>
+</ul></li>
+<li>Realtime publishing
+
+<ul>
+<li>Related trade and consolidated trade realtime publishes include the <code>marketHasRefunds</code> flag to make it known to clients that the market group is associated with one or more refunds.</li>
+<li>A <a href="#ce-refund-events">CE refund events</a> channel publishes refund events for consumers who want to ingest refund updates as they happen.</li>
+</ul></li>
+</ul>
+<h2 id='ce-refunds-vs-taker-cash-out'>CE Refunds vs. Taker Cash Out</h2>
+<ul>
+<li>Refunds can only occur within market groups that have no bets that have already been cashed out.</li>
+<li>Conversely, cash outs cannot occur for any markets that have already received CE refunds.</li>
+</ul>
+
+<p>This mutual exclusivity prevents double counting risk release and ensures consistent accounting.</p>
+<h2 id='breaking-changes'>Breaking changes</h2>
+<ul>
+<li>New <code>marketHasRefunds</code> boolean field is included on Trade and ConslidatedTrade objects within <a href="#get-active-trades">Get active trades</a>, <a href="#get-trades-by-orderhash">Get trades by orderHash</a>, and <a href="#get-consolidated-trades">Get consolidated trades</a> API responses and is published in related realtime messages.</li>
+</ul>
 <h1 id='references'>References</h1><h2 id='mainnet'>Mainnet</h2>
 <table><thead>
 <tr>
@@ -1530,6 +1596,61 @@ Note that the `requestSize` is only indicating what the user is requesting, but 
 </tbody></table>
 
 <p>Note that the messages are sent in batches in an array. If you receive two updates for the same <code>orderHash</code> within an update, you can order them by <code>updateTime</code> after converting the <code>updateTime</code> to a BigInt or BigNumber.</p>
+<h2 id='ce-refund-events'>CE refund events</h2>
+<aside class="notice">
+Coming soon! This channel will be available for use soon, please follow our Discord #api-changes channel to stay up to date.
+</aside>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">user</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">0xaD6A65315Cb20dD0b9D0Af56213516727a20C66F</span><span class="dl">"</span><span class="p">;</span>
+<span class="kd">const</span> <span class="nx">channel</span> <span class="o">=</span> <span class="nx">realtime</span><span class="p">.</span><span class="nx">channels</span><span class="p">.</span><span class="kd">get</span><span class="p">(</span><span class="s2">`ce_refunds:</span><span class="p">${</span><span class="nx">user</span><span class="p">}</span><span class="s2">`</span><span class="p">);</span>
+<span class="nx">channel</span><span class="p">.</span><span class="nx">subscribe</span><span class="p">((</span><span class="nx">message</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">message</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div>
+<blockquote>
+<p>The above command returns JSON structured like this</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">[</span><span class="w">
+  </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x3e012cc2842849b96768547d4c92720d7ee8946e7706323f5114b6451708cf5e"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"baseToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"totalRefunded"</span><span class="p">:</span><span class="w"> </span><span class="mf">2.346033</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"events"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"maker"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2.346033"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"bettor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xaD6A65315Cb20dD0b9D0Af56213516727a20C66F"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"baseToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-10-21T14:29:26.805266+00:00"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x3e012cc2842849b96768547d4c92720d7ee8946e7706323f5114b6451708cf5e"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"fillOrderHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x7efa8ee211c5cbccebda722318252ee09cfadaa9c910bf4c433086d853784b02"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">]</span><span class="w">
+</span></code></pre></div>
+<p>Subscribe to changes in a particular user&#39;s capital‑efficient refund events. You receive updates when refunds are generated from reductions in maximum loss (MXL) for the user’s market groups. </p>
+
+<p>For field definitions, see <a href="#get-portfolio-refunds">Get portfolio refunds</a>. </p>
+
+<p>See <a href="#capital-efficiency-upgrade">Capital Efficiency Upgrade</a> for a high-level overview of the Capital Efficiency Upgrade.</p>
+<h3 id='channel-name-format-9'>Channel name format</h3>
+<p><code>ce_refunds:{user}</code></p>
+
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>user</td>
+<td>string</td>
+<td>The user to subscribe to</td>
+</tr>
+</tbody></table>
+<h3 id='message-payload-format-9'>Message payload format</h3>
+<p>The message payload matches a single element within the <code>GET /trades/portfolio/refunds</code> JSON results. See <a href="#get-portfolio-refunds">Get portfolio refunds</a> for schema details.</p>
 <h2 id='best-practices'>Best Practices</h2><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">const</span> <span class="nx">Ably</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="dl">"</span><span class="s2">ably</span><span class="dl">"</span><span class="p">);</span>
 <span class="k">import</span> <span class="nx">axios</span> <span class="k">from</span> <span class="dl">"</span><span class="s2">axios</span><span class="dl">"</span><span class="p">;</span>
 
@@ -3499,6 +3620,7 @@ Parlay Markets act as regular markets, but with additional fields to indicate th
         </span><span class="nl">"fillHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xbe846c92bec584c4d2215df76ac7d53ebab25f81a30cca5811fb93f35e8b5321"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"tradeStatus"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SUCCESS"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"valid"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"marketHasRefunds"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
         </span><span class="nl">"outcome"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
         </span><span class="nl">"settleDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-12-11T20:17:45.990Z"</span><span class="w">
       </span><span class="p">},</span><span class="w">
@@ -3517,6 +3639,7 @@ Parlay Markets act as regular markets, but with additional fields to indicate th
         </span><span class="nl">"fillHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xbe846c92bec584c4d2215df76ac7d53ebab25f81a30cca5811fb93f35e8b5321"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"tradeStatus"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SUCCESS"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"valid"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"marketHasRefunds"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
         </span><span class="nl">"outcome"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
         </span><span class="nl">"settleDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-12-11T20:17:45.990Z"</span><span class="w">
       </span><span class="p">},</span><span class="w">
@@ -3535,6 +3658,7 @@ Parlay Markets act as regular markets, but with additional fields to indicate th
         </span><span class="nl">"fillHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xc0240cf27c111d843bc4cf2de0521ab097223de933125857343e7a6fba469172"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"tradeStatus"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SUCCESS"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"valid"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"marketHasRefunds"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
         </span><span class="nl">"outcome"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
         </span><span class="nl">"settleDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-12-11T22:02:19.484Z"</span><span class="w">
       </span><span class="p">},</span><span class="w">
@@ -3553,6 +3677,7 @@ Parlay Markets act as regular markets, but with additional fields to indicate th
         </span><span class="nl">"fillHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xc0240cf27c111d843bc4cf2de0521ab097223de933125857343e7a6fba469172"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"tradeStatus"</span><span class="p">:</span><span class="w"> </span><span class="s2">"SUCCESS"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"valid"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"marketHasRefunds"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
         </span><span class="nl">"outcome"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
         </span><span class="nl">"settleDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2020-12-11T22:02:19.484Z"</span><span class="w">
       </span><span class="p">}</span><span class="w">
@@ -3676,6 +3801,10 @@ Parlay Markets act as regular markets, but with additional fields to indicate th
 </tr>
 </tbody></table>
 
+<aside class="notice">
+Fields marked with an '*' are coming soon in future release.
+</aside>
+
 <p>A <code>Trade</code> object has the following format</p>
 
 <table><thead>
@@ -3756,6 +3885,11 @@ Parlay Markets act as regular markets, but with additional fields to indicate th
 <td><code>true</code> if the trade counts toward competitions or tournaments</td>
 </tr>
 <tr>
+<td>marketHasRefunds*</td>
+<td>boolean</td>
+<td><code>true</code> if capital‑efficient refunds exist for this trade&#39;s market group; if <code>true</code>, query <a href="#get-portfolio-refunds">Get portoflio refunds</a> for details</td>
+</tr>
+<tr>
 <td>outcome</td>
 <td>number</td>
 <td>with <code>settled=true</code>, this will be 0, 1, or 2 depending on the final outcome of the market</td>
@@ -3813,6 +3947,7 @@ Parlay Markets act as regular markets, but with additional fields to indicate th
         </span><span class="nl">"fillHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xb6b15fe7d4d337ff0ae0e2a233203385e619c5e1edf23f04135efbf12128def8"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"affiliate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x0000000000000000000000000000000000000000"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"valid"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"marketHasRefunds"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
         </span><span class="nl">"providerEventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"15468276"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"settleDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-04-24T17:38:24.885Z"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"outcome"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
@@ -3843,6 +3978,7 @@ Parlay Markets act as regular markets, but with additional fields to indicate th
         </span><span class="nl">"fillHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xb6b15fe7d4d337ff0ae0e2a233203385e619c5e1edf23f04135efbf12128def8"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"affiliate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x0000000000000000000000000000000000000000"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"valid"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"marketHasRefunds"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
         </span><span class="nl">"providerEventId"</span><span class="p">:</span><span class="w"> </span><span class="s2">"15468276"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"settleDate"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-04-24T17:38:24.885Z"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"outcome"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
@@ -3928,6 +4064,7 @@ Parlay Markets act as regular markets, but with additional fields to indicate th
         </span><span class="nl">"gameTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-01-06T23:30:00.000Z"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"leagueLabel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"International Test"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"outcome"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"marketHasRefunds"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
         </span><span class="nl">"netReturn"</span><span class="p">:</span><span class="w"> </span><span class="s2">"4.999999999999999999"</span><span class="w">
       </span><span class="p">},</span><span class="w">
       </span><span class="p">{</span><span class="w">
@@ -3947,6 +4084,7 @@ Parlay Markets act as regular markets, but with additional fields to indicate th
         </span><span class="nl">"gameTime"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2021-01-06T23:30:00.000Z"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"leagueLabel"</span><span class="p">:</span><span class="w"> </span><span class="s2">"International Test"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"outcome"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"marketHasRefunds"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
         </span><span class="nl">"netReturn"</span><span class="p">:</span><span class="w"> </span><span class="s2">"4.999999999999999999"</span><span class="w">
       </span><span class="p">}</span><span class="w">
     </span><span class="p">],</span><span class="w">
@@ -4149,6 +4287,401 @@ Parlay Markets act as regular markets, but with additional fields to indicate th
 <td>sportXeventId</td>
 <td>string</td>
 <td>The event related to this trade</td>
+</tr>
+<tr>
+<td>marketHasRefunds*</td>
+<td>boolean</td>
+<td><code>true</code> if capital efficient refunds exist for this market group; if <code>true</code>, query <a href="#get-portfolio-refunds">Get portoflio refunds</a> for details</td>
+</tr>
+</tbody></table>
+<h2 id='get-portfolio-refunds'>Get portfolio refunds</h2>
+<aside class="notice">
+Coming soon! This endpoint will be available for use soon, please follow our Discord #api-changes channel to stay up to date.
+</aside>
+<div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.sx.bet/trades/portfolio/refunds?bettor=0xaD6A65315Cb20dD0b9D0Af56213516727a20C66F&amp;sortAsc=false&amp;page=0&amp;perPage=500'</span>
+</code></pre></div>
+<blockquote>
+<p>The above command returns JSON structured like this:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"status"</span><span class="p">:</span><span class="w"> </span><span class="s2">"success"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"results"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x3e012cc2842849b96768547d4c92720d7ee8946e7706323f5114b6451708cf5e"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"baseToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"totalRefunded"</span><span class="p">:</span><span class="w"> </span><span class="mf">2.346033</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"events"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"maker"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2.346033"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"bettor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xaD6A65315Cb20dD0b9D0Af56213516727a20C66F"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"baseToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-10-21T14:29:26.805266+00:00"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x3e012cc2842849b96768547d4c92720d7ee8946e7706323f5114b6451708cf5e"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"fillOrderHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x7efa8ee211c5cbccebda722318252ee09cfadaa9c910bf4c433086d853784b02"</span><span class="w">
+          </span><span class="p">}</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x14081d3be87bcdc2cb81c616e9eb5a487506af4abad1b7495a66d9768d6352c2"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"baseToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"totalRefunded"</span><span class="p">:</span><span class="w"> </span><span class="mf">2.698125</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"events"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"maker"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2.698125"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"bettor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xaD6A65315Cb20dD0b9D0Af56213516727a20C66F"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"baseToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-10-21T14:27:37.892992+00:00"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x14081d3be87bcdc2cb81c616e9eb5a487506af4abad1b7495a66d9768d6352c2"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"fillOrderHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x5a5f7ff232699f73db7c29af3631f47b1f338e3b5279bcf851ff05b63292e71c"</span><span class="w">
+          </span><span class="p">}</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x30bb58ae1c28d04ab9e94c313eb6d9656c0854248bd0273cb13edcd8e337155a"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"baseToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"totalRefunded"</span><span class="p">:</span><span class="w"> </span><span class="mf">3.695149</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"events"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"maker"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"3.695149"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"bettor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xaD6A65315Cb20dD0b9D0Af56213516727a20C66F"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"baseToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-10-21T14:26:39.85327+00:00"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x30bb58ae1c28d04ab9e94c313eb6d9656c0854248bd0273cb13edcd8e337155a"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"fillOrderHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x179e4d8cfad8dcc16f8188dc7714a54b2bfb60335e3aba305120919c2419be9a"</span><span class="w">
+          </span><span class="p">}</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x0760c1c1fe427ff04bec6488702637918f7daa8cae7b2411017e692caaa28e6c"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"baseToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"totalRefunded"</span><span class="p">:</span><span class="w"> </span><span class="mf">19.559896</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"events"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"maker"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"9.779948"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"bettor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xaD6A65315Cb20dD0b9D0Af56213516727a20C66F"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"baseToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-10-20T15:25:15.899042+00:00"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x0760c1c1fe427ff04bec6488702637918f7daa8cae7b2411017e692caaa28e6c"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"fillOrderHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xea2423b823246d7d12833e1834123a86ddb208f7f1eb63e06dd2d31303f37f32"</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"maker"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"9.779948"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"bettor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xaD6A65315Cb20dD0b9D0Af56213516727a20C66F"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"baseToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-10-20T15:25:15.730559+00:00"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x0760c1c1fe427ff04bec6488702637918f7daa8cae7b2411017e692caaa28e6c"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"fillOrderHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xea2423b823246d7d12833e1834123a86ddb208f7f1eb63e06dd2d31303f37f32"</span><span class="w">
+          </span><span class="p">}</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x381fba172f94f121026047e4944edcf895550dffd90627f2e76843705f1a633a"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"baseToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"totalRefunded"</span><span class="p">:</span><span class="w"> </span><span class="mf">18.561474</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"events"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"maker"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"9.280737"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"bettor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xaD6A65315Cb20dD0b9D0Af56213516727a20C66F"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"baseToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-10-20T15:03:48.323011+00:00"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x381fba172f94f121026047e4944edcf895550dffd90627f2e76843705f1a633a"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"fillOrderHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x4faa50c4e6aa5074b8305db34050e7aaf675bd6d4c32c18ac159a8122587ae61"</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"maker"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"9.280737"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"bettor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xaD6A65315Cb20dD0b9D0Af56213516727a20C66F"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"baseToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-10-20T15:03:48.214994+00:00"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x381fba172f94f121026047e4944edcf895550dffd90627f2e76843705f1a633a"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"fillOrderHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x4faa50c4e6aa5074b8305db34050e7aaf675bd6d4c32c18ac159a8122587ae61"</span><span class="w">
+          </span><span class="p">}</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xf84c30678aecadab705cd492b3b4c1b58c2589c9e8bac070b17860affa63c17f"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"baseToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"totalRefunded"</span><span class="p">:</span><span class="w"> </span><span class="mf">13.289026</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"events"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"maker"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5.881642"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"bettor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xaD6A65315Cb20dD0b9D0Af56213516727a20C66F"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"baseToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-10-17T23:22:45.667688+00:00"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xf84c30678aecadab705cd492b3b4c1b58c2589c9e8bac070b17860affa63c17f"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"fillOrderHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x1fa325f322649c9d21086c6702bd4ce3210e32781d12ea7e54fc301796cb39bb"</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"maker"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"7.407384"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"bettor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xaD6A65315Cb20dD0b9D0Af56213516727a20C66F"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"baseToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-10-17T18:52:00.185707+00:00"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xf84c30678aecadab705cd492b3b4c1b58c2589c9e8bac070b17860affa63c17f"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"fillOrderHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xa0bfe79dcf7c4488aa685cc91d02381143a5f4b505e1ccb18b33b5f4cbf8fe7f"</span><span class="w">
+          </span><span class="p">}</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xed9963a520580046eed9675cef34d38050854a3734494e7b37ea265f548bbe37"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"baseToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"totalRefunded"</span><span class="p">:</span><span class="w"> </span><span class="mf">6.153813</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"events"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"maker"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"6.153813"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"bettor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xaD6A65315Cb20dD0b9D0Af56213516727a20C66F"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"baseToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-10-16T21:26:16.143613+00:00"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xed9963a520580046eed9675cef34d38050854a3734494e7b37ea265f548bbe37"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"fillOrderHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x8e1faaa91c6164b72de3b3a42c516e4947c111e8e05d5f59655a7ba58f7dc788"</span><span class="w">
+          </span><span class="p">}</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x319d42ff612a1b0cbd5865690e067877f509aa943a89d3a819abba8b412d8f35"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"baseToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"totalRefunded"</span><span class="p">:</span><span class="w"> </span><span class="mf">7.889529</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"events"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"maker"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"7.889529"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"bettor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xaD6A65315Cb20dD0b9D0Af56213516727a20C66F"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"baseToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-10-16T21:24:50.05795+00:00"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x319d42ff612a1b0cbd5865690e067877f509aa943a89d3a819abba8b412d8f35"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"fillOrderHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x2403cbb53f0223ad9dec5213ab251960c6b7af427ae0b438e4c2504245eafd28"</span><span class="w">
+          </span><span class="p">}</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x5bf33fb43e24a16ea507defabebce86f9cd481cb3d5e057aebba4f63b265a75a"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"baseToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"totalRefunded"</span><span class="p">:</span><span class="w"> </span><span class="mf">9.367678</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"events"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"maker"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"9.367678"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"bettor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xaD6A65315Cb20dD0b9D0Af56213516727a20C66F"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"baseToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-10-15T19:54:46.63248+00:00"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x5bf33fb43e24a16ea507defabebce86f9cd481cb3d5e057aebba4f63b265a75a"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"fillOrderHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xd22c09f4a888d283cb495ac1a428063a57e5182c338408aca6c563643e183077"</span><span class="w">
+          </span><span class="p">}</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x1a5521437acd388bf31da31b655e7f38c2b5df9f72686bb0e2252a435bf57305"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"baseToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"totalRefunded"</span><span class="p">:</span><span class="w"> </span><span class="mf">7.393698</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"events"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"maker"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"7.393698"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"bettor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xaD6A65315Cb20dD0b9D0Af56213516727a20C66F"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"baseToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-10-02T21:12:00.458343+00:00"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x1a5521437acd388bf31da31b655e7f38c2b5df9f72686bb0e2252a435bf57305"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"fillOrderHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xcca366280794ef6e5a84275780cc7fd5dc9345613464510ee7178a08a4f1daff"</span><span class="w">
+          </span><span class="p">}</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x3b9d3fab07560742bf8ecf7e50ef28ccbbcfb0288bead1ac599898939c1958e7"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"baseToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"totalRefunded"</span><span class="p">:</span><span class="w"> </span><span class="mf">17.977509</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"events"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"maker"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"amount"</span><span class="p">:</span><span class="w"> </span><span class="s2">"17.977509"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"bettor"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0xaD6A65315Cb20dD0b9D0Af56213516727a20C66F"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"baseToken"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x1BC6326EA6aF2aB8E4b6Bc83418044B1923b2956"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"createdAt"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2025-09-19T14:16:44.283611+00:00"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"marketHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x3b9d3fab07560742bf8ecf7e50ef28ccbbcfb0288bead1ac599898939c1958e7"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"fillOrderHash"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0x98795dacfcb0023420e1dcb40ffba19bbc84e0df7feb6b8f1f50b423bfd57633"</span><span class="w">
+          </span><span class="p">}</span><span class="w">
+        </span><span class="p">]</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="nl">"count"</span><span class="p">:</span><span class="w"> </span><span class="mi">11</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>This endpoint retrieves capital‑efficient refund events for a bettor, aggregated by market. It supports reconciling cases where <code>settledNetReturn</code> may differ from <code>netReturn</code> when <code>marketHasRefunds</code> is <code>true</code> (see Capital Efficiency Upgrades). Refunds reflect decreases in worst‑case exposure (MXL) from offsetting positions and are only generated for market groups without prior cash outs; conversely, cash outs cannot occur after capital‑efficient refunds.</p>
+
+<p>See <a href="#capital-efficiency-upgrade">Capital Efficiency Upgrade</a> for a high-level overview of the Capital Efficiency Upgrade.</p>
+<h3 id='http-request-4'>HTTP Request</h3>
+<p><code>GET https://api.sx.bet/trades/portfolio/refunds</code></p>
+<h3 id='query-parameters-4'>Query parameters</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Required</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>bettor</td>
+<td>true</td>
+<td>string</td>
+<td>Bettor address (checksummed).</td>
+</tr>
+<tr>
+<td>marketHash</td>
+<td>false</td>
+<td>string</td>
+<td>Filter by market hash.</td>
+</tr>
+<tr>
+<td>baseToken</td>
+<td>false</td>
+<td>string</td>
+<td>Filter by base token.</td>
+</tr>
+<tr>
+<td>fillOrderHash</td>
+<td>false</td>
+<td>string</td>
+<td>Filter by the associated trade fill hash.</td>
+</tr>
+<tr>
+<td>maker</td>
+<td>false</td>
+<td>boolean</td>
+<td>If <code>true</code>, only refunds where bettor was a maker; otherwise taker refunds.</td>
+</tr>
+<tr>
+<td>sortAsc</td>
+<td>true</td>
+<td>boolean</td>
+<td>Sort ascending when <code>true</code>, descending when <code>false</code>.</td>
+</tr>
+<tr>
+<td>page</td>
+<td>true</td>
+<td>number</td>
+<td>Page number for pagination (min 0).</td>
+</tr>
+<tr>
+<td>perPage</td>
+<td>true</td>
+<td>number</td>
+<td>Page size (max 500).</td>
+</tr>
+</tbody></table>
+<h3 id='response-format-4'>Response format</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>status</td>
+<td>string</td>
+<td><code>success</code> or <code>failure</code></td>
+</tr>
+<tr>
+<td>data</td>
+<td>object</td>
+<td>The response payload</td>
+</tr>
+<tr>
+<td>&gt; results</td>
+<td>PortfolioRefund[]</td>
+<td>Aggregated refunds by market</td>
+</tr>
+<tr>
+<td>&gt; count</td>
+<td>number</td>
+<td>Total count of aggregated market results</td>
+</tr>
+</tbody></table>
+
+<p>A <code>PortfolioRefund</code> object has the following format</p>
+
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>marketHash</td>
+<td>string</td>
+<td>Market hash for this refund aggregation</td>
+</tr>
+<tr>
+<td>baseToken</td>
+<td>string</td>
+<td>Base token of the refunds</td>
+</tr>
+<tr>
+<td>totalRefunded</td>
+<td>number</td>
+<td>Sum of refund amounts for this market in base token</td>
+</tr>
+<tr>
+<td>events</td>
+<td>RefundEvent[]</td>
+<td>Individual refund events that make up the aggregation</td>
+</tr>
+</tbody></table>
+
+<p>A <code>RefundEvent</code> object has the following format</p>
+
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>maker</td>
+<td>boolean</td>
+<td><code>true</code> if bettor was maker for this refund</td>
+</tr>
+<tr>
+<td>amount</td>
+<td>string</td>
+<td>Refund amount in base token (string‑encoded)</td>
+</tr>
+<tr>
+<td>bettor</td>
+<td>string</td>
+<td>Bettor address</td>
+</tr>
+<tr>
+<td>baseToken</td>
+<td>string</td>
+<td>Token address</td>
+</tr>
+<tr>
+<td>createdAt</td>
+<td>string</td>
+<td>ISO date string of event creation</td>
+</tr>
+<tr>
+<td>marketHash</td>
+<td>string</td>
+<td>Market hash</td>
+</tr>
+<tr>
+<td>fillOrderHash</td>
+<td>string</td>
+<td>Fill hash associated with the refund</td>
 </tr>
 </tbody></table>
 <h1 id='orders'>Orders</h1><h2 id='get-active-orders'>Get active orders</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">--location</span> <span class="nt">--request</span> GET <span class="s1">'https://api.sx.bet/orders'</span>
