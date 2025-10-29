@@ -6374,7 +6374,7 @@ Note that <code>totalBetSize</code> is from *the perspective of the market maker
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
-<p>This endpoint fills orders on the exchange based on the specified desiredOdds and oddsSlippage. Order matching is done internally <i>after</i> the built-in betting delay, optimizing the taker experience particularly during in-play betting. Furthermore, if any new orders with better odds are added during the betting delay window, those orders will be filled. Lastly, if there isn&#39;t sufficient size to support the full stake amount, taker fills will be partially filled so they can carry out a subsequent fill.</p>
+<p>This endpoint fills orders on the exchange based on the specified desiredOdds and oddsSlippage. Order matching is done internally <i>after</i> the built-in betting delay, optimizing the taker experience particularly during in-play betting. Furthermore, if any new orders with better odds are added during the betting delay window, those orders will be filled. Lastly, if there isn&#39;t sufficient size to support the full stake amount, the response will include a <code>isPartialFill: true</code> flag to indicate that the fill was only partially filled. Takers can then attempt to fill again if they choose to do so.</p>
 
 <p>See below for the betting delays by sport which are added to guard against toxic flow and high spikes in latency from the bookmaker&#39;s side. It is effectively protection for the bookmaker. As order matching is done after the betting delay, errors observed in the past due to order cancellations within the betting delay will now be avoided.</p>
 
